@@ -39,6 +39,7 @@
     <Compile Include="TcpServer.cs" />
     <Compile Include="ParallelComputation.cs" />
     <Compile Include="PipelineComputation.cs" />
+    <Compile Include="BoundBuffer.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>
