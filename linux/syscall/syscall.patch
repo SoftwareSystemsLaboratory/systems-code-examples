@@ -1,0 +1,83 @@
+diff -r linux-source-2.6.38-orig//arch/x86/ia32/ia32entry.S linux-source-2.6.38//arch/x86/ia32/ia32entry.S
+853a854
+> 	.quad sys_addsyscall
+diff -r linux-source-2.6.38-orig//arch/x86/include/asm/unistd_32.h linux-source-2.6.38//arch/x86/include/asm/unistd_32.h
+348a349
+> #define __NR_addsyscall		341
+352c353
+< #define NR_syscalls 341
+---
+> #define NR_syscalls 342
+diff -r linux-source-2.6.38-orig//arch/x86/include/asm/unistd_64.h linux-source-2.6.38//arch/x86/include/asm/unistd_64.h
+671a672,673
+> #define __NR_addsyscall				303
+> __SYSCALL(__NR_addsyscall, sys_addsyscall)
+diff -r linux-source-2.6.38-orig//arch/x86/kernel/syscall_table_32.S linux-source-2.6.38//arch/x86/kernel/syscall_table_32.S
+342a343,344
+> 	.long sys_addsyscall
+> 
+Only in linux-source-2.6.38/: .config
+Only in linux-source-2.6.38/: .config.old
+Only in linux-source-2.6.38/: debian
+Only in linux-source-2.6.38//drivers/gpu/drm/radeon: evergreen_reg_safe.h
+Only in linux-source-2.6.38//drivers/gpu/drm/radeon: r100_reg_safe.h
+Only in linux-source-2.6.38//drivers/gpu/drm/radeon: r200_reg_safe.h
+Only in linux-source-2.6.38//drivers/gpu/drm/radeon: r300_reg_safe.h
+Only in linux-source-2.6.38//drivers/gpu/drm/radeon: r420_reg_safe.h
+Only in linux-source-2.6.38//drivers/gpu/drm/radeon: r600_reg_safe.h
+Only in linux-source-2.6.38//drivers/gpu/drm/radeon: rn50_reg_safe.h
+Only in linux-source-2.6.38//drivers/gpu/drm/radeon: rs600_reg_safe.h
+Only in linux-source-2.6.38//drivers/gpu/drm/radeon: rv515_reg_safe.h
+diff -r linux-source-2.6.38-orig//include/asm-generic/unistd.h linux-source-2.6.38//include/asm-generic/unistd.h
+649a650,652
+> #define __NR_addsyscall 264
+> __SYSCALL(__NR_addsyscall, sys_addsyscall)
+> 
+651c654
+< #define __NR_syscalls 264
+---
+> #define __NR_syscalls 265
+Only in linux-source-2.6.38//include: config
+Only in linux-source-2.6.38//include: generated
+diff -r linux-source-2.6.38-orig//include/linux/syscalls.h linux-source-2.6.38//include/linux/syscalls.h
+650a651
+> asmlinkage long sys_addsyscall(int x, int y);
+Only in linux-source-2.6.38//include/linux: version.h
+diff -r linux-source-2.6.38-orig//kernel/sys.c linux-source-2.6.38//kernel/sys.c
+1401a1402,1410
+> SYSCALL_DEFINE2(addsyscall, int, x, int, y)
+> {
+> 	int ret;
+> 	printk(KERN_DEBUG "x=%d, y=%d\n", x, y);
+> 	ret = x + y;
+> 	return ret;
+> }
+> 
+> 
+Only in linux-source-2.6.38/: Module.symvers
+Only in linux-source-2.6.38//scripts/basic: docproc
+Only in linux-source-2.6.38//scripts/basic: fixdep
+Only in linux-source-2.6.38//scripts: conmakehash
+Only in linux-source-2.6.38//scripts/genksyms: genksyms
+Only in linux-source-2.6.38//scripts/genksyms: keywords.c
+Only in linux-source-2.6.38//scripts/genksyms: lex.c
+Only in linux-source-2.6.38//scripts/genksyms: parse.c
+Only in linux-source-2.6.38//scripts/genksyms: parse.h
+Only in linux-source-2.6.38//scripts: kallsyms
+Only in linux-source-2.6.38//scripts/kconfig: conf
+Only in linux-source-2.6.38//scripts/kconfig: lex.zconf.c
+Only in linux-source-2.6.38//scripts/kconfig: zconf.hash.c
+Only in linux-source-2.6.38//scripts/kconfig: zconf.tab.c
+Only in linux-source-2.6.38//scripts/mod: elfconfig.h
+Only in linux-source-2.6.38//scripts/mod: mk_elfconfig
+Only in linux-source-2.6.38//scripts/mod: modpost
+Only in linux-source-2.6.38//scripts: recordmcount
+Only in linux-source-2.6.38//scripts/selinux/genheaders: genheaders
+Only in linux-source-2.6.38//scripts/selinux/mdp: mdp
+Only in linux-source-2.6.38//security/apparmor: af_names.h
+Only in linux-source-2.6.38//security/apparmor: capability_names.h
+Only in linux-source-2.6.38//security/apparmor: rlim_names.h
+Only in linux-source-2.6.38//ubuntu/aufs: conf.str
+Only in linux-source-2.6.38//ubuntu/aufs: conf.str.tmp
+Only in linux-source-2.6.38//ubuntu/ndiswrapper: win2lin_stubs.h
+Only in linux-source-2.6.38/: .version
