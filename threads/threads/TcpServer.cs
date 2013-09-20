@@ -39,10 +39,13 @@ namespace DistributedSystemsSamples
 	public class TcpClient {
 		public void ConnectToServer() {
 			var socket = new Socket (AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-			socket.Connect (new IPEndPoint (new IPAddress ("127.0.0.1"), 8080));
+			socket.Connect (new IPEndPoint (IPAddress.Parse("127.0.0.1"), 8080));
 			var buffer = new byte[1024];
 			var receivedBytes = socket.Receive (buffer);
-
+			if (receivedBytes > 0) {
+				Array.Resize (ref buffer, receivedBytes);
+				Console.WriteLine (System.Text.Encoding.UTF8.GetString (buffer));
+			}
 		}
 	}
 }

@@ -6,7 +6,8 @@ namespace threads
 	{
 		public static void Main (string[] args)
 		{
-			Console.WriteLine ("Hello World!");
+			new ParallelComputation().PrintFactors(123456789);
+			Console.ReadLine ();
 		}
 	}
 }
