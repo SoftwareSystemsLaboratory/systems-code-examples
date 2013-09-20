@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 namespace threads
 {
+	//begin-class-BoundBuffer
 	public class BoundBuffer<T> {
 		private readonly Semaphore _full;
 		private readonly Semaphore _empty;
@@ -34,5 +35,6 @@ namespace threads
 			return item;
 		}
 	}
+	//end-class-BoundBuffer
 }
 
