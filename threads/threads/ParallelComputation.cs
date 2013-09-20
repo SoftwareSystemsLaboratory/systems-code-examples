@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 namespace threads
 {
+	//begin-class-ParallelComputation
 	public class ParallelComputationWorkItem {
 		public readonly long LowerBound;
 		public readonly long UpperBound;
@@ -50,7 +51,7 @@ namespace threads
 				}
 			}
 		}
-
 	}
+	//end-class-ParallelComputation
 }
 

@@ -6,6 +6,7 @@ using System.Threading;
 
 namespace threads
 {
+	//begin-class-PipelineComputation
 	public class PipelineComputation {
 		private readonly Queue<byte[]> _readData;
 		private readonly Queue<byte[]> _compressionData;
@@ -107,5 +108,6 @@ namespace threads
 			}
 		}
 	}
+	//end-class-PipelineComputation
 }
 

@@ -6,6 +6,7 @@ using System.Text;
 
 namespace DistributedSystemsSamples
 {
+	//begin-class-TcpServer
 	public class TcpServer
 	{
 		private Socket _socket;
@@ -48,5 +49,6 @@ namespace DistributedSystemsSamples
 			}
 		}
 	}
+	//end-class-TcpServer
 }
 
