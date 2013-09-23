@@ -40,6 +40,8 @@
     <Compile Include="ParallelComputation.cs" />
     <Compile Include="PipelineComputation.cs" />
     <Compile Include="BoundBuffer.cs" />
+    <Compile Include="ThreadedList.cs" />
+    <Compile Include="ConcisePipelineComputation.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

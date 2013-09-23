@@ -20,7 +20,7 @@ namespace threads
 
 		public void PerformCompression() {
 			var readerThread = new Thread (FileReader);
-			var compressThread = new Thread (Compress);
+			var compressThread = new Thread (Compression);
 			var writerThread = new Thread (FileWriter);
 			readerThread.Start ();
 			compressThread.Start ();
@@ -32,7 +32,7 @@ namespace threads
 
 		private void FileReader() {
 			using (var stream = new FileStream("file.txt", FileMode.Open, FileAccess.Read)) {
-				var len;
+				int len;
 				var buffer = new byte[1024];
 				while ((len = stream.Read(buffer, 0, buffer.Length)) > 0) {
 					if (len != buffer.Length) {
@@ -80,8 +80,8 @@ namespace threads
 
 		private static byte[] Compress(byte[] data) {
 			var memStream = new MemoryStream ();
-			using(var compressionStream = new GZipStream(memStream)) {
-				compressionStream.Write(data);
+			using(var compressionStream = new GZipStream(memStream, CompressionMode.Compress)) {
+				compressionStream.Write(data, 0, data.Length);
 			}
 			return memStream.ToArray ();
 		}
@@ -102,7 +102,7 @@ namespace threads
 						}
 					}
 					if (compressedData != null) {
-						stream.Write (compressedData);
+						stream.Write (compressedData, 0, compressedData.Length);
 					}
 				}
 			}
