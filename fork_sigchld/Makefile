@@ -1,5 +1,5 @@
-CC=/usr/pkg/bin/g++
-#CC=/usr/bin/g++
+#CC=/usr/pkg/bin/g++
+CC=/usr/bin/g++
 CFLAGS= -g -Wall -D_POSIX_SOURCE=1 -I.
 LINKFLAGS= -g -Wall
 
