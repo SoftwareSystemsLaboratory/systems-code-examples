@@ -1,7 +1,7 @@
 #CC=/usr/pkg/bin/g++
 CC=/usr/bin/g++
 CFLAGS= -g -Wall -I.
-LINKFLAGS= -g -Wall -lpthread
+LINKFLAGS= -g -Wall -lpthread -pthread
 
 all: demo
 
