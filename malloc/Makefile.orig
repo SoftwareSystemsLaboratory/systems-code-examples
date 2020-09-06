@@ -7,9 +7,9 @@ clean:
 demo: demo.o malloc.o
 	g++ demo.o malloc.o -o demo
 
-demo.o: demo.cc malloc.h
-	g++ -c demo.cc -o demo.o
+demo.o: demo.c malloc.h
+	g++ -c demo.c -o demo.o
 
-malloc.o: malloc.cc malloc.h
-	g++ -c malloc.cc -o malloc.o
+malloc.o: malloc.c malloc.h
+	g++ -c malloc.c -o malloc.o
 
