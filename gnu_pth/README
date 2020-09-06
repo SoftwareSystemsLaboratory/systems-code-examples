@@ -1,0 +1,9 @@
+Note: If you get an error compiling this, you need to install the GNU pth package.
+
+On Ubuntu
+
+```
+$ sudo apt install libpth-dev
+```
+
+
