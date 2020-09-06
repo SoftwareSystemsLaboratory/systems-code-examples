@@ -1,4 +1,4 @@
-project(NAME_OF_DEMO)
+project(FORK_EXEC_DEMO)
 cmake_minimum_required(VERSION 2.6)
 
 if (CMAKE_VERSION VERSION_LESS "3.1")
@@ -26,4 +26,4 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
  
 # Link runTests with what we want to test and the GTest and pthread library
 
-add_executable(main-demo main.c)
+add_executable(fork-exec-demo main.c)
