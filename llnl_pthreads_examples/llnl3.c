@@ -24,9 +24,9 @@ void *PrintHello(void *td_ptr)
     thread_data_t *td = (thread_data_t *)td_ptr;
     void* status;
     if (td->waits) {
-      printf("Waiting for thread...");
-      pthread_join(td->waitsfor, &status);
-    } 
+        printf("Waiting for thread...");
+        pthread_join(td->waitsfor, &status);
+    }
     printf("Hello World! It's me, thread #%ld!\n", td->tid);
     printf("sqr(%ld) = %ld\n", td->tid, td->square);
     pthread_exit(NULL);
@@ -49,10 +49,10 @@ int main (int argc, char *argv[])
         thread_data[t].tid = t;
         thread_data[t].square = t * t;
         if (t != 2) {
-          thread_data[t].waits = 1;
-          thread_data[t].waitsfor = threads[2];
+            thread_data[t].waits = 1;
+            thread_data[t].waitsfor = threads[2];
         } else {
-          thread_data[t].waits = 0;
+            thread_data[t].waits = 0;
         }
 
         printf("In main: creating thread %ld\n", t);

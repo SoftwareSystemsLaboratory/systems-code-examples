@@ -4,39 +4,39 @@
 #include <stdlib.h>
 
 int main(int argc, char* argv[]) {
-	
-	int pipes[2];
-	pipe(pipes);
 
-	int inputPartOfPipe = pipes[0];
-	int outputPartOfPipe = pipes[1];
+    int pipes[2];
+    pipe(pipes);
 
-	int pid = fork();
+    int inputPartOfPipe = pipes[0];
+    int outputPartOfPipe = pipes[1];
 
-	if(pid > 0) {	//parent process
-		dup2(inputPartOfPipe, 0); // redirect STDIN
-		close(outputPartOfPipe);  // close unused half of pipe
+    int pid = fork();
 
-		char *wcArgs[] = {"-l", NULL};
-		execvp("wc", wcArgs);
+    if(pid > 0) {	//parent process
+        dup2(inputPartOfPipe, 0); // redirect STDIN
+        close(outputPartOfPipe);  // close unused half of pipe
 
-		fprintf(stderr, "should not be able to reach here!\n");
-	} else if(pid == 0) {	//child process
-		dup2(outputPartOfPipe, 1); // redirect STDOUT
-		close(inputPartOfPipe);     // close unused half of pipe
+        char *wcArgs[] = {"-l", NULL};
+        execvp("wc", wcArgs);
 
-		char *echoArgs[] = {"-ne", "\"hello\\nworld\\n\"\n", NULL};
-		execvp("echo", echoArgs);
+        fprintf(stderr, "should not be able to reach here!\n");
+    } else if(pid == 0) {	//child process
+        dup2(outputPartOfPipe, 1); // redirect STDOUT
+        close(inputPartOfPipe);     // close unused half of pipe
 
-		fprintf(stderr, "should not be able to reach here!\n");
-	} else {
-		printf("fork failed!\n");
-	}
+        char *echoArgs[] = {"-ne", "\"hello\\nworld\\n\"\n", NULL};
+        execvp("echo", echoArgs);
 
-	//don't worry about closing remaining pipes, 
-	//process exit does this for us
+        fprintf(stderr, "should not be able to reach here!\n");
+    } else {
+        printf("fork failed!\n");
+    }
 
-	return 0;
+    //don't worry about closing remaining pipes,
+    //process exit does this for us
+
+    return 0;
 }
 
 

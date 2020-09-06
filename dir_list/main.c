@@ -4,17 +4,17 @@
 #include <errno.h>
 
 int main(int argc, char* argv[]) {
-	const char *dir = "/";
+    const char *dir = "/";
 
-	DIR *d = opendir(dir);
+    DIR *d = opendir(dir);
 
-	struct dirent *de;
-	while((de = readdir(d)) != NULL) {
-		printf("name: %s\n", de->d_name);
-	}
+    struct dirent *de;
+    while((de = readdir(d)) != NULL) {
+        printf("name: %s\n", de->d_name);
+    }
 
-	closedir(d);
-	return 0;
+    closedir(d);
+    return 0;
 }
 
 

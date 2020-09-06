@@ -5,16 +5,16 @@
 
 class Monitor {
 public:
-	Monitor();
-	~Monitor();
-	void Enter();
-	void Exit();
-	void Wait();
-	void Pulse();
+    Monitor();
+    ~Monitor();
+    void Enter();
+    void Exit();
+    void Wait();
+    void Pulse();
 private:
-	Mutex *_lock;
-	volatile bool _locked;
-	volatile int _pulse;
+    Mutex *_lock;
+    volatile bool _locked;
+    volatile int _pulse;
 };
 
 #endif
