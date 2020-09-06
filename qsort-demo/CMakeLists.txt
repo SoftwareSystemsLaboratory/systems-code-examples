@@ -18,6 +18,7 @@ else()
 endif()
 
 
+set(CMAKE_BUILD_TYPE Debug)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 #find_package(GTest REQUIRED)
