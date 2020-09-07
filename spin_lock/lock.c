@@ -1,4 +1,4 @@
-#include "lock.hh"
+#include "lock.h"
 #include <pthread.h>
 
 unsigned long test_and_set(unsigned long *lock) {
