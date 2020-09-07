@@ -1,0 +1,6 @@
+This example does not use CMake.
+
+It's designed tos hwo the different assembly language code for PIC vs. non-PIC.
+
+GCC now defaults to -fpic by all indications.
+
