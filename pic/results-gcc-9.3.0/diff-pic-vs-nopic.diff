@@ -1,0 +1,14 @@
+diff main.pic.s main.nopic.s
+7c7
+< 	.section	.data.rel.local,"aw"
+---
+> 	.data
+28,29c28
+< 	movq	msg@GOTPCREL(%rip), %rax
+< 	movq	(%rax), %rax
+---
+> 	movq	msg(%rip), %rax
+36c35
+< 	call	write@PLT
+---
+> 	call	write
