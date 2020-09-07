@@ -1,16 +1,25 @@
-language: c
-addons:
- apt:
-   packages:
-     - build-essential
-     - cmake
-     - libpth-dev
+matrix:
+  include:
+    - language: c
+      before_script:
+        - cp scripts/install-googletest.sh $TRAVIS_BUILD_DIR
+        - chmod +x $TRAVIS_BUILD_DIR/install-googletest.sh
+         - pushd $TRAVIS_BUILD_DIR && ./install-googletest.sh && popd
+      addons:
+        apt:
+          packages:
+            - build-essential
+            - cmake
+            - libpth-dev
+      script:
+        - bash scripts/build-cmake-examples.sh
 
-before_script:
-  - cp scripts/install-googletest.sh $TRAVIS_BUILD_DIR
-  - chmod +x $TRAVIS_BUILD_DIR/install-googletest.sh
-  - pushd $TRAVIS_BUILD_DIR && ./install-googletest.sh && popd
 
-script:
-  - bash scripts/build-cmake-examples.sh
+    - language: java
+      script:
+        - bash scripts/build-java-examples.sh
+
+    - language: csharp
+      script:
+        - bash scripts/build-csharp-examples.sh
 
