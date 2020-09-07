@@ -11,11 +11,11 @@ producer: producer.o
 consumer: consumer.o
 	$(CC) $(LINKFLAGS) -o consumer consumer.o
 
-producer.o: producer.cc
-	$(CC) $(CFLAGS) -c producer.cc -o producer.o
+producer.o: producer.c
+	$(CC) $(CFLAGS) -c producer.c -o producer.o
 
-consumer.o: consumer.cc
-	$(CC) $(CFLAGS) -c consumer.cc -o consumer.o
+consumer.o: consumer.c
+	$(CC) $(CFLAGS) -c consumer.c -o consumer.o
 
 clean:
 	rm -f *.o producer consumer shared.dat
