@@ -9,7 +9,7 @@ typedef struct {
     struct Employee** TeamMates;
 } Employee;
 
-Employee* Employee_New(const char* name, const int age) {
+Employee* Employee_New(char* name, const int age) {
     Employee* newEmp = (Employee*)calloc(1, sizeof(Employee));
     memcpy(newEmp->Name, name, strlen(name)+1);
     newEmp->Age = age;
@@ -18,7 +18,7 @@ Employee* Employee_New(const char* name, const int age) {
     return newEmp;
 }
 
-void Employee_Print(const Employee* employee) {
+void Employee_Print(Employee* employee) {
     printf("Name: %s\n", employee->Name);
     printf("Age:  %d\n", employee->Age);
     printf("Number of TeamMates: %d\n", employee->NumberOfTeamMates);
@@ -26,18 +26,18 @@ void Employee_Print(const Employee* employee) {
         printf("\t");
     }
     for(int i = 0; i < employee->NumberOfTeamMates; i++) {
-        Employee* teamMate = employee->TeamMates[i];
+        Employee* teamMate = (Employee*) employee->TeamMates[i];
         printf("%s, ", teamMate->Name);
     }
     printf("\n");
 }
 
-void Employee_AddTeamMate(Employee* employee, const Employee* teamMate) {
+void Employee_AddTeamMate(Employee* employee, Employee* teamMate) {
     employee->NumberOfTeamMates += 1;
-    employee->TeamMates = (Employee**)realloc(
+    employee->TeamMates = (struct Employee**)realloc(
                               employee->TeamMates,
                               sizeof(Employee*) * employee->NumberOfTeamMates);
-    employee->TeamMates[employee->NumberOfTeamMates-1] = teamMate;
+    employee->TeamMates[employee->NumberOfTeamMates-1] = (struct Employee *)teamMate;
 }
 
 int main(int argc, char* argv[]) {
