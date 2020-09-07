@@ -4,6 +4,7 @@ addons:
    packages:
      - build-essential
      - cmake
+     - libpth-dev
 
 before_script:
   - cp scripts/install-googletest.sh $TRAVIS_BUILD_DIR
