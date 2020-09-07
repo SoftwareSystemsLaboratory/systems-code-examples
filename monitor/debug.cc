@@ -7,7 +7,7 @@ int assertEquals(int expected, int actual, const char *msg) {
         result = 1;
     } else {
         result = 0;
-        printf(msg);
+        printf("%s", msg);
     }
     return result;
 }
