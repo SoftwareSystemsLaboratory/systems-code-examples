@@ -3,7 +3,7 @@
 SIZE_CMD="size --format=SysV"
 
 echo -ne "section               size      addr\n"
-$SIZE_CMD demo | grep ".text"
-$SIZE_CMD demo | grep ".data" | grep -v "rodata"
-$SIZE_CMD demo | grep ".bss"
+$SIZE_CMD ./bin/c-intro-demo | grep ".text"
+$SIZE_CMD ./bin/c-intro-demo | grep ".data" | grep -v "rodata"
+$SIZE_CMD ./bin/c-intro-demo | grep ".bss"
 
