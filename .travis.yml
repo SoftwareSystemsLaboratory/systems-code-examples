@@ -1,0 +1,19 @@
+language: c
+addons:
+ apt:
+   packages:
+     - build-essential
+     - cmake
+     - mono-complete
+     - openjdk-11-jdk
+
+before_script:
+  - cp scripts/install-googletest.sh $TRAVIS_BUILD_DIR
+  - chmod +x $TRAVIS_BUILD_DIR/install-googletest.sh
+  - pushd $TRAVIS_BUILD_DIR && ./install-googletest.sh && popd
+
+script:
+  - bash scripts/build-cmake-examples.sh
+  - bash scripts/build-csharp-examples.sh
+  - bash scripts/build-java-examples.sh
+
