@@ -22,4 +22,4 @@ Build Status
 --------------
 
 
-[![Build Status](https://travis-ci.com/gkthiruvathukal/systems-code-examples.svg?branch=master)](https://travis-ci.com/gkthiruvathukal/systems-code-examples)[![Build Status](https://travis-ci.com/gkthiruvathukal/systems-code-examples.svg?branch=master)](https://travis-ci.com/gkthiruvathukal/systems-code-examples)
+[![Build Status](https://travis-ci.com/gkthiruvathukal/systems-code-examples.svg?branch=master)](https://travis-ci.com/gkthiruvathukal/systems-code-examples)
