@@ -1,0 +1,6 @@
+This example shows how to create a simple abstract type in C.
+It's the familiar 2D point example found in many OOP books.
+The idea is not to be super interesting but to show a minimum-viable example of how to do object-based
+thinking in C with a simple abstract data type.
+
+
