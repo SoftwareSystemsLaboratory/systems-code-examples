@@ -26,4 +26,4 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
  
 # Link runTests with what we want to test and the GTest and pthread library
 
-add_executable(queue-mva-demo queue-mva.c)
+add_executable(wordlist-demo wordlist-demo.c wordlist.c)
