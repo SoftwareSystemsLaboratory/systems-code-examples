@@ -32,3 +32,4 @@ add_executable(hsearch-manpage-htable-demo hsearch-manpage-htable.c)
 add_executable(hsearch-better hsearch-better.c)
 #target_compile_options(bsearch-better PRIVATE -Werror -Wall -Wextra)
 
+add_executable(hsearch-wordinfo hsearch-wordinfo.c)
