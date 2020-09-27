@@ -27,3 +27,8 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 # Link runTests with what we want to test and the GTest and pthread library
 
 add_executable(hsearch-manpage-htable-demo hsearch-manpage-htable.c)
+#target_compile_options(bsearch-manpage-htable-demo PRIVATE -Werror -Wall -Wextra)
+
+add_executable(hsearch-better hsearch-better.c)
+#target_compile_options(bsearch-better PRIVATE -Werror -Wall -Wextra)
+

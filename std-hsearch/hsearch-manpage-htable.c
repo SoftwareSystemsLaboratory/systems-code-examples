@@ -30,7 +30,7 @@ int main(void)
 
     for (i = 0; i < 24; i++) {
         e.key = data[i];
-        e.data = (void *) i;
+        e.data = (void *) (i + 0L);
         hsearch_r(e, ENTER, &ep, &htable);
         if (ep == NULL) {
             fprintf(stderr, "entry failed\n");
@@ -41,8 +41,8 @@ int main(void)
     for (i = 22; i < 26; i++) {
         e.key = data[i];
         hsearch_r(e, FIND, &ep, &htable);
-        printf("%9.9s -> %9.9s:%d\n", e.key,
-               ep ? ep->key : "NULL", ep ? (int)(ep->data) : 0);
+        printf("%9.9s -> %9.9s:%ld\n", e.key,
+               ep ? ep->key : "NULL", ep ? (long)(ep->data) : 0);
     }
     hdestroy_r(&htable);
     exit(EXIT_SUCCESS);
