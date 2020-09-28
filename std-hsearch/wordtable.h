@@ -25,5 +25,6 @@ extern wordentry_t* wordtable_upsert(wordtable_t* wt_ptr, char* word, int delta)
 extern wordentry_t* wordtable_decrement(wordtable_t* wt_ptr, char* word);
 extern wordentry_t* wordtable_increment(wordtable_t* wt_ptr, char* word);
 extern void wordtable_delete(wordtable_t* wt_ptr);
+extern int wordtable_delete_entry(wordtable_t* wt_ptr, char* word);
 
 #endif

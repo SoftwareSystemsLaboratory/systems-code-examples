@@ -35,6 +35,21 @@ wordentry_t* wordtable_upsert(wordtable_t* wt_ptr, char* word, int delta) {
     }
 }
 
+/* hsearch, unfortunately, doesn't support deletion. But we can at least make a word unavailable */
+/* and free up the wordcount_t entry for it */
+
+int wordtable_delete_entry(wordtable_t* wt_ptr, char* word) {
+    ENTRY e, *ep;
+    e.key = word;
+    hsearch_r(e, FIND, &ep, &wt_ptr->wtable);
+    if (ep != NULL) {
+      wordentry_t* wp = ep->data;
+      free(ep->data);
+      ep->data = NULL;
+      return wp != NULL;
+    }
+    return 0;
+}
 
 
 wordentry_t* wordtable_decrement(wordtable_t* wt_ptr, char* word) {
@@ -47,7 +62,6 @@ wordentry_t* wordtable_increment(wordtable_t* wt_ptr, char* word) {
 }
 
 void wordtable_delete(wordtable_t* wt_ptr) {
-    // TODO: GC the wordentry_t structures
     hdestroy_r(&wt_ptr->wtable);
 }
 

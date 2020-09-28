@@ -51,6 +51,11 @@ int main(void)
         if (wp == NULL || wp->count > 0) continue;
         printf("zero word= %s, count=%ld, id=%p\n", data[i], wp->count, wp);
     }
+
+    for (int i = 0; i < data_size; i ++) {
+       int result = wordtable_delete_entry(&wtable, data[i]);
+       printf("deleting word %s, result=%d\n", data[i], result);
+    }
     wordtable_delete(&wtable);
     exit(EXIT_SUCCESS);
 }
