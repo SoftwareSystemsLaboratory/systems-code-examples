@@ -11,6 +11,7 @@
 
 typedef struct _wordtable_t {
   struct hsearch_data wtable;
+  int size;
 } wordtable_t;
 
 typedef struct _wordentry_t {
@@ -18,7 +19,7 @@ typedef struct _wordentry_t {
   long count;
 } wordentry_t;
 
-extern void wordtable_init(wordtable_t* wt_ptr);
+extern void wordtable_init(wordtable_t* wt_ptr, int size);
 extern wordentry_t* wordtable_lookup(wordtable_t* wt_ptr, char* word);
 extern wordentry_t* wordtable_upsert(wordtable_t* wt_ptr, char* word, int delta);
 extern wordentry_t* wordtable_decrement(wordtable_t* wt_ptr, char* word);

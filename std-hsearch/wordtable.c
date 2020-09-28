@@ -3,8 +3,9 @@
 
 #include "wordtable.h"
 
-void wordtable_init(wordtable_t* wt_ptr) {
-    hcreate_r(30, &wt_ptr->wtable);
+void wordtable_init(wordtable_t* wt_ptr, int size) {
+    hcreate_r(size, &wt_ptr->wtable);
+    wt_ptr->size = size;
 }
 
 wordentry_t* wordtable_lookup(wordtable_t* wt_ptr, char* word) {

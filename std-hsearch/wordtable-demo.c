@@ -21,7 +21,7 @@ static char *data[] = { "alpha", "bravo", "charlie", "delta",
 int main(void)
 {
     wordtable_t wtable;
-    wordtable_init(&wtable);
+    wordtable_init(&wtable, 50);
     int data_size = sizeof(data) / sizeof(char*);
     int i;
 
