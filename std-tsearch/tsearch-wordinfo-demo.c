@@ -41,13 +41,13 @@ static void action(const void *nodep, VISIT which, int depth)
         break;
     case postorder:
         datap = *(wordinfo_t **) nodep;
-        printf("word %s count %d\n", datap->word, datap->count);
+        printf("word %s count %d depth %d\n", datap->word, datap->count, depth);
         break;
     case endorder:
         break;
     case leaf:
         datap = *(wordinfo_t **) nodep;
-        printf("word %s count %d\n", datap->word, datap->count);
+        printf("word %s count %d depth %d\n", datap->word, datap->count, depth);
         break;
     }
 }
