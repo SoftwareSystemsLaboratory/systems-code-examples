@@ -25,9 +25,9 @@ typedef struct _wordinfo_t {
 
 static int compare_by_word(const void *pa, const void *pb)
 {
-    wordinfo_t* wi_a = pa, *wi_b = pb;
+    const wordinfo_t* wi_a = pa, *wi_b = pb;
 
-    printf("comparing %s to %s\n", wi_a->word, wi_b->word);
+    //printf("comparing %s to %s\n", wi_a->word, wi_b->word);
     return strcmp(wi_a->word, wi_b->word);
 }
 
@@ -70,10 +70,7 @@ int main(void)
         if (val != NULL)  {
             wordinfo_t* entry = *val;
             entry->count++;
-            printf("In tree\n");
         }
-        else
-            printf("Not in tree\n");
     }
     twalk(root, action);
     // tdestroy(root, free);
