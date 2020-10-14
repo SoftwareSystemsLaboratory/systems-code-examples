@@ -13,7 +13,14 @@ else()
   set(CMAKE_CXX_EXTENSIONS OFF)
 endif()
 
+
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+
+find_package(GTest REQUIRED)
+include_directories(${GTEST_INCLUDE_DIRS})
+
 add_executable(point_demo point_demo.c point.c)
 target_link_libraries(point_demo -lm)
 
+add_executable(point_tests point_tests.cc point.c)
+target_link_libraries(point_tests ${GTEST_LIBRARIES} -lpthread)
