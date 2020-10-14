@@ -4,11 +4,15 @@
 #include <math.h>
 
 #ifdef __cplusplus
+
 extern "C" {
-#endif
 
 #include "point.h"
 
-#ifdef __cplusplus
 }
+
+#else
+
+#include "point.h"
+
 #endif
