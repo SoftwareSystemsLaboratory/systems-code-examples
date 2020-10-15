@@ -6,6 +6,10 @@
 #include <string.h>
 #include <stdlib.h>
 
+point_t* point_allocate() {
+  return (point_t*) malloc(sizeof(point_t));
+}
+
 void point_new(point_t* point) {
    point->x = 0;
    point->y = 0;

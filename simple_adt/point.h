@@ -12,7 +12,9 @@ typedef struct _point_t {
     double x, y;
 } point_t;
 
-extern void point_new(point_t* point);;
+extern point_t* point_allocate();
+
+extern void point_new(point_t* point);
 
 extern void point_init(point_t* point, double x, double y);
 
