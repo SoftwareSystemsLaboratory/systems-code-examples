@@ -69,3 +69,8 @@ dkms.conf
 # Targets to ignore
 bin/
 lib/
+
+# IntelliJ/CLion
+
+.idea/
+*-debug/
