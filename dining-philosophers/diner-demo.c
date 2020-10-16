@@ -1,5 +1,6 @@
 #include <pthread.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 #include "diners.h"
 #include "millisleep.h"
@@ -10,30 +11,32 @@ int main(int argc, char *argv[]) {
     fork_t fork[MAX_DINERS];
     diner_t diner[MAX_DINERS];
     pthread_t diner_thread[MAX_DINERS];
+
     pthread_attr_t attr;
-    pthread_attr_init(&attr);
-    pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE);
     pthread_t this_thread = pthread_self();
+
+    pthread_attr_init(&attr);
+
+    pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE);
+
+    // the main thread monitors the state of the diners and runs at highest
+    // priority so it can continue doing something, even if (or when) the other
+    // threads get deadlocked.
+
     struct sched_param sched_parameters;
     sched_parameters.sched_priority = sched_get_priority_max(SCHED_OTHER);
     int status = pthread_setschedparam(this_thread, SCHED_OTHER, &sched_parameters);
 
-
-    if (get_dining_policy() == FORK_REORDERING)
-        printf("Enumerating forks to avoid deadlock.");
-    else
-        printf("Not Enumerating forks to avoid deadlock.");
-
     if (status != 0) {
         fprintf(stderr, "Cannot set max prioirty.\n");
-        //exit(1);
+        exit(1);
     }
 
-    int go_on = 1;
-
+    /* initialize the shared resources (forks) */
     for (int i = 0; i < MAX_DINERS; i++)
         fork_init(&fork[i], i);
 
+    /* initialize the diners to link to the shared resources (forks) */
     for (int i = 0; i < MAX_DINERS; i++) {
         if (get_dining_policy() == FORK_REORDERING) {
             int id1 = i;
@@ -48,14 +51,17 @@ int main(int argc, char *argv[]) {
             diner_init(&diner[i], i, &fork[i], &fork[(i + 1) % MAX_DINERS]);
     }
 
+    /* start the actual threads for each diner */
     for (int i = 0; i < MAX_DINERS; i++) {
         printf("Creating thread %d", i);
         pthread_create(&diner_thread[i], &attr, diner_run, (void *) &diner[i]);
     }
 
-    // set current (main) thread to max priority
-    //
-    //
+    /* monitor the state of the diners in the main (highest-priority) thread
+     * because it is high priority, it must sleep for a short time to give
+     * the diner threads a chance to do their thing.
+     */
+    int go_on = 1;
     while (go_on) {
         for (int i = 0; i < MAX_DINERS; i++) {
             putchar(diner[i].state);
@@ -67,6 +73,11 @@ int main(int argc, char *argv[]) {
         }
         millisecond_sleep(MAIN_THREAD_SLEEP_TIME);
     }
+
+    /* assuming no deadlock happened, this code will be reached so we
+     * can join with the main thread
+     */
+
     for (int i=0; i < MAX_DINERS; i++) {
         void *result;
         pthread_join(diner_thread[i], &result);
@@ -74,8 +85,10 @@ int main(int argc, char *argv[]) {
         printf("Diner id %c exited normally; state = %c\n", diner->id, diner->state);
     }
 
+    /* locks associated with forks need to be cleaned up */
     for (int i = 0; i < MAX_DINERS; i++)
         fork_free_resources(&fork[i]);
 
+    /* attribute object should also be freed (could do earlier, too) */
     pthread_attr_destroy(&attr);
 }
