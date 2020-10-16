@@ -39,13 +39,13 @@ int main(int argc, char *argv[]) {
             int id1 = i;
             int id2 = (i + 1) % MAX_DINERS;
             if (id1 < id2)
-                diner_init(&diner[i], &fork[id1], &fork[id2]);
+                diner_init(&diner[i], i, &fork[id1], &fork[id2]);
             else {
                 printf("Reordered forks %d and %d\n", id1, id2);
-                diner_init(&diner[i], &fork[id2], &fork[id1]);
+                diner_init(&diner[i], i, &fork[id2], &fork[id1]);
             }
         } else
-            diner_init(&diner[i], &fork[i], &fork[(i + 1) % MAX_DINERS]);
+            diner_init(&diner[i], i, &fork[i], &fork[(i + 1) % MAX_DINERS]);
     }
 
     for (int i = 0; i < MAX_DINERS; i++) {
@@ -67,4 +67,15 @@ int main(int argc, char *argv[]) {
         }
         millisecond_sleep(MAIN_THREAD_SLEEP_TIME);
     }
+    for (int i=0; i < MAX_DINERS; i++) {
+        void *result;
+        pthread_join(diner_thread[i], &result);
+        diner_t* diner = (diner_t*) result;
+        printf("Diner id %c exited normally; state = %c\n", diner->id, diner->state);
+    }
+
+    for (int i = 0; i < MAX_DINERS; i++)
+        fork_free_resources(&fork[i]);
+
+    pthread_attr_destroy(&attr);
 }

@@ -16,6 +16,7 @@ typedef struct {
 } fork_t;
 
 typedef struct {
+    char id;
     char state;
     fork_t *left;
     fork_t *right;
@@ -27,7 +28,9 @@ extern void fork_pickup(fork_t *fork);
 
 extern void fork_putdown(fork_t *fork);
 
-extern void diner_init(diner_t *diner, fork_t *left, fork_t *right);
+extern void fork_free_resources(fork_t *fork);
+
+extern void diner_init(diner_t *diner, int id, fork_t *left, fork_t *right);
 
 extern void diner_think(diner_t *diner);
 

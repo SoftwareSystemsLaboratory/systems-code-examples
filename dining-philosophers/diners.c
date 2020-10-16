@@ -22,7 +22,12 @@ void fork_putdown(fork_t *fork) {
     pthread_mutex_unlock(&fork->lock);
 }
 
-void diner_init(diner_t *diner, fork_t *left, fork_t *right) {
+void fork_free_resources(fork_t *fork) {
+    pthread_mutex_destroy(&fork->lock);
+}
+
+void diner_init(diner_t *diner, int id, fork_t *left, fork_t *right) {
+    diner->id = '0' + id;
     diner->state = 't';
     diner->left = left;
     diner->right = right;
@@ -55,6 +60,7 @@ void *diner_run(void *tsd) {  /* tsd should be the diner object */
         fork_putdown(diner->right);
     }
     diner->state = 'd';
+    pthread_exit(diner);
 }
 
 enum dining_policy_t get_dining_policy() {
