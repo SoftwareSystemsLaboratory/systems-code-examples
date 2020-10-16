@@ -27,10 +27,25 @@ void fork_free_resources(fork_t *fork) {
 }
 
 void diner_init(diner_t *diner, int id, fork_t *left, fork_t *right) {
+    pthread_attr_t attr;
     diner->id = '0' + id;
     diner->state = 't';
     diner->left = left;
     diner->right = right;
+}
+
+void diner_start(diner_t *diner) {
+    pthread_attr_t attr;
+
+    pthread_attr_init(&attr);
+    pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE);
+    pthread_create(&diner->thread, &attr, diner_run, (void *)diner);
+    pthread_attr_destroy(&attr);
+}
+
+void diner_await(diner_t *diner) {
+    void *result;
+    pthread_join(&diner->thread, &result);
 }
 
 void diner_think(diner_t *diner) {

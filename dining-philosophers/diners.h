@@ -20,6 +20,7 @@ typedef struct {
     char state;
     fork_t *left;
     fork_t *right;
+    pthread_t thread;
 } diner_t;
 
 extern void fork_init(fork_t *fork, int value);
@@ -35,6 +36,10 @@ extern void diner_init(diner_t *diner, int id, fork_t *left, fork_t *right);
 extern void diner_think(diner_t *diner);
 
 extern void diner_eat(diner_t *diner);
+
+extern void diner_start(diner_t *diner);
+
+extern void diner_await(diner_t *diner);
 
 extern void *diner_run(void *tsd);
 
