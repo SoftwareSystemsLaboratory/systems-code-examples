@@ -73,10 +73,12 @@ void bounded_buffer_cleanup(bounded_buffer_t* bb) {
     pthread_cond_destroy(&bb->has_items);
 }
 
+/* suppliers will produce NUM_SUPPLIERS * GEN_COUNT messages */
+
 void* supplier(void *tsd)
 {
     bounded_buffer_t* bb = (bounded_buffer_t*) tsd;
-    printf("Starting supplier()\n");
+    printf("Starting supplier(): will supply %d messages\n", GEN_COUNT);
     for (int i=0; i < GEN_COUNT; i++) {
         entry_t* new_entry = (entry_t*) malloc(sizeof(entry_t));
         new_entry->value = i;
@@ -85,11 +87,17 @@ void* supplier(void *tsd)
     pthread_exit(NULL);
 }
 
+/* consumers will consume NUM_SUPPLIERS * GEN_COUNT / NUM_CONSUMERS messages each */
+
 void* consumer(void *tsd)
 {
     bounded_buffer_t* bb = (bounded_buffer_t*) tsd;
-    printf("Starting consumer()\n");
-    for (int i=0; i < GEN_COUNT; i++) {
+    int max_to_consume = NUM_SUPPLIERS * GEN_COUNT / NUM_CONSUMERS;
+    printf("Starting consumer(): will consume %d messages \n", max_to_consume);
+    int not_consumed = NUM_SUPPLIERS * GEN_COUNT % NUM_CONSUMERS;
+    if (not_consumed > 0)
+      printf("Note: %d messages will be left in buffer at the end\n", not_consumed);
+    for (int i=0; i < max_to_consume; i++) {
         entry_t* entry = bounded_buffer_get(bb);
         printf("got entry %d\n", entry->value);
     }
