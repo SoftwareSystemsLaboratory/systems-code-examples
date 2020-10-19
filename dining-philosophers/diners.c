@@ -27,7 +27,6 @@ void fork_free_resources(fork_t *fork) {
 }
 
 void diner_init(diner_t *diner, int id, fork_t *left, fork_t *right) {
-    pthread_attr_t attr;
     diner->id = '0' + id;
     diner->state = 't';
     diner->left = left;
