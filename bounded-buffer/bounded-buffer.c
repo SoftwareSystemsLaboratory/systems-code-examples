@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <getopt.h>
 
 /* TODO: add getopt() support soon */
 
@@ -32,6 +33,90 @@ typedef struct {
     pthread_cond_t has_space;
     pthread_cond_t has_items;
 } bounded_buffer_t;
+
+typedef struct {
+    int no_suppliers;
+    int no_consumers;
+    int supplier_max_delay_ms;
+    int consumer_max_delay_ms;
+    int debug_level;
+} bb_options_t;
+
+
+int bb_options_get(bb_options_t* options, int argc, char **argv)
+{
+    int c;
+    int digit_optind = 0;
+
+    options->no_suppliers = NUM_SUPPLIERS;
+    options->no_consumers = NUM_CONSUMERS;
+    options->supplier_max_delay_ms = SUPPLIER_DELAY;
+    options->consumer_max_delay_ms = CONSUMER_DELAY;
+    options->debug_level = 0;
+
+    while (1) {
+        int this_option_optind = optind ? optind : 1;
+        int option_index = 0;
+        static struct option long_options[] = {
+            {"suppliers",     required_argument, 0,  's' },
+            {"consumers",  required_argument,       0,  'c' },
+            {"sdelay",  required_argument, 0,  'x' },
+            {"cdelay", required_argument,       0, 'y' },
+            {"debug",  required_argument, 0, 'd'},
+            {0,         0,                 0,  0 }
+        };
+
+        c = getopt_long(argc, argv, "abc:d:012",
+                        long_options, &option_index);
+        if (c == -1)
+            break;
+
+        switch (c) {
+        case 's':
+            options->no_suppliers = atoi(optarg);
+            break;
+
+        case 'c':
+            options->no_consumers = atoi(optarg);
+            break;
+
+        case 'x':
+            options->supplier_max_delay_ms = atoi(optarg);
+            break;
+
+        case 'y':
+            options->consumer_max_delay_ms = atoi(optarg);
+            break;
+
+        case 'd':
+            options->debug_level = atoi(optarg);
+            break;
+
+        case '?':
+            break;
+
+        default:
+            printf("?? getopt returned character code 0%o ??\n", c);
+        }
+    }
+
+    /*
+     * Save these notes from GNU man page.
+    if (optind < argc) {
+      printf("non-option ARGV-elements: ");
+      while (optind < argc)
+        printf("%s ", argv[optind++]);
+      printf("\n");
+    }
+    */
+
+}
+
+void bb_options_print(bb_options_t* options) {
+    printf("suppliers %d, consumers %d, sdelay %d, cdelay %d, debug %d\n",
+           options->no_suppliers, options->no_consumers, options->supplier_max_delay_ms, options->consumer_max_delay_ms, options->debug_level);
+
+}
 
 void bounded_buffer_init(bounded_buffer_t* bb, int size) {
     bb->entries = (entry_t**) malloc(size * sizeof(entry_t*));
@@ -103,7 +188,7 @@ void* consumer(void *tsd)
     printf("Starting consumer(): will consume %d messages \n", max_to_consume);
     int not_consumed = NUM_SUPPLIERS * GEN_COUNT % NUM_CONSUMERS;
     if (not_consumed > 0)
-      printf("Note: %d messages will be left in buffer at the end\n", not_consumed);
+        printf("Note: %d messages will be left in buffer at the end\n", not_consumed);
     for (int i=0; i < max_to_consume; i++) {
         entry_t* entry = bounded_buffer_get(bb);
         printf("buffer size est = %d\n", bb->tail - bb->head);
@@ -119,8 +204,12 @@ int main (int argc, char *argv[])
 {
     pthread_t threads[NUM_THREADS];
     pthread_attr_t attr;
-
     bounded_buffer_t bb;
+
+    bb_options_t options;
+    bb_options_get(&options, argc, argv);
+    bb_options_print(&options);
+
     bounded_buffer_init(&bb, BB_SIZE);
 
     pthread_attr_init(&attr);
