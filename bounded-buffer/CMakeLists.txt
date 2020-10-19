@@ -17,6 +17,6 @@ endif()
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
-add_executable(bounded-buffer bounded-buffer.c)
+add_executable(bounded-buffer bounded-buffer.c millisleep.c millisleep.h)
 target_link_libraries(bounded-buffer pthread)
 

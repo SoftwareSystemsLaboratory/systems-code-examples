@@ -14,6 +14,11 @@
 #define NUM_CONSUMERS 1
 #define NUM_THREADS ((NUM_SUPPLIERS) + (NUM_CONSUMERS))
 
+#define SUPPLIER_DELAY 300
+#define CONSUMER_DELAY 1000
+
+#include "millisleep.h"
+
 typedef struct {
     int value;
 } entry_t;
@@ -80,9 +85,11 @@ void* supplier(void *tsd)
     bounded_buffer_t* bb = (bounded_buffer_t*) tsd;
     printf("Starting supplier(): will supply %d messages\n", GEN_COUNT);
     for (int i=0; i < GEN_COUNT; i++) {
+        millisecond_sleep( rand() % SUPPLIER_DELAY);
         entry_t* new_entry = (entry_t*) malloc(sizeof(entry_t));
         new_entry->value = i;
         bounded_buffer_put(bb, new_entry);
+        printf("buffer size est = %d\n", bb->tail - bb->head);
     }
     pthread_exit(NULL);
 }
@@ -99,7 +106,10 @@ void* consumer(void *tsd)
       printf("Note: %d messages will be left in buffer at the end\n", not_consumed);
     for (int i=0; i < max_to_consume; i++) {
         entry_t* entry = bounded_buffer_get(bb);
+        printf("buffer size est = %d\n", bb->tail - bb->head);
+        millisecond_sleep( rand() % CONSUMER_DELAY);
         printf("got entry %d\n", entry->value);
+        free(entry);
     }
     pthread_exit(NULL);
 }
