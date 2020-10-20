@@ -13,13 +13,24 @@
 
 #define INFO(fmt, ...) do { fprintf(stdout, fmt, ## __VA_ARGS__); } while (0)
 
+/*
+ * bounded buffer example where there can be any number of suppliers and consumers
+ *
+ * in this design:
+ * - each supplier and consumer runs as a separate thread
+ *   thread-specific data allows each to share the bound_buffer_t* instance and command-line options/config
+ *   each supplier and consumer knows its own id.
+ * - suppliers each produce options->gen_count values
+ *   consumers consume only (options->gen_count * options->no_suppliers) / options->no_consumers entries
+ *   some entries may NOT be consumed (ok under most circumstances)
+ * - because consumers will stop after they have gotten their share of values, others are allowed to consume their fair share
+ */
+
 typedef struct {
     bb_options_t* options;
     bounded_buffer_t* bb;
     int id;
 } bb_thread_specific_data_t;
-
-/* note: supplier generates options->gen_count entries */
 
 void* supplier(void *tsd)
 {
@@ -36,7 +47,7 @@ void* supplier(void *tsd)
         new_entry->value = my_id * options->gen_count + i;
         DEBUG("producer %d added entry %d\n", my_id, new_entry->value);
         bounded_buffer_put(bb, new_entry);
-        INFO("buffer size est = %d\n", bb->tail - bb->head);
+        INFO("current buffer size  = %d\n", bb->tail - bb->head);
     }
     INFO("supplier %d is done\n", my_id);
     pthread_exit(NULL);
@@ -59,7 +70,7 @@ void* consumer(void *tsd)
         DEBUG("Note: %d messages will be left in buffer at the end\n", not_consumed);
     for (int i=0; i < max_to_consume; i++) {
         entry_t* entry = bounded_buffer_get(bb);
-        INFO("buffer size est = %d\n", bb->tail - bb->head);
+        INFO("current buffer size = %d\n", bb->tail - bb->head);
         millisecond_sleep( rand() % options->consumer_max_delay_ms);
         DEBUG("consumer %d got entry %d\n", my_id, entry->value);
         free(entry);
@@ -74,7 +85,6 @@ int main (int argc, char *argv[])
     bounded_buffer_t bb;
     bb_options_t options;
 
-
     bb_options_get(&options, argc, argv);
     int no_threads = options.no_suppliers + options.no_consumers;
     pthread_t* threads = (pthread_t*) malloc(no_threads * sizeof(pthread_t));
@@ -87,7 +97,6 @@ int main (int argc, char *argv[])
     pthread_attr_init(&attr);
     pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE);
 
-    /* TODO: Consider making thread-specific data include supplier/consumer IDs */
     int thread_count = 0;
     bb_thread_specific_data_t common_tsd = { &options, &bb, -1 };
     for (int i=0; i < options.no_suppliers; i++) {
@@ -96,15 +105,13 @@ int main (int argc, char *argv[])
         pthread_create(&threads[thread_count], &attr, supplier, (void *)&bb_tsd[thread_count]);
         thread_count++;
     }
-    DEBUG("producer threads created total = %d\n", thread_count);
-
     for (int i=0; i < options.no_consumers; i++) {
         bb_tsd[thread_count] = common_tsd;
         bb_tsd[thread_count].id = i;
         pthread_create(&threads[thread_count], &attr, consumer, (void *)&bb_tsd[thread_count]);
         thread_count++;
     }
-    DEBUG("threads created total = %d\n", thread_count);
+    DEBUG("threads created = %d\n", thread_count);
 
     for (int i=0; i < thread_count; i++) {
         pthread_join(threads[i], NULL);
@@ -114,6 +121,7 @@ int main (int argc, char *argv[])
 
     pthread_attr_destroy(&attr);
     free(threads);
+    free(bb_tsd);
 
     DEBUG("freed all pthread_t resources\n");
 
