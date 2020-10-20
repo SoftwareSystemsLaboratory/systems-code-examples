@@ -1,5 +1,7 @@
 #include "bbuffer.h"
 
+#include <stdlib.h>
+
 void bounded_buffer_init(bounded_buffer_t* bb, int size) {
     bb->entries = (entry_t**) malloc(size * sizeof(entry_t*));
     for (int i=0; i < size; i++)

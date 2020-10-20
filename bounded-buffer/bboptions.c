@@ -15,15 +15,19 @@ int bb_options_get(bb_options_t* options, int argc, char **argv)
     options->no_consumers = NUM_CONSUMERS;
     options->supplier_max_delay_ms = SUPPLIER_DELAY;
     options->consumer_max_delay_ms = CONSUMER_DELAY;
+    options->gen_count = GEN_COUNT;
+    options->bsize = BB_SIZE;
 
     while (1) {
         int this_option_optind = optind ? optind : 1;
         int option_index = 0;
         static struct option long_options[] = {
-            {"suppliers", required_argument, 0,  's' },
-            {"consumers", required_argument,       0,  'c' },
-            {"sdelay",    required_argument, 0,  'x' },
-            {"cdelay",    required_argument,       0, 'y' },
+            {"suppliers", required_argument, 0, 's' },
+            {"consumers", required_argument, 0, 'c' },
+            {"sdelay",    required_argument, 0, 'x' },
+            {"cdelay",    required_argument, 0, 'y' },
+            {"gen",       required_argument, 0, 'g' },
+            {"bsize",     required_argument, 0, 'b' },
             {0,         0,                 0,  0 }
         };
 
@@ -33,6 +37,10 @@ int bb_options_get(bb_options_t* options, int argc, char **argv)
             break;
 
         switch (c) {
+        case 'b':
+            options->bsize = atoi(optarg);
+            break;
+
         case 's':
             options->no_suppliers = atoi(optarg);
             break;
@@ -47,6 +55,10 @@ int bb_options_get(bb_options_t* options, int argc, char **argv)
 
         case 'y':
             options->consumer_max_delay_ms = atoi(optarg);
+            break;
+
+        case 'g':
+            options->gen_count = atoi(optarg);
             break;
 
         case '?':
@@ -70,7 +82,7 @@ int bb_options_get(bb_options_t* options, int argc, char **argv)
 }
 
 void bb_options_print(bb_options_t* options) {
-    printf("suppliers %d, consumers %d, sdelay %d, cdelay %d\n",
-           options->no_suppliers, options->no_consumers, options->supplier_max_delay_ms, options->consumer_max_delay_ms);
+    printf("suppliers %d, consumers %d, sdelay %d, cdelay %d, gen count %d, bsize %d\n",
+           options->no_suppliers, options->no_consumers, options->supplier_max_delay_ms, options->consumer_max_delay_ms, options->gen_count, options->bsize);
 
 }
