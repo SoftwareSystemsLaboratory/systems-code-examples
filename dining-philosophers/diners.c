@@ -44,7 +44,7 @@ void diner_start(diner_t *diner) {
 
 void diner_await(diner_t *diner) {
     void *result;
-    pthread_join(&diner->thread, &result);
+    pthread_join(diner->thread, &result);
 }
 
 void diner_think(diner_t *diner) {
