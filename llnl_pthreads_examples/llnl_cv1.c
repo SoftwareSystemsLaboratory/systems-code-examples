@@ -30,8 +30,8 @@ void *inc_count(void *t)
             printf("inc_count(): thread %ld, count = %d  Threshold reached.\n",
                    my_id, count);
         }
-        printf("inc_count(): thread %ld, count = %d, unlocking mutex\n",
-               my_id, count);
+        printf("inc_count(): thread %ld, count = %d, i = %d, unlocking mutex\n",
+               my_id, count, i);
         pthread_mutex_unlock(&count_mutex);
 
         /* Do some "work" so threads can alternate on mutex lock */
