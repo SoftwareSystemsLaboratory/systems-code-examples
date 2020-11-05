@@ -15,6 +15,7 @@ else()
   set(CMAKE_CXX_EXTENSIONS OFF)
 endif()
 
+set(CMAKE_BUILD_TYPE Debug)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 add_executable(bounded-buffer bounded-buffer.c bbuffer.c bbuffer.h bboptions.c bboptions.h millisleep.c millisleep.h)
