@@ -9,9 +9,7 @@
 
 #include "millisleep.h"
 
-#define DEBUG(fmt, ...) do { fprintf(stderr, fmt, ## __VA_ARGS__); } while (0)
 
-#define INFO(fmt, ...) do { fprintf(stdout, fmt, ## __VA_ARGS__); } while (0)
 
 /*
  * bounded buffer example where there can be any number of suppliers and consumers
@@ -35,7 +33,6 @@ typedef struct {
 void* supplier(void *tsd)
 {
     bb_thread_specific_data_t* bb_tsd = (bb_thread_specific_data_t*) tsd;
-
     bounded_buffer_t* bb = bb_tsd->bb;
     bb_options_t* options = bb_tsd->options;
     int my_id = bb_tsd->id;
@@ -45,9 +42,8 @@ void* supplier(void *tsd)
         millisecond_sleep( rand() % options->supplier_max_delay_ms);
         entry_t* new_entry = (entry_t*) malloc(sizeof(entry_t));
         new_entry->value = my_id * options->gen_count + i;
-        DEBUG("producer %d added entry %d\n", my_id, new_entry->value);
         bounded_buffer_put(bb, new_entry);
-        INFO("current buffer size  = %d\n", bb->tail - bb->head);
+        INFO("producer %d added entry %d [buffer size = %d, head %d tail %d]\n", my_id, new_entry->value, bounded_buffer_size(bb), bb->head, bb->tail);
     }
     INFO("supplier %d is done\n", my_id);
     pthread_exit(NULL);
@@ -59,7 +55,6 @@ void* supplier(void *tsd)
 void* consumer(void *tsd)
 {
     bb_thread_specific_data_t* bb_tsd = (bb_thread_specific_data_t*) tsd;
-
     bounded_buffer_t* bb = bb_tsd->bb;
     bb_options_t* options = bb_tsd->options;
     int my_id = bb_tsd->id;
@@ -70,9 +65,8 @@ void* consumer(void *tsd)
         DEBUG("Note: %d messages will be left in buffer at the end\n", not_consumed);
     for (int i=0; i < max_to_consume; i++) {
         entry_t* entry = bounded_buffer_get(bb);
-        INFO("current buffer size = %d\n", bb->tail - bb->head);
         millisecond_sleep( rand() % options->consumer_max_delay_ms);
-        DEBUG("consumer %d got entry %d\n", my_id, entry->value);
+        INFO("consumer %d got entry %d [buffer size = %d head %d tail %d]\n", my_id, entry->value, bounded_buffer_size(bb), bb->head, bb->tail);
         free(entry);
     }
     INFO("consumer %d is done\n", my_id);
@@ -98,15 +92,16 @@ int main (int argc, char *argv[])
     pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE);
 
     int thread_count = 0;
-    bb_thread_specific_data_t common_tsd = { &options, &bb, -1 };
     for (int i=0; i < options.no_suppliers; i++) {
-        bb_tsd[thread_count] = common_tsd;
+        bb_tsd[thread_count].options = &options;
+        bb_tsd[thread_count].bb = &bb;
         bb_tsd[thread_count].id = i;
-        pthread_create(&threads[thread_count], &attr, supplier, (void *)&bb_tsd[thread_count]);
+        int retval = pthread_create(&threads[thread_count], &attr, supplier, (void *)&bb_tsd[thread_count]);
         thread_count++;
     }
     for (int i=0; i < options.no_consumers; i++) {
-        bb_tsd[thread_count] = common_tsd;
+        bb_tsd[thread_count].options = &options;
+        bb_tsd[thread_count].bb = &bb;
         bb_tsd[thread_count].id = i;
         pthread_create(&threads[thread_count], &attr, consumer, (void *)&bb_tsd[thread_count]);
         thread_count++;
@@ -120,6 +115,7 @@ int main (int argc, char *argv[])
     DEBUG("joined with producer and consumer threads\n");
 
     pthread_attr_destroy(&attr);
+    bounded_buffer_cleanup(&bb);
     free(threads);
     free(bb_tsd);
 
