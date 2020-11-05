@@ -5,7 +5,7 @@
 void bounded_buffer_init(bounded_buffer_t* bb, int size) {
     bb->entries = (entry_t**) malloc(size * sizeof(entry_t*));
     for (int i=0; i < size; i++)
-        bb->entries[size] = NULL;
+        bb->entries[i] = NULL;
     bb->size = size;
     bb->head = bb->tail = 0;
     pthread_mutex_init(&bb->lock, NULL);
@@ -39,6 +39,10 @@ entry_t* bounded_buffer_get(bounded_buffer_t* bb)  {
 
     pthread_mutex_unlock(&bb->lock);
     return entry;
+}
+
+int bounded_buffer_size(bounded_buffer_t* bb) {
+    return bb->tail - bb->head;
 }
 
 void bounded_buffer_cleanup(bounded_buffer_t* bb) {
