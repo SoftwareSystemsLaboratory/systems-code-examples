@@ -46,6 +46,14 @@ int bounded_buffer_size(bounded_buffer_t* bb) {
 }
 
 void bounded_buffer_cleanup(bounded_buffer_t* bb) {
+    int unfreed_count = 0;
+    for (int i=0; i < bb->size; i++)
+        if (bb->entries[i] != NULL)
+            unfreed_count++;
+    if (unfreed_count > 0) {
+        INFO("Warning: %d entries in bounded buffer not freed\n", unfreed_count);
+    }
+    free(bb->entries);
     pthread_mutex_destroy(&bb->lock);
     pthread_cond_destroy(&bb->has_space);
     pthread_cond_destroy(&bb->has_items);
