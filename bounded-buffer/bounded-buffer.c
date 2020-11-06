@@ -111,6 +111,7 @@ int main (int argc, char *argv[])
 
     DEBUG("joined with producer and consumer threads\n");
 
+    INFO("Number of items remaining in bounded buffer %d (this is ok if not 0)\n", bounded_buffer_size(&bb));
     pthread_attr_destroy(&attr);
     bounded_buffer_cleanup(&bb);
     free(threads);
