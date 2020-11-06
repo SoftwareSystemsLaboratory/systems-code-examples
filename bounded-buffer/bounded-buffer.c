@@ -91,27 +91,37 @@ int main (int argc, char *argv[])
     pthread_attr_init(&attr);
     pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE);
 
-    int thread_count = 0;
+    /* create supplier threads */
     for (int i=0; i < options.no_suppliers; i++) {
-        // This is called a compound literal, which allows you to initialize fields of a struct in a statement.
-        bb_tsd[thread_count] = (bb_thread_specific_data_t) { .options = &options, .bb = &bb, .id = i };
-        pthread_create(&threads[thread_count], &attr, supplier, (void *)&bb_tsd[thread_count]);
-        thread_count++;
+        int thread_number = i;
+        bb_tsd[thread_number] = (bb_thread_specific_data_t) { .options = &options, .bb = &bb, .id = i };
+        INFO("Creating thread %d for supplier %d\n", thread_number, i);
+        pthread_create(&threads[thread_number], &attr, supplier, (void *)&bb_tsd[thread_number]);
     }
-    for (int i=0; i < options.no_consumers; i++) {
-        bb_tsd[thread_count] = (bb_thread_specific_data_t) { .options = &options, .bb = &bb, .id = i };
-        pthread_create(&threads[thread_count], &attr, consumer, (void *)&bb_tsd[thread_count]);
-        thread_count++;
-    }
-    DEBUG("threads created = %d\n", thread_count);
 
-    for (int i=0; i < thread_count; i++) {
+    /* create supplier threads */
+    for (int i=0; i < options.no_consumers; i++) {
+        int thread_number = i+options.no_suppliers;
+        bb_tsd[thread_number] = (bb_thread_specific_data_t) { .options = &options, .bb = &bb, .id = i };
+        INFO("Creating thread %d for consumer %d\n", thread_number, i);
+        pthread_create(&threads[thread_number], &attr, consumer, (void *)&bb_tsd[thread_number]);
+    }
+
+    DEBUG("threads created = %d\n", no_threads);
+
+    for (int i=0; i < no_threads; i++) {
         pthread_join(threads[i], NULL);
     }
 
     DEBUG("joined with producer and consumer threads\n");
 
     INFO("Number of items remaining in bounded buffer %d (this is ok if not 0)\n", bounded_buffer_size(&bb));
+    int bb_size = bounded_buffer_size(&bb);
+    for (int i=0; i < bb_size; i++) {
+        entry_t* e = bounded_buffer_get(&bb);
+        INFO("Removed un-consumed entry %d\n", e->value);
+        free(e);
+    }
     pthread_attr_destroy(&attr);
     bounded_buffer_cleanup(&bb);
     free(threads);
