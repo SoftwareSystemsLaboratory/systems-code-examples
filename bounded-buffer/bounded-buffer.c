@@ -93,16 +93,13 @@ int main (int argc, char *argv[])
 
     int thread_count = 0;
     for (int i=0; i < options.no_suppliers; i++) {
-        bb_tsd[thread_count].options = &options;
-        bb_tsd[thread_count].bb = &bb;
-        bb_tsd[thread_count].id = i;
-        int retval = pthread_create(&threads[thread_count], &attr, supplier, (void *)&bb_tsd[thread_count]);
+        // This is called a compound literal, which allows you to initialize fields of a struct in a statement.
+        bb_tsd[thread_count] = (bb_thread_specific_data_t) { .options = &options, .bb = &bb, .id = i };
+        pthread_create(&threads[thread_count], &attr, supplier, (void *)&bb_tsd[thread_count]);
         thread_count++;
     }
     for (int i=0; i < options.no_consumers; i++) {
-        bb_tsd[thread_count].options = &options;
-        bb_tsd[thread_count].bb = &bb;
-        bb_tsd[thread_count].id = i;
+        bb_tsd[thread_count] = (bb_thread_specific_data_t) { .options = &options, .bb = &bb, .id = i };
         pthread_create(&threads[thread_count], &attr, consumer, (void *)&bb_tsd[thread_count]);
         thread_count++;
     }
