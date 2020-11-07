@@ -28,11 +28,11 @@ typedef struct {
     bb_options_t* options;
     bounded_buffer_t* bb;
     int id;
-} bb_thread_specific_data_t;
+} bb_tsd_t;
 
 void* supplier(void *tsd)
 {
-    bb_thread_specific_data_t* bb_tsd = (bb_thread_specific_data_t*) tsd;
+    bb_tsd_t* bb_tsd = (bb_tsd_t*) tsd;
     bounded_buffer_t* bb = bb_tsd->bb;
     bb_options_t* options = bb_tsd->options;
     int my_id = bb_tsd->id;
@@ -54,7 +54,7 @@ void* supplier(void *tsd)
 
 void* consumer(void *tsd)
 {
-    bb_thread_specific_data_t* bb_tsd = (bb_thread_specific_data_t*) tsd;
+    bb_tsd_t* bb_tsd = (bb_tsd_t*) tsd;
     bounded_buffer_t* bb = bb_tsd->bb;
     bb_options_t* options = bb_tsd->options;
     int my_id = bb_tsd->id;
@@ -82,7 +82,7 @@ int main (int argc, char *argv[])
     bb_options_get(&options, argc, argv);
     int no_threads = options.no_suppliers + options.no_consumers;
     pthread_t* threads = (pthread_t*) malloc(no_threads * sizeof(pthread_t));
-    bb_thread_specific_data_t* bb_tsd = (bb_thread_specific_data_t*) malloc(no_threads * sizeof(bb_thread_specific_data_t));
+    bb_tsd_t* bb_tsd = (bb_tsd_t*) malloc(no_threads * sizeof(bb_tsd_t));
 
     bb_options_print(&options);
 
@@ -94,7 +94,7 @@ int main (int argc, char *argv[])
     /* create supplier threads */
     for (int i=0; i < options.no_suppliers; i++) {
         int thread_number = i;
-        bb_tsd[thread_number] = (bb_thread_specific_data_t) { .options = &options, .bb = &bb, .id = i };
+        bb_tsd[thread_number] = (bb_tsd_t) { .options = &options, .bb = &bb, .id = i };
         INFO("Creating thread %d for supplier %d\n", thread_number, i);
         pthread_create(&threads[thread_number], &attr, supplier, (void *)&bb_tsd[thread_number]);
     }
@@ -102,7 +102,7 @@ int main (int argc, char *argv[])
     /* create supplier threads */
     for (int i=0; i < options.no_consumers; i++) {
         int thread_number = i+options.no_suppliers;
-        bb_tsd[thread_number] = (bb_thread_specific_data_t) { .options = &options, .bb = &bb, .id = i };
+        bb_tsd[thread_number] = (bb_tsd_t) { .options = &options, .bb = &bb, .id = i };
         INFO("Creating thread %d for consumer %d\n", thread_number, i);
         pthread_create(&threads[thread_number], &attr, consumer, (void *)&bb_tsd[thread_number]);
     }
