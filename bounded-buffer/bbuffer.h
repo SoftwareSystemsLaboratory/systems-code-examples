@@ -26,6 +26,7 @@ typedef struct {
 extern void bounded_buffer_init(bounded_buffer_t* bb, int size);
 extern void bounded_buffer_put(bounded_buffer_t* bb, entry_t* item);
 extern entry_t* bounded_buffer_get(bounded_buffer_t* bb);
-extern int bounded_buffer_size(bounded_buffer_t* bb);
+extern int bounded_buffer_count(bounded_buffer_t* bb);
 extern void bounded_buffer_cleanup(bounded_buffer_t* bb);
+extern void bounded_buffer_print_info(bounded_buffer_t* bb);
 #endif

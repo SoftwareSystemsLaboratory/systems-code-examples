@@ -18,7 +18,7 @@
  * - each supplier and consumer runs as a separate thread
  *   thread-specific data allows each to share the bound_buffer_t* instance and command-line options/config
  *   each supplier and consumer knows its own id.
- * - suppliers each produce options->gen_count values
+ * - suppliers each generate options->gen_count values
  *   consumers consume only (options->gen_count * options->no_suppliers) / options->no_consumers entries
  *   some entries may NOT be consumed (ok under most circumstances)
  * - because consumers will stop after they have gotten their share of values, others are allowed to consume their fair share
@@ -37,15 +37,16 @@ void* supplier(void *tsd)
     bb_options_t* options = bb_tsd->options;
     int my_id = bb_tsd->id;
 
-    DEBUG("Starting supplier(): will supply %d messages\n", options->gen_count);
+    INFO("supplier { id: %d, state : \"running\", gen: %d }\n", my_id, options->gen_count);
     for (int i=0; i < options->gen_count; i++) {
         millisecond_sleep( rand() % options->supplier_max_delay_ms);
         entry_t* new_entry = (entry_t*) malloc(sizeof(entry_t));
         new_entry->value = my_id * options->gen_count + i;
         bounded_buffer_put(bb, new_entry);
-        INFO("producer %d added entry %d [buffer size = %d, head %d tail %d]\n", my_id, new_entry->value, bounded_buffer_size(bb), bb->head, bb->tail);
+        INFO("supplier { id: %d,  entry: %d }\n", my_id, new_entry->value);
+        bounded_buffer_print_info(bb); 
     }
-    INFO("supplier %d is done\n", my_id);
+    INFO("supplier { id: %d, state: \"exit\" }\n", my_id);
     pthread_exit(NULL);
 }
 
@@ -59,17 +60,18 @@ void* consumer(void *tsd)
     bb_options_t* options = bb_tsd->options;
     int my_id = bb_tsd->id;
     int max_to_consume = options->no_suppliers * options->gen_count / options->no_consumers;
-    DEBUG("Starting consumer(): will consume %d messages \n", max_to_consume);
+    INFO("consumer { id: %d, state: \"running\", messages: %d }\n", my_id, max_to_consume);
     int not_consumed = options->no_suppliers * options->gen_count % options->no_consumers;
     if (not_consumed > 0)
-        DEBUG("Note: %d messages will be left in buffer at the end\n", not_consumed);
+        INFO("consumer { id: %d, extra_messages: %d }\n", my_id, not_consumed);
     for (int i=0; i < max_to_consume; i++) {
         entry_t* entry = bounded_buffer_get(bb);
         millisecond_sleep( rand() % options->consumer_max_delay_ms);
-        INFO("consumer %d got entry %d [buffer size = %d head %d tail %d]\n", my_id, entry->value, bounded_buffer_size(bb), bb->head, bb->tail);
+        INFO("consumer { id: %d, entry: %d }\n", my_id, entry->value);
+        bounded_buffer_print_info(bb); 
         free(entry);
     }
-    INFO("consumer %d is done\n", my_id);
+    INFO("consumer { id: %d, state: \"exit\" }\n", my_id);
     pthread_exit(NULL);
 }
 
@@ -95,7 +97,7 @@ int main (int argc, char *argv[])
     for (int i=0; i < options.no_suppliers; i++) {
         int thread_number = i;
         bb_tsd[thread_number] = (bb_tsd_t) { .options = &options, .bb = &bb, .id = i };
-        INFO("Creating thread %d for supplier %d\n", thread_number, i);
+        INFO("pthread_create ( thread: %d, type: \"supplier\", id: %d }\n", thread_number, i);
         pthread_create(&threads[thread_number], &attr, supplier, (void *)&bb_tsd[thread_number]);
     }
 
@@ -103,31 +105,30 @@ int main (int argc, char *argv[])
     for (int i=0; i < options.no_consumers; i++) {
         int thread_number = i+options.no_suppliers;
         bb_tsd[thread_number] = (bb_tsd_t) { .options = &options, .bb = &bb, .id = i };
-        INFO("Creating thread %d for consumer %d\n", thread_number, i);
+        INFO("pthread_create ( thread: %d, type: \"consumer\", id: %d }\n", thread_number, i);
         pthread_create(&threads[thread_number], &attr, consumer, (void *)&bb_tsd[thread_number]);
     }
 
-    DEBUG("threads created = %d\n", no_threads);
+    INFO("main { threads:  %d, state: \"started\" }\n", no_threads);
 
     for (int i=0; i < no_threads; i++) {
         pthread_join(threads[i], NULL);
     }
 
-    DEBUG("joined with producer and consumer threads\n");
+    INFO("main { threads:  %d,  state: \"joined\" }\n", no_threads);
 
-    INFO("Number of items remaining in bounded buffer %d (this is ok if not 0)\n", bounded_buffer_size(&bb));
-    int bb_size = bounded_buffer_size(&bb);
+    INFO("main { extra_entires:  %d }\n", bounded_buffer_count(&bb));
+
+    int bb_size = bounded_buffer_count(&bb);
     for (int i=0; i < bb_size; i++) {
         entry_t* e = bounded_buffer_get(&bb);
-        INFO("Removed un-consumed entry %d\n", e->value);
+        INFO("main { removed: %d }\n", e->value);
         free(e);
     }
     pthread_attr_destroy(&attr);
     bounded_buffer_cleanup(&bb);
     free(threads);
     free(bb_tsd);
-
-    DEBUG("freed all pthread_t resources\n");
 
     pthread_exit(NULL);
 }

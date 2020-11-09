@@ -41,7 +41,7 @@ entry_t* bounded_buffer_get(bounded_buffer_t* bb)  {
     return entry;
 }
 
-int bounded_buffer_size(bounded_buffer_t* bb) {
+int bounded_buffer_count(bounded_buffer_t* bb) {
     return bb->tail - bb->head;
 }
 
@@ -59,3 +59,17 @@ void bounded_buffer_cleanup(bounded_buffer_t* bb) {
     pthread_cond_destroy(&bb->has_items);
 }
 
+void bounded_buffer_print_info(bounded_buffer_t* bb) {
+   INFO("buffer { size: %d, length: %d, head: %d, tail: %d, ", bb->size, bb->tail - bb->head, bb->head, bb->tail);
+   INFO("[");
+   int add_comma = 0;
+   for (int i=bb->head; i < bb->tail; i++) {
+     if (add_comma) 
+       INFO(", %d", bb->entries[i % bb->size]->value);
+     else
+       INFO("%d", bb->entries[i % bb->size]->value);
+     add_comma = 1;
+   }
+   INFO("]");
+   INFO(" }\n");
+}

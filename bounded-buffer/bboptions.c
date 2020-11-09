@@ -82,7 +82,7 @@ int bb_options_get(bb_options_t* options, int argc, char **argv)
 }
 
 void bb_options_print(bb_options_t* options) {
-    printf("suppliers %d, consumers %d, sdelay %d, cdelay %d, gen count %d, bsize %d\n",
+    printf("options { suppliers: %d, consumers: %d, sdelay: %d, cdelay: %d, gen count: %d, bsize: %d }\n",
            options->no_suppliers, options->no_consumers, options->supplier_max_delay_ms, options->consumer_max_delay_ms, options->gen_count, options->bsize);
 
 }

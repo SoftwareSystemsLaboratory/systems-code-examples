@@ -5,6 +5,7 @@
 #include "millisleep.h"
 #include <errno.h>
 #include <time.h>
+#include <stdint.h>
 
 int millisecond_sleep(long milliseconds)
 {
