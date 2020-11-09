@@ -28,10 +28,11 @@ int bb_options_get(bb_options_t* options, int argc, char **argv)
             {"cdelay",    required_argument, 0, 'y' },
             {"gen",       required_argument, 0, 'g' },
             {"bsize",     required_argument, 0, 'b' },
+            {"help",     no_argument, 0, 'h' },
             {0,         0,                 0,  0 }
         };
 
-        c = getopt_long(argc, argv, "abc:d:012",
+        c = getopt_long(argc, argv, "",
                         long_options, &option_index);
         if (c == -1)
             break;
@@ -59,6 +60,17 @@ int bb_options_get(bb_options_t* options, int argc, char **argv)
 
         case 'g':
             options->gen_count = atoi(optarg);
+            break;
+
+        case 'h':
+            fprintf(stderr, "usage: %s [--suppliers SUPPLIERS] [--consumers CONSUMERS] [--sdelay SDELAY] [--cdelay CDELAY]  [--gen GEN]  [--bsize BSIZE]\n", argv[0]);
+            fprintf(stderr, "\tSUPPLIERS is number of suppliers (default:  %d)\n", NUM_SUPPLIERS);
+            fprintf(stderr, "\tCONSUMERS is number of suppliers (default:  %d)\n", NUM_CONSUMERS);
+            fprintf(stderr, "\tSDELAY is max random delay in millisconds (default: %d)\n", SUPPLIER_DELAY);
+            fprintf(stderr, "\tCDELAY is max random delay in millisconds (default: %d)\n", CONSUMER_DELAY);
+            fprintf(stderr, "\tBSIZE is bounded buffer size (default: %d)\n", BB_SIZE);
+            fprintf(stderr, "\tGEN number of messages to generate per supplier (default: %d)\n", GEN_COUNT);
+            exit(0);
             break;
 
         case '?':

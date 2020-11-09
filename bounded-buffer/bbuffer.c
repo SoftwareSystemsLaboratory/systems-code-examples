@@ -61,7 +61,7 @@ void bounded_buffer_cleanup(bounded_buffer_t* bb) {
 
 void bounded_buffer_print_info(bounded_buffer_t* bb) {
    INFO("buffer { size: %d, length: %d, head: %d, tail: %d, ", bb->size, bb->tail - bb->head, bb->head, bb->tail);
-   INFO("[");
+   INFO("entries : [");
    int add_comma = 0;
    for (int i=bb->head; i < bb->tail; i++) {
      if (add_comma) 

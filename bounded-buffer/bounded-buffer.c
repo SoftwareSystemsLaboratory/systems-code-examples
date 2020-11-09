@@ -60,10 +60,10 @@ void* consumer(void *tsd)
     bb_options_t* options = bb_tsd->options;
     int my_id = bb_tsd->id;
     int max_to_consume = options->no_suppliers * options->gen_count / options->no_consumers;
-    INFO("consumer { id: %d, state: \"running\", messages: %d }\n", my_id, max_to_consume);
     int not_consumed = options->no_suppliers * options->gen_count % options->no_consumers;
-    if (not_consumed > 0)
-        INFO("consumer { id: %d, extra_messages: %d }\n", my_id, not_consumed);
+    if (my_id < not_consumed)
+        max_to_consume++;
+    INFO("consumer { id: %d, state: \"running\", messages: %d }\n", my_id, max_to_consume);
     for (int i=0; i < max_to_consume; i++) {
         entry_t* entry = bounded_buffer_get(bb);
         millisecond_sleep( rand() % options->consumer_max_delay_ms);
