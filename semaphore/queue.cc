@@ -2,7 +2,6 @@
 #include "debug.hh"
 
 Node::Node(int value) {
-    assert(value != NULL)
     _value = value;
 }
 
