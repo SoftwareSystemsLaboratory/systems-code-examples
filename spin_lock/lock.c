@@ -1,4 +1,5 @@
 #include "lock.h"
+#define _GNU_SOURCE
 #include <pthread.h>
 
 unsigned long test_and_set(unsigned long *lock) {
