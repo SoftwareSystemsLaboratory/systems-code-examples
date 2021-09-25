@@ -22,7 +22,7 @@ int main(int argc, char* argv[]) {
             printf("write returned (-1)\n");
             return (-1);
         }
-        printf("wrote %d bytes\n", written);
+        printf("wrote %ld bytes\n", written);
         offset += written;
         length -= written;
     }
