@@ -45,7 +45,7 @@ add_subdirectory(syscall)
 add_subdirectory(vectored_io)
 add_subdirectory(wait)
 
-if(BUILD_PTH)
+if(BUILD_PTH_EXAMPLE)
   message("Building GNU PTH example")
   add_subdirectory(gnu_pth)
 else()
