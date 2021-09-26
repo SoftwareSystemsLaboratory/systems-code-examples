@@ -1,4 +1,4 @@
-name: CMake
+name: OS Examples
 
 on:
   push:
