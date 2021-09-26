@@ -1,8 +1,8 @@
 if(UNIX AND NOT APPLE)
-  message(">> Linux")
+  message("---> Linux Platform detected for regex support.")
   add_compile_options(-DWITH_LINUX)
 else()
-  message(">> non-Linux")
+  message("---> Apple Platform detected for regex support.")
   add_compile_options(-DWITH_APPLE) 
 endif()
 
