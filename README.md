@@ -1,29 +1,23 @@
 Build Status
 --------------
 
-[![Build Status](https://travis-ci.com/gkthiruvathukal/systems-code-examples.svg?branch=master)](https://travis-ci.com/gkthiruvathukal/systems-code-examples)
-
+[![OS Examples](https://github.com/SoftwareSystemsLaboratory/systems-code-examples/actions/workflows/cmake.yml/badge.svg)](https://github.com/SoftwareSystemsLaboratory/systems-code-examples/actions/workflows/cmake.yml)
 
 Synopsis
 ---------
 
-A number of example programs to accompany https://os.cs.luc.edu, lecture notes on the Operating Systems course at Loyola University Chicago.
+A number of example programs to accompany the [os.cs.luc.edu](https://os.cs.luc.edu) lecture notes for the Operating Systems course at Loyola University Chicago.
 
-I'm doing some major updating to tehse examples, including merging in many additions I have made over the past 3
-semesters of teaching it. Stay tuned for what (I hope) will be some great news.
-
-Things I'm working on
+Recent Developments
 ----------------------
 
-- For starters, using continuous integration to make sure our examples build properly on Linux. Students love it when code actually compiles.
+- Updated CMake build process. All examples are driven by a top-level `CMakeLists.txt`. CMake is pretty awesome. I just don't have the time to write Makefiles by hand, and I never enjoyed working with autoconf.
 
-- Incorporating GoogleTest as appropriate. Unit Testing is useful to computer systems!
+- Establish foundation for using `GoogleTest`. 
 
-- Having systems examples in C (with occasional C++), Java, and C#. Might add Python soon, too.
+- Modular structure to allow various examples to be standalone programs, possibly with internal library dependencies. 
 
-- Making sure software engineering is a part of everything we do.
-
-- All examples now build with ``cmake``. I'm sorry, I grew up creating Makefiles, but I am tired of writing them by hand. CMake does a nice job. More to the point, it works across different Unix words. I never found the "auto" tools to be satisfactory. ``cmake`` just works.
+- Many new examples with *pthreads*.
 
 Disclosure
 -----------
