@@ -44,6 +44,9 @@ add_subdirectory(strtok)
 add_subdirectory(syscall)
 add_subdirectory(vectored_io)
 add_subdirectory(wait)
+add_subdirectory(hello-exe)
+add_subdirectory(hello-lib)
+
 
 if(BUILD_PTH_EXAMPLE)
   message("Building GNU PTH example")
