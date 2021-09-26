@@ -21,6 +21,9 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
+    - name: Install GNU pth (userland threads example)
+      run: sudo apt install libpth-dev
+
     - name: Install gtest from official source
       run: ./setup-gtest.sh
 
