@@ -5,7 +5,7 @@ cmake_minimum_required(VERSION 2.8.12)
 set(CMAKE_BUILD_TYPE Debug)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
-option(BUILD_PTH_EXAMPLE "Build GNU PTH example" OFF)
+option(BUILD_PTH_EXAMPLE "Build GNU PTH example" ON)
 
 add_subdirectory(better_gets)
 add_subdirectory(bounded-buffer)
