@@ -19,10 +19,10 @@ Recent Developments
 
 - Many new examples with *pthreads*.
 
-Disclosure
------------
+Limitations
+------------
 
-The code compiles. Many programs don't have unit tests yet. And some things in systems are not easily tested with 
-unit tests. But some do, and we'll get there.
-
-That said, most programs here are rather well tested (battle tested?) but please do report issues to me.
+- We only support Linux/BSD systems for now. For the most part, this is not a major issue, since my teaching is on Linux (and equivalent systems, e.g. Windows Substem for Linux and Chrome OS/Crostini with Debian). All of these platforms are known to work--and work well.
+- Our primary test environment is with the LTS releases of Linux (20.04 LTS is used in our GH Actions setup).
+- OS X + Homebrew is in the works. I'm making some progress with gcc@11 but there are problems getting `cmake` to use the GNU libc instead of the OS supplied one, which has some problems with the standard data structures (hsearch and tsearch) in my testing.
+- OS X users are recommended to use Docker at this time (Ubuntu base image with build-essential and cmake installed).
