@@ -19,10 +19,37 @@ Recent Developments
 
 - Many new examples with *pthreads*.
 
-Limitations
-------------
 
-- We only support Linux/BSD systems for now. For the most part, this is not a major issue, since my teaching is on Linux (and equivalent systems, e.g. Windows Substem for Linux and Chrome OS/Crostini with Debian). All of these platforms are known to work--and work well.
-- Our primary test environment is with the LTS releases of Linux (20.04 LTS is used in our GH Actions setup).
-- OS X + Homebrew is in the works. I'm making some progress with gcc@11 but there are problems getting `cmake` to use the GNU libc instead of the OS supplied one, which has some problems with the standard data structures (hsearch and tsearch) in my testing.
-- OS X users are recommended to use Docker at this time (Ubuntu base image with build-essential and cmake installed).
+Debian/Linux/GNU Systems
+-------------------------
+
+- `git clone https://github.com/SoftwareSystemsLaboratory/systems-code-examples`
+- `apt install build-essential cmake`
+- Install GoogleTest using instructions at https://github.com/SoftwareSystemsLaboratory/googletest-mva.
+- `cd systems-code-examples`
+- `mkdir build`
+- `cd build`
+- `cmake ..`
+- `make`
+
+OS X via Homebrew
+------------------
+
+We only provide limited support for OS X and Homebrew at this time.
+The core examples from https://os.cs.luc.edu work. However, some of the newer examples rely on some GNU-specific (and sometimes GNU-only) features that don't seem to have a clear equivalent on OS X (even via Homebrew).
+I'm still working on it.
+
+Nevertheless, if you want to try, do the following:
+
+
+- `git clone https://github.com/SoftwareSystemsLaboratory/systems-code-examples`
+- `brew install cmake gcc@11`
+- Install GoogleTest using instructions at https://github.com/SoftwareSystemsLaboratory/googletest-mva.
+- `cd systems-code-examples`
+- `mkdir build`
+- `cd build`
+- `cmake -DCMAKE_C_COMPILER=$(which gcc-11) -DCMAKE_CXX_COMPILER=$(which g++-11) ..`
+- `make`
+
+Hopefully, by end of the Fall semester, I will be able to get the 5 pesky examples to build/run on OS X.
+It's not a matter of *if* but *when*.
