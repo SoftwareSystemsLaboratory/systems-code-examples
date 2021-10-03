@@ -73,6 +73,6 @@ int main(void)
         }
     }
     twalk(root, action);
-    // tdestroy(root, free);
+    tdestroy(root, free);
     exit(EXIT_SUCCESS);
 }
