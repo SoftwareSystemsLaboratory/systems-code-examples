@@ -6,5 +6,5 @@ else()
   add_compile_options(-DWITH_APPLE) 
 endif()
 
-
 add_executable(try-regex try-regex.c regex-match.c)
+target_link_libraries (try-regex LINK_PUBLIC strbuffer-lib)
