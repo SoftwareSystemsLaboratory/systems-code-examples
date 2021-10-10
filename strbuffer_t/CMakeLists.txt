@@ -1,3 +1,3 @@
-add_executable(strbuffer_demo strbuffer_demo.c strbuffer.c)
+add_library (strbuffer-lib strbuffer.c)
 
-add_executable(strbuffer_getline_demo strbuffer_getline_demo.c strbuffer.c)
+target_include_directories (strbuffer-lib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
