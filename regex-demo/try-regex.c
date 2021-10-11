@@ -14,25 +14,30 @@
 #include "strbuffer.h"
 #include "regex-match.h"
 
+void process_regex(const char* find_text, const char* regex_text);
+
 int main (int argc, char ** argv)
 {
-    regex_t regex;
-    const char * regex_text = WORD_REGEX;
-    const char * find_text;
-    const char * line = NULL;
-    strbuffer_t buffer;
     int eof;
+    const char * regex_text = WORD_REGEX;
 
     // if no arguments read text from stdin; else use argv[1] as text
     if (argc < 2) {
+        strbuffer_t buffer;
         strbuffer_init(&buffer, 80, 10);
-        line = strbuffer_getline(&buffer, &eof);
-        find_text = line;
+        char* line = strbuffer_getline(&buffer, &eof);
+        process_regex(line, regex_text);
+        if (line) free(line);
     }
     else {
-        find_text = argv[1];
+        process_regex(argv[1], regex_text);
     }
-    printf ("Trying to find '%s' in '%s'\n", regex_text, find_text);
+    return 0;
+}
+
+void process_regex(const char* find_text, const char* regex_text) 
+{
+    regex_t regex;
     basic_matchlist_t match_list;
     regex_compile (&regex, regex_text);
     basic_matchlist_init(&match_list);
@@ -40,6 +45,4 @@ int main (int argc, char ** argv)
     basic_matchlist_print(&match_list);
     basic_matchlist_delete(&match_list);
     regfree (&regex);
-    if (line) free(line);
-    return 0;
 }
