@@ -81,7 +81,7 @@ int regex_match (regex_t * r, const char * to_match, basic_matchlist_t *match_li
             //printf ("No more matches.\n");
             return nomatch;
         }
-        printf("nomatch = %d\n", nomatch);
+        //printf("nomatch = %d\n", nomatch);
         for (i = 0; i < n_matches; i++) {
             int start;
             int finish;
@@ -92,7 +92,7 @@ int regex_match (regex_t * r, const char * to_match, basic_matchlist_t *match_li
             start = m[i].rm_so + (p - to_match);
             finish = m[i].rm_eo + (p - to_match);
             char* matched_text = strndup(to_match+start, finish-start);
-            printf("Match %d at %d, %d\n", i, m[i].rm_so, m[i].rm_eo);
+            //printf("Match %d at %d, %d\n", i, m[i].rm_so, m[i].rm_eo);
             basic_matchlist_add(match_list, start, finish, matched_text);
             break;
         }
