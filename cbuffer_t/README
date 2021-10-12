@@ -1,0 +1,8 @@
+This example is not yet integrated into the lecture notes.
+
+I wrote it to demonstrate:
+- basic abstract type, strbuffer_t, to mimic Java's StringBuffer
+- basic demostration of its use to handle line-oriented input
+  - possible future extension is to have an absolute upper bound on memory usage
+- demonstration of GNU regex to process words
+
