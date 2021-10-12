@@ -22,4 +22,10 @@ extern void charlist_delete(struct charlist_t* head_ptr);
 
 extern void charlist_init(struct charlist_t* head_ptr);
 
+extern int charlist_size_slow(struct charlist_t* head_ptr);
+
+extern char* charlist_tostring(struct charlist_t* head_ptr);
+
+typedef struct charlist_t charlist_t;
+
 #endif
