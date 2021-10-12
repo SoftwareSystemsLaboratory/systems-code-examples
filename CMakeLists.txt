@@ -56,6 +56,8 @@ add_subdirectory(vectored_io)
 add_subdirectory(wait)
 add_subdirectory(hello-exe)
 add_subdirectory(hello-lib)
+add_subdirectory(cbuffer_t)
+add_subdirectory(cbuffer-demo)
 
 
 if(UNIX AND NOT APPLE)

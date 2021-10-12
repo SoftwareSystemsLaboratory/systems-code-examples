@@ -12,7 +12,9 @@ struct charentry_t {
   TAILQ_ENTRY(charentry_t) entries;
 };
 
-extern void charlist_add(struct charlist_t* head_ptr, char char);
+extern void charlist_add_char(struct charlist_t* head_ptr, char c);
+
+extern void charlist_add_string(struct charlist_t* head_ptr, char* text);
 
 extern void charlist_print(struct charlist_t* head_ptr);
 

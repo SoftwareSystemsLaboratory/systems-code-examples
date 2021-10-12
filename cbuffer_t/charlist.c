@@ -3,16 +3,21 @@
 
 #include "charlist.h"
 
-void charlist_add(struct charlist_t* head_ptr, char* c) {
+void charlist_add_char(struct charlist_t* head_ptr, char c) {
    struct charentry_t* my_entry = malloc(sizeof(struct charentry_t));
    my_entry->c = c;
    TAILQ_INSERT_TAIL(head_ptr, my_entry, entries);
 }
 
+void charlist_add_string(struct charlist_t* head_ptr, char* text) {
+   for (char* next_char=text; *next_char != '\0'; next_char++)
+      charlist_add_char(head_ptr, *next_char);
+}
+
 void charlist_print(struct charlist_t* head_ptr) {
    struct charentry_t* np;
    TAILQ_FOREACH(np, head_ptr, entries) {
-      printf("%c\n", np->c;
+      printf("%c\n", np->c);
    }
 }
 
