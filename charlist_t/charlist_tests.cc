@@ -45,7 +45,7 @@ TEST(CharListTest, ToString) {
     char* text = charlist_tostring(&char_list);
     ASSERT_EQ(strcmp(text, word), 0);
     free(text);
-}   charlist_delete(&char_list);
+    charlist_delete(&char_list);
 }
 
 
