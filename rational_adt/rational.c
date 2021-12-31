@@ -86,7 +86,7 @@ void rational_divide(rational_t* n1, rational_t* n2, rational_t* result) {
 }
 
 long rational_compare(rational_t* n1, rational_t* n2) {
-  return n1->numerator*n2->denominator - n1->denominator * n2->denominator;
+  return n1->numerator * n2->denominator - n2->numerator * n1->denominator;
 }
 
 
