@@ -12,10 +12,6 @@
 static void reduce_fraction(rational_t* number);
 static long long_gcd(long a, long b);
 
-long long_abs(long a) {
-  return a < 0 ? -a : a;
-}
-
 rational_t* rational_allocate() {
   return (rational_t*) malloc(sizeof(rational_t));
 }
@@ -38,13 +34,13 @@ static long long_gcd(long a, long b)
    assert(a != 0 || b != 0);
 
    if (a == 0)
-      return long_abs(b);
+      return labs(b);
    while (b != 0) {  // Euclid's algorithm
       int remainder = a % b;
       a = b;
       b = remainder;
    }
-   return long_abs(a);
+   return labs(a);
 }
 
 static void reduce_fraction(rational_t* number) {
