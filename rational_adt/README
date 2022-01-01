@@ -1,6 +1,9 @@
 This example shows how to create a simple abstract type in C.
-It's the familiar 2D point example found in many OOP books.
-The idea is not to be super interesting but to show a minimum-viable example of how to do object-based
-thinking in C with a simple abstract data type.
 
+It is based on the simple idea of a rational number, which is represented as a numerator and denominator (long).
+
+The rational number is always kept in a reduced form to minimize the likelihood of overflow of either the numerator or denominator.
+Of course, this cannot be guaranteed without arbitrary-length integers.
+
+This example also includes unit tests to test the various operations, including (random) property-style testing.
 
