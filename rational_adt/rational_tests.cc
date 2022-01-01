@@ -31,6 +31,29 @@ TEST(RationalTest, Comparison) {
     ASSERT_GT(rational_compare(&r3, &r1), 0);
 }
 
+TEST(RationalTest, SimpleAdd) {
+    rational_t r1, r2, expected, result;
+    rational_init(&r1, 1, 2);
+    rational_init(&r2, -1, 4);
+    rational_init(&expected, 1, 4);
+
+    rational_add(&r1, &r2, &result);
+    ASSERT_EQ(rational_compare(&result, &expected), 0);
+}
+
+TEST(RationalTest, RandomAdd) {
+    for (int i=0; i < 10; i++) {
+       rational_t r1, r2, expected, result;
+       rational_init(&r1, 1000 - rand() % 1000, 1 + rand() % 1000);
+       rational_init(&r2, 1000 - rand() % 1000, 1 + rand() % 1000);
+       long add_numerator = rational_numerator(&r1) * rational_denominator(&r2) + rational_denominator(&r1) * rational_numerator(&r2);
+       long add_denominator = rational_denominator(&r1) * rational_denominator(&r2);
+       rational_init(&expected, add_numerator, add_denominator);
+       rational_add(&r1, &r2, &result);
+       ASSERT_EQ(rational_compare(&result, &expected), 0);
+    }
+}
+
 
 int main(int argc, char **argv) {
     testing::InitGoogleTest(&argc, argv);
