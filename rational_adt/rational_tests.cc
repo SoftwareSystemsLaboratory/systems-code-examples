@@ -41,6 +41,37 @@ TEST(RationalTest, SimpleAdd) {
     ASSERT_EQ(rational_compare(&result, &expected), 0);
 }
 
+TEST(RationalTest, SimpleSubtract) {
+    rational_t r1, r2, expected, result;
+    rational_init(&r1, 2, 3);
+    rational_init(&r2, -1, 6);
+    rational_init(&expected, 5, 6);
+
+    rational_subtract(&r1, &r2, &result);
+    ASSERT_EQ(rational_compare(&result, &expected), 0);
+}
+
+
+TEST(RationalTest, SimpleMultiply) {
+    rational_t r1, r2, expected, result;
+    rational_init(&r1, 2, 3);
+    rational_init(&r2, 30, 20);
+    rational_init(&expected, 1, 1);
+
+    rational_multiply(&r1, &r2, &result);
+    ASSERT_EQ(rational_compare(&result, &expected), 0);
+}
+
+TEST(RationalTest, SimpleDivide) {
+    rational_t r1, r2, expected, result;
+    rational_init(&r1, -2, 3);
+    rational_init(&r2, 2000, -3000);
+    rational_init(&expected, 1, 1);
+
+    rational_divide(&r1, &r2, &result);
+    ASSERT_EQ(rational_compare(&result, &expected), 0);
+}
+
 TEST(RationalTest, RandomAdd) {
     for (int i=0; i < 10; i++) {
        rational_t r1, r2, expected, result;
