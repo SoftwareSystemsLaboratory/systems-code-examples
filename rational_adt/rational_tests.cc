@@ -10,12 +10,19 @@ TEST(RationalTest, Initialization) {
     rational_init(&r1, 1, 2);
     rational_init(&r2, 300, 400);
 
-    
     ASSERT_EQ( rational_numerator(&r1), 1L);
     ASSERT_EQ( rational_denominator(&r1), 2L);
 
     ASSERT_EQ( rational_numerator(&r2), 3L);
     ASSERT_EQ( rational_denominator(&r2), 4L);
+
+    rational_from_rational(&r3, &r1);
+    ASSERT_EQ( rational_numerator(&r3), 1L);
+    ASSERT_EQ( rational_denominator(&r3), 2L);
+
+    rational_from_long(&r3, 4L);
+    ASSERT_EQ( rational_numerator(&r3), 4L);
+    ASSERT_EQ( rational_denominator(&r3), 1L);
 }
 
 
