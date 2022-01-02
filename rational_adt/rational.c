@@ -17,8 +17,21 @@ rational_t* rational_allocate() {
 }
 
 void rational_init(rational_t* number, long numerator, long denominator) {
+  assert(denominator != 0);
   number->numerator = numerator;
-  number->denominator = denominator; // assertion needed here
+  number->denominator = denominator;
+  reduce_fraction(number);
+}
+
+void rational_from_rational(rational_t* number, rational_t* another) {
+  number->numerator = another->numerator;
+  number->denominator = another->denominator;
+  reduce_fraction(number);
+}
+
+void rational_from_long(rational_t* number, long whole_number) {
+  number->numerator = whole_number;
+  number->denominator = 1L;
   reduce_fraction(number);
 }
 
@@ -89,4 +102,13 @@ long rational_compare(rational_t* n1, rational_t* n2) {
   return n1->numerator * n2->denominator - n2->numerator * n1->denominator;
 }
 
+void rational_reciprocal(rational_t* number) {
+  long numerator = number->numerator;
+  long denominator = number->denominator;
+  number->numerator = denominator;
+  number->denominator = numerator;
+}
 
+void rational_negate(rational_t* number) {
+  number->numerator = -number->numerator;
+}

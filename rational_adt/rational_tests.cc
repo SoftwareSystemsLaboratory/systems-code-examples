@@ -72,6 +72,26 @@ TEST(RationalTest, SimpleDivide) {
     ASSERT_EQ(rational_compare(&result, &expected), 0);
 }
 
+TEST(RationalTest, SimpleReciprocal) {
+    rational_t r1, r2, expected, result;
+    rational_from_long(&r1, 4);
+    rational_from_rational(&r2, &r1);
+    rational_reciprocal(&r2);
+    rational_from_long(&expected, 1);
+    rational_multiply(&r1, &r2, &result);
+    ASSERT_EQ(rational_compare(&result, &expected), 0);
+}
+
+TEST(RationalTest, SimpleNegate) {
+    rational_t r1, r2, expected, result;
+    rational_init(&r1, -1, 4);
+    rational_from_rational(&r2, &r1);
+    rational_negate(&r1);
+    rational_from_long(&expected, 0);
+    rational_add(&r1, &r2, &result);
+    ASSERT_EQ(rational_compare(&result, &expected), 0);
+}
+
 TEST(RationalTest, RandomAdd) {
     for (int i=0; i < 10; i++) {
        rational_t r1, r2, expected, result;
