@@ -102,6 +102,26 @@ long rational_compare(rational_t* n1, rational_t* n2) {
   return n1->numerator * n2->denominator - n2->numerator * n1->denominator;
 }
 
+int rational_gt(rational_t* n1, rational_t* n2) {
+  return rational_compare(n1,n2) > 0;
+}
+
+int rational_lt(rational_t* n1, rational_t* n2) {
+  return rational_compare(n1,n2) < 0;
+}
+
+int rational_eq(rational_t* n1, rational_t* n2) {
+  return rational_compare(n1,n2) == 0;
+}
+
+int rational_ge(rational_t* n1, rational_t* n2) {
+  return rational_compare(n1,n2) >= 0;
+}
+
+int rational_le(rational_t* n1, rational_t* n2) {
+  return rational_compare(n1,n2) <= 0;
+}
+
 void rational_reciprocal(rational_t* number) {
   long numerator = number->numerator;
   long denominator = number->denominator;

@@ -26,7 +26,7 @@ TEST(RationalTest, Initialization) {
 }
 
 
-TEST(RationalTest, Comparison) {
+TEST(RationalTest, SimpleComparison) {
     rational_t r1, r2, r3;
 
     rational_init(&r1, 1, 2);
@@ -36,6 +36,12 @@ TEST(RationalTest, Comparison) {
     ASSERT_LT(rational_compare(&r1, &r2), 0);
     ASSERT_EQ(rational_compare(&r2, &r3), 0);
     ASSERT_GT(rational_compare(&r3, &r1), 0);
+
+    ASSERT_TRUE(rational_lt(&r1,&r2));
+    ASSERT_TRUE(rational_le(&r1,&r2));
+    ASSERT_TRUE(rational_eq(&r2,&r3));
+    ASSERT_TRUE(rational_gt(&r3,&r1));
+    ASSERT_TRUE(rational_ge(&r3,&r1));
 }
 
 TEST(RationalTest, SimpleAdd) {
