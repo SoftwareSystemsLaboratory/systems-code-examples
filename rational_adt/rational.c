@@ -46,14 +46,11 @@ static long long_gcd(long a, long b)
    // assume a or b is not 0 ; make into C assertion
    assert(a != 0 || b != 0);
 
-   if (a == 0)
-      return labs(b);
-   while (b != 0) {  // Euclid's algorithm
-      int remainder = a % b;
-      a = b;
-      b = remainder;
+   if (b == 0) {
+      return labs(a);
+   } else {
+      return long_gcd(b, a % b);
    }
-   return labs(a);
 }
 
 static void reduce_fraction(rational_t* number) {
