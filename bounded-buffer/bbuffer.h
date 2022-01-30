@@ -2,12 +2,9 @@
 #define _BBUFFER_H_
 
 #include <stdio.h>
-
-#define DEBUG(fmt, ...) do { fprintf(stderr, fmt, ## __VA_ARGS__); } while (0)
-
-#define INFO(fmt, ...) do { fprintf(stdout, fmt, ## __VA_ARGS__); } while (0)
-
 #include <pthread.h>
+
+#include "lwlog.h"
 
 typedef struct {
     int value;

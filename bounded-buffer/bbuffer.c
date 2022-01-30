@@ -51,7 +51,7 @@ void bounded_buffer_cleanup(bounded_buffer_t* bb) {
         if (bb->entries[i] != NULL)
             unfreed_count++;
     if (unfreed_count > 0) {
-        INFO("Warning: %d entries in bounded buffer not freed\n", unfreed_count);
+        lwlog_info("Warning: %d entries in bounded buffer not freed\n", unfreed_count);
     }
     free(bb->entries);
     pthread_mutex_destroy(&bb->lock);
@@ -60,16 +60,18 @@ void bounded_buffer_cleanup(bounded_buffer_t* bb) {
 }
 
 void bounded_buffer_print_info(bounded_buffer_t* bb) {
-   INFO("buffer { size: %d, length: %d, head: %d, tail: %d, ", bb->size, bb->tail - bb->head, bb->head, bb->tail);
-   INFO("entries : [");
+   printf("buffer { size: %d, length: %d, head: %d, tail: %d, ", bb->size, bb->tail - bb->head, bb->head, bb->tail);
+   printf("entries : [");
    int add_comma = 0;
    for (int i=bb->head; i < bb->tail; i++) {
-     if (add_comma) 
-       INFO(", %d", bb->entries[i % bb->size]->value);
-     else
-       INFO("%d", bb->entries[i % bb->size]->value);
+     if (add_comma) {
+       printf(", %d", bb->entries[i % bb->size]->value);
+     }
+     else {
+       printf("%d", bb->entries[i % bb->size]->value);
+     }
      add_comma = 1;
    }
-   INFO("]");
-   INFO(" }\n");
+   printf("]");
+   printf(" }\n");
 }
