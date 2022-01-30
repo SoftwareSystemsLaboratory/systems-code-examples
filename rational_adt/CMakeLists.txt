@@ -9,6 +9,7 @@ add_executable(
 
 target_link_libraries(
   rational_demo
+  lwlog-lib
   -lm
 )
 
@@ -21,6 +22,7 @@ add_executable(
 target_link_libraries(
   rational_tests
   gtest_main
+  lwlog-lib
   -lpthread
 ) 
 

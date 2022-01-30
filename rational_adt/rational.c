@@ -7,6 +7,10 @@
 #include <assert.h>
 
 #include "rational.h"
+#include "lwlog.h"
+
+#define LOG_COLOR (1)
+#define LOG_LEVEL (7)
 
 /* internal functions */
 static void reduce_fraction(rational_t* number);
@@ -43,8 +47,10 @@ void rational_print(rational_t* number, FILE* stream, int nl) {
 /* keep as self-contained as possible */
 static long long_gcd(long a, long b)
 {
-   // assume a or b is not 0 ; make into C assertion
-   assert(a != 0 || b != 0);
+   if (a == 0 && b == 0) {
+     lwlog_err("Either a (== %d) or b (== %d) must be non-zero", a, b);
+     abort(); // Fail
+   }
 
    if (b == 0) {
       return labs(a);
