@@ -12,13 +12,21 @@
 #define LOG_COLOR (1)
 #define LOG_LEVEL (7)
 
-/* internal functions */
+/* rational_c:reduce_fraction */
+
 static void reduce_fraction(rational_t* number);
+
+/* rational_c:long_gcd */
+
 static long long_gcd(long a, long b);
+
+/* rational_c:rational_allocate */
 
 rational_t* rational_allocate() {
   return (rational_t*) malloc(sizeof(rational_t));
 }
+
+/* rational_c:rational_init */
 
 void rational_init(rational_t* number, long numerator, long denominator) {
   assert(denominator != 0);
@@ -27,11 +35,15 @@ void rational_init(rational_t* number, long numerator, long denominator) {
   reduce_fraction(number);
 }
 
+/* rational_c:rational_from_rational */
+
 void rational_from_rational(rational_t* number, rational_t* another) {
   number->numerator = another->numerator;
   number->denominator = another->denominator;
   reduce_fraction(number);
 }
+
+/* rational_c:rational_from_long */
 
 void rational_from_long(rational_t* number, long whole_number) {
   number->numerator = whole_number;
@@ -39,12 +51,15 @@ void rational_from_long(rational_t* number, long whole_number) {
   reduce_fraction(number);
 }
 
+/* rational_c:rational_print */
+
 void rational_print(rational_t* number, FILE* stream, int nl) {
   fprintf(stream, "%ld/%ld", number->numerator, number->denominator);
   if (nl) fprintf(stream, "\n");
 }
 
-/* keep as self-contained as possible */
+/* rational_c:long_gcd */
+
 static long long_gcd(long a, long b)
 {
    if (a == 0 && b == 0) {
@@ -59,6 +74,8 @@ static long long_gcd(long a, long b)
    }
 }
 
+/* rational_c:reduce_fraction */
+
 static void reduce_fraction(rational_t* number) {
    assert(number->denominator != 0);
    long common_divisor = long_gcd(number->numerator, number->denominator);
@@ -70,19 +87,27 @@ static void reduce_fraction(rational_t* number) {
    }
 }
 
+/* rational_c:rational_numerator */
+
 long rational_numerator(rational_t* number) {
   return number->numerator;
 }
 
+/* rational_c:rational_denominator */
+
 long rational_denominator(rational_t* number) {
   return number->denominator;
 }
+
+/* rational_c:rational_add */
 
 void rational_add(rational_t* n1, rational_t* n2, rational_t* result) {
   rational_init(result,
       n1->numerator * n2->denominator + n1->denominator * n2->numerator,
       n1->denominator * n2->denominator);
 }
+
+/* rational_c:rational_subtract */
 
 void rational_subtract(rational_t* n1, rational_t* n2, rational_t* result) {
   rational_init(result,
@@ -91,39 +116,57 @@ void rational_subtract(rational_t* n1, rational_t* n2, rational_t* result) {
 }
 
 
+/* rational_c:rational_multiply */
+
 void rational_multiply(rational_t* n1, rational_t* n2, rational_t* result) {
   rational_init(result, n1->numerator * n2->numerator,
       n1->denominator * n2->denominator);
 }
+
+/* rational_c:rational_divide */
 
 void rational_divide(rational_t* n1, rational_t* n2, rational_t* result) {
   rational_init(result, n1->numerator * n2->denominator,
       n1->denominator * n2->numerator);
 }
 
+/* rational_c:rational_compare */
+
 long rational_compare(rational_t* n1, rational_t* n2) {
   return n1->numerator * n2->denominator - n2->numerator * n1->denominator;
 }
+
+/* rational_c:rational_gt */
 
 int rational_gt(rational_t* n1, rational_t* n2) {
   return rational_compare(n1,n2) > 0;
 }
 
+/* rational_c:rational_lt */
+
 int rational_lt(rational_t* n1, rational_t* n2) {
   return rational_compare(n1,n2) < 0;
 }
+
+/* rational_c:rational_eq */
 
 int rational_eq(rational_t* n1, rational_t* n2) {
   return rational_compare(n1,n2) == 0;
 }
 
+/* rational_c:rational_ge */
+
 int rational_ge(rational_t* n1, rational_t* n2) {
   return rational_compare(n1,n2) >= 0;
 }
 
+/* rational_c:rational_le */
+
 int rational_le(rational_t* n1, rational_t* n2) {
   return rational_compare(n1,n2) <= 0;
 }
+
+/* rational_c:rational_reciprocal */
 
 void rational_reciprocal(rational_t* number) {
   long numerator = number->numerator;
@@ -131,6 +174,8 @@ void rational_reciprocal(rational_t* number) {
   number->numerator = denominator;
   number->denominator = numerator;
 }
+
+/* rational_c:rational_negate */
 
 void rational_negate(rational_t* number) {
   number->numerator = -number->numerator;

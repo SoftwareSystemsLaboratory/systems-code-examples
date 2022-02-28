@@ -3,49 +3,48 @@
 
 #include <stdio.h>
 
+/* rational_h:typedef */
 typedef struct {
   long numerator;
   long denominator;
 } rational_t;
 
-// most common initialization [construction]
+/* rational_h:basic-init */
 extern void rational_init(rational_t* number, long numerator, long denominator);
 
-// initialize from another rational_t [like copy constructor]
+/* rational_h:advanced-init */
 extern void rational_from_rational(rational_t* number, rational_t* another);
-
-// initialize from a whole number [similar to general initialization with implicit/default denominator of 1]
 extern void rational_from_long(rational_t* number, long whole_number);
 
-// accessors [in the Java sense]
+/* rational_h:accessors */
 extern long rational_numerator(rational_t* number);
 extern long rational_denominator(rational_t* number);
 
-// core arithmetic operations [non-destructive]
+/* rational_h:arithmetic */
 extern void rational_add(rational_t* n1, rational_t* n2, rational_t* result);
 extern void rational_subtract(rational_t* n1, rational_t* n2, rational_t* result);
 extern void rational_multiply(rational_t* n1, rational_t* n2, rational_t* result);
 extern void rational_divide(rational_t* n1, rational_t* n2, rational_t* result);
 
-// in-place operations
+/* rational_h:unary-inplace */
 extern void rational_negate(rational_t* number);
 extern void rational_reciprocal(rational_t* number);
 
-// relational operator(s)
+/* rational_h:compare */
 extern long rational_compare(rational_t* n1, rational_t* n2);
 
-// convenience functions
+/* rational_h:compare-convenience */
 extern int rational_lt(rational_t* n1, rational_t* n2);
 extern int rational_gt(rational_t* n1, rational_t* n2);
 extern int rational_ge(rational_t* n1, rational_t* n2);
 extern int rational_le(rational_t* n1, rational_t* n2);
 extern int rational_eq(rational_t* n1, rational_t* n2);
 
-// output to stream
+/* rational_h:print */
 extern void rational_print(rational_t* number, FILE* stream, int nl);
 
-// Allocate an instance dynamically.
 
+/* rational_h:allocate */
 extern rational_t* rational_allocate();
 
 #endif
