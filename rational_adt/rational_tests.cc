@@ -4,6 +4,8 @@
 
 #include "rational.hh"
 
+/* rational_tests:Initialization */
+
 TEST(RationalTest, Initialization) {
     rational_t r1, r2, r3;
 
@@ -25,6 +27,7 @@ TEST(RationalTest, Initialization) {
     ASSERT_EQ( rational_denominator(&r3), 1L);
 }
 
+/* rational_tests:SimpleComparison */
 
 TEST(RationalTest, SimpleComparison) {
     rational_t r1, r2, r3;
@@ -44,6 +47,8 @@ TEST(RationalTest, SimpleComparison) {
     ASSERT_TRUE(rational_ge(&r3,&r1));
 }
 
+/* rational_tests:SimpleAdd */
+
 TEST(RationalTest, SimpleAdd) {
     rational_t r1, r2, expected, result;
     rational_init(&r1, 1, 2);
@@ -53,6 +58,8 @@ TEST(RationalTest, SimpleAdd) {
     rational_add(&r1, &r2, &result);
     ASSERT_EQ(rational_compare(&result, &expected), 0);
 }
+
+/* rational_tests:SimpleSubtract  */
 
 TEST(RationalTest, SimpleSubtract) {
     rational_t r1, r2, expected, result;
@@ -65,6 +72,8 @@ TEST(RationalTest, SimpleSubtract) {
 }
 
 
+/* rational_tests:SimpleMultiply */
+
 TEST(RationalTest, SimpleMultiply) {
     rational_t r1, r2, expected, result;
     rational_init(&r1, 2, 3);
@@ -74,6 +83,8 @@ TEST(RationalTest, SimpleMultiply) {
     rational_multiply(&r1, &r2, &result);
     ASSERT_EQ(rational_compare(&result, &expected), 0);
 }
+
+/* rational_tests: SimpleDivide */
 
 TEST(RationalTest, SimpleDivide) {
     rational_t r1, r2, expected, result;
@@ -85,6 +96,8 @@ TEST(RationalTest, SimpleDivide) {
     ASSERT_EQ(rational_compare(&result, &expected), 0);
 }
 
+/* rational_tests: SimpleReciprocal  */
+
 TEST(RationalTest, SimpleReciprocal) {
     rational_t r1, r2, expected, result;
     rational_from_long(&r1, 4);
@@ -95,6 +108,8 @@ TEST(RationalTest, SimpleReciprocal) {
     ASSERT_EQ(rational_compare(&result, &expected), 0);
 }
 
+/* rational_tests: SimpleNegate */
+
 TEST(RationalTest, SimpleNegate) {
     rational_t r1, r2, expected, result;
     rational_init(&r1, -1, 4);
@@ -104,6 +119,8 @@ TEST(RationalTest, SimpleNegate) {
     rational_add(&r1, &r2, &result);
     ASSERT_EQ(rational_compare(&result, &expected), 0);
 }
+
+/* rational_tests:RandomAdd */
 
 TEST(RationalTest, RandomAdd) {
     for (int i=0; i < 10; i++) {
@@ -118,6 +135,8 @@ TEST(RationalTest, RandomAdd) {
     }
 }
 
+
+/* rational_tests:main */
 
 int main(int argc, char **argv) {
     testing::InitGoogleTest(&argc, argv);
