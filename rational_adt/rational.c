@@ -12,7 +12,7 @@
 #define LOG_COLOR (1)
 #define LOG_LEVEL (7)
 
-/* rational_c:reduce_fraction */
+/* rational_c:reduce_fraction_prototype */
 
 static void reduce_fraction(rational_t* number);
 
@@ -20,7 +20,7 @@ static void reduce_fraction(rational_t* number);
 
 static long long_gcd(long a, long b);
 
-/* rational_c:rational_allocate_prototype */
+/* rational_c:rational_allocate */
 
 rational_t* rational_allocate() {
   return (rational_t*) malloc(sizeof(rational_t));
