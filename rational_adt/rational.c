@@ -16,11 +16,11 @@
 
 static void reduce_fraction(rational_t* number);
 
-/* rational_c:long_gcd */
+/* rational_c:long_gcd_prototype */
 
 static long long_gcd(long a, long b);
 
-/* rational_c:rational_allocate */
+/* rational_c:rational_allocate_prototype */
 
 rational_t* rational_allocate() {
   return (rational_t*) malloc(sizeof(rational_t));
