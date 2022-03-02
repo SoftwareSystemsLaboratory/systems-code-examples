@@ -84,7 +84,7 @@ TEST(RationalTest, SimpleMultiply) {
     ASSERT_EQ(rational_compare(&result, &expected), 0);
 }
 
-/* rational_tests: SimpleDivide */
+/* rational_tests:SimpleDivide */
 
 TEST(RationalTest, SimpleDivide) {
     rational_t r1, r2, expected, result;
@@ -96,7 +96,7 @@ TEST(RationalTest, SimpleDivide) {
     ASSERT_EQ(rational_compare(&result, &expected), 0);
 }
 
-/* rational_tests: SimpleReciprocal  */
+/* rational_tests:SimpleReciprocal  */
 
 TEST(RationalTest, SimpleReciprocal) {
     rational_t r1, r2, expected, result;
@@ -108,7 +108,7 @@ TEST(RationalTest, SimpleReciprocal) {
     ASSERT_EQ(rational_compare(&result, &expected), 0);
 }
 
-/* rational_tests: SimpleNegate */
+/* rational_tests:SimpleNegate */
 
 TEST(RationalTest, SimpleNegate) {
     rational_t r1, r2, expected, result;
