@@ -29,7 +29,6 @@ rational_t* rational_allocate() {
 /* rational_c:rational_init */
 
 void rational_init(rational_t* number, long numerator, long denominator) {
-  assert(denominator != 0);
   number->numerator = numerator;
   number->denominator = denominator;
   reduce_fraction(number);
@@ -64,7 +63,7 @@ static long long_gcd(long a, long b)
 {
    if (a == 0 && b == 0) {
      lwlog_err("Either a (== %d) or b (== %d) must be non-zero", a, b);
-     abort(); // Fail
+     return 0;
    }
 
    if (b == 0) {
@@ -77,8 +76,9 @@ static long long_gcd(long a, long b)
 /* rational_c:reduce_fraction */
 
 static void reduce_fraction(rational_t* number) {
-   assert(number->denominator != 0);
    long common_divisor = long_gcd(number->numerator, number->denominator);
+   if (common_divisor == 0)
+     return;
    number->numerator /= common_divisor;
    number->denominator /= common_divisor;
    if (number->denominator < 0) {
