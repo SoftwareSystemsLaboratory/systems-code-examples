@@ -12,11 +12,9 @@
 #define LOG_COLOR (1)
 #define LOG_LEVEL (7)
 
-/* rational_c:reduce_fraction */
+/* rational_c:rational_static_interfaces */
 
 static void reduce_fraction(rational_t* number);
-
-/* rational_c:long_gcd */
 
 static long long_gcd(long a, long b);
 
