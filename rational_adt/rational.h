@@ -7,6 +7,7 @@
 typedef struct {
   long numerator;
   long denominator;
+  int valid;
 } rational_t;
 
 /* rational_h:basic-init */
