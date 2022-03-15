@@ -15,15 +15,15 @@
 
 /* rational_c:long_static_overflow_helpers */
 
-int long_add(long a, long b, long *c) {
+inline int long_add(long a, long b, long *c) {
     return __builtin_saddl_overflow(a, b, c) == 0;
 }
 
-int long_multiply(long a, long b, long *c) {
+inline int long_multiply(long a, long b, long *c) {
     return __builtin_smull_overflow(a, b, c) == 0;
 }
 
-int long_subtract(long a, long b, long *c) {
+inline int long_subtract(long a, long b, long *c) {
     return __builtin_ssubl_overflow(a, b, c) == 0;
 }
 
