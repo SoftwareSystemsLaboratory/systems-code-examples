@@ -38,7 +38,8 @@ rational_t *rational_allocate() {
 void rational_init(rational_t *number, long numerator, long denominator) {
     number->numerator = numerator;
     number->denominator = denominator;
-    number->valid = (denominator != 0);
+    if (number->valid && denominator == 0)
+        number->valid = 0;
     reduce_fraction(number);
 }
 
@@ -113,15 +114,24 @@ long rational_denominator(rational_t *number) {
 
 /* rational_c:rational_add */
 
+/*
+ * rational addition is:
+ *    (n->numerator * n2->denominator + n1->denominator * n2->denominator) / (n1->denominator * n2->denominator)
+ *
+ *    In this computation, we check for overflow(underflow) on each of these operations. If either is detected,
+ *    the result is not valid. C does not have exceptions, so we check the result status.
+ *    The & is used instead of && to avoid short circuiting.
+ */
+
 void rational_add(rational_t *n1, rational_t *n2, rational_t *result) {
 
     long nd_product, dn_product, dd_product, nd_dn_product_sum;
-    int valid = n1->valid && n2->valid;
-    valid = valid && long_multiply(n1->numerator, n2->denominator, &nd_product);
-    valid = valid && long_multiply(n2->numerator, n1->denominator, &dn_product);
-    valid = valid && long_multiply(n1->denominator, n2->denominator, &dd_product);
-    valid = valid && long_add(nd_product, dn_product, &nd_dn_product_sum);
-    result->valid = valid;
+
+    result->valid = n1->valid & n2->valid
+            & long_multiply(n1->numerator, n2->denominator, &nd_product)
+            & long_multiply(n2->numerator, n1->denominator, &dn_product)
+            & long_multiply(n1->denominator, n2->denominator, &dd_product)
+            & long_add(nd_product, dn_product, &nd_dn_product_sum);
     rational_init(result, nd_dn_product_sum, dd_product);
 }
 
@@ -129,12 +139,11 @@ void rational_add(rational_t *n1, rational_t *n2, rational_t *result) {
 
 void rational_subtract(rational_t *n1, rational_t *n2, rational_t *result) {
     long nd_product, dn_product, dd_product, nd_dn_product_diff;
-    int valid = n1->valid && n2->valid;
-    valid = valid && long_multiply(n1->numerator, n2->denominator, &nd_product);
-    valid = valid && long_multiply(n2->numerator, n1->denominator, &dn_product);
-    valid = valid && long_multiply(n1->denominator, n2->denominator, &dd_product);
-    valid = valid && long_subtract(nd_product, dn_product, &nd_dn_product_diff);
-    result->valid = valid;
+    result->valid = n1->valid && n2->valid
+            & long_multiply(n1->numerator, n2->denominator, &nd_product)
+            & long_multiply(n2->numerator, n1->denominator, &dn_product)
+            & long_multiply(n1->denominator, n2->denominator, &dd_product)
+            & long_subtract(nd_product, dn_product, &nd_dn_product_diff);
     rational_init(result, nd_dn_product_diff, dd_product);
 }
 
@@ -143,10 +152,9 @@ void rational_subtract(rational_t *n1, rational_t *n2, rational_t *result) {
 
 void rational_multiply(rational_t *n1, rational_t *n2, rational_t *result) {
     long nn_product, dd_product;
-    int valid = n1->valid && n2->valid;
-    valid = valid && long_multiply(n1->numerator, n2->numerator, &nn_product);
-    valid = valid && long_multiply(n2->denominator, n1->denominator, &dd_product);
-    result->valid = valid;
+    result->valid = n1->valid && n2->valid
+            & long_multiply(n1->numerator, n2->numerator, &nn_product)
+            & long_multiply(n2->denominator, n1->denominator, &dd_product);
     rational_init(result, nn_product, dd_product);
 }
 
@@ -154,57 +162,22 @@ void rational_multiply(rational_t *n1, rational_t *n2, rational_t *result) {
 
 void rational_divide(rational_t *n1, rational_t *n2, rational_t *result) {
     long nd_product, dn_product;
-    int valid = n1->valid && n2->valid;
-    valid = valid && long_multiply(n1->numerator, n2->denominator, &nd_product);
-    valid = valid && long_multiply(n2->denominator, n1->numerator, &dn_product);
-    result->valid = valid;
+    result->valid = n1->valid & n2->valid
+        & long_multiply(n1->numerator, n2->denominator, &nd_product)
+        & long_multiply(n2->denominator, n1->numerator, &dn_product);
     rational_init(result, nd_product, dn_product);
-
 }
 
 /* rational_c:rational_compare */
 
-long rational_compare(rational_t *n1, rational_t *n2) {
-    rational_t result;
-    long nd_product, dn_product, dd_product, nd_dn_product_diff;
-    int valid = n1->valid && n2->valid;
-    valid = valid && long_multiply(n1->numerator, n2->denominator, &nd_product);
-    valid = valid && long_multiply(n2->numerator, n1->denominator, &dn_product);
-    //valid = valid && long_multiply(n1->denominator, n2->denominator, &dd_product);
-    valid = valid && long_subtract(nd_product, dn_product, &nd_dn_product_diff);
-    if (!valid)
-        lwlog_err("Comparison generated overflow/underflow.");
-    return nd_dn_product_diff;
-}
-
-/* rational_c:rational_gt */
-
-int rational_gt(rational_t *n1, rational_t *n2) {
-    return rational_compare(n1, n2) > 0;
-}
-
-/* rational_c:rational_lt */
-
-int rational_lt(rational_t *n1, rational_t *n2) {
-    return rational_compare(n1, n2) < 0;
-}
-
-/* rational_c:rational_eq */
-
-int rational_eq(rational_t *n1, rational_t *n2) {
-    return rational_compare(n1, n2) == 0;
-}
-
-/* rational_c:rational_ge */
-
-int rational_ge(rational_t *n1, rational_t *n2) {
-    return rational_compare(n1, n2) >= 0;
-}
-
-/* rational_c:rational_le */
-
-int rational_le(rational_t *n1, rational_t *n2) {
-    return rational_compare(n1, n2) <= 0;
+long rational_compare(rational_t *n1, rational_t *n2, rational_comparison_t *result) {
+    long nd_product, dn_product, nd_dn_product_diff;
+    result->valid = n1->valid & n2->valid
+            & long_multiply(n1->numerator, n2->denominator, &nd_product)
+            & long_multiply(n2->numerator, n1->denominator, &dn_product)
+            & long_subtract(nd_product, dn_product, &nd_dn_product_diff);
+    result->comparison = nd_dn_product_diff;
+    return result->comparison;
 }
 
 /* rational_c:rational_reciprocal */

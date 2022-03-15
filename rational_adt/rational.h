@@ -10,6 +10,11 @@ typedef struct {
   int valid;
 } rational_t;
 
+typedef struct {
+    long comparison; /* boolean for type of condition */
+    int valid; /* whether valid (arising from overflow, etc.) */
+} rational_comparison_t;
+
 /* rational_h:basic-init */
 extern void rational_init(rational_t* number, long numerator, long denominator);
 
@@ -32,14 +37,7 @@ extern void rational_negate(rational_t* number);
 extern void rational_reciprocal(rational_t* number);
 
 /* rational_h:compare */
-extern long rational_compare(rational_t* n1, rational_t* n2);
-
-/* rational_h:compare-convenience */
-extern int rational_lt(rational_t* n1, rational_t* n2);
-extern int rational_gt(rational_t* n1, rational_t* n2);
-extern int rational_ge(rational_t* n1, rational_t* n2);
-extern int rational_le(rational_t* n1, rational_t* n2);
-extern int rational_eq(rational_t* n1, rational_t* n2);
+extern long rational_compare(rational_t* n1, rational_t* n2, rational_comparison_t *result);
 
 /* rational_h:print */
 extern void rational_print(rational_t* number, FILE* stream, int nl);
