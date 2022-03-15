@@ -44,6 +44,16 @@ extern int rational_eq(rational_t* n1, rational_t* n2);
 /* rational_h:print */
 extern void rational_print(rational_t* number, FILE* stream, int nl);
 
+/* rational_h:utililties */
+
+extern int long_add(long a, long b, long *c);
+extern int long_multiply(long a, long b, long *c);
+extern int long_subtract(long a, long b, long *c);
+
+/* rational_c:rational_static_interfaces */
+
+extern void reduce_fraction(rational_t *number);
+extern long long_gcd(long a, long b);
 
 /* rational_h:allocate */
 extern rational_t* rational_allocate();

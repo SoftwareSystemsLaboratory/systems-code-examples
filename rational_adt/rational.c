@@ -13,23 +13,17 @@
 #define LOG_COLOR (1)
 #define LOG_LEVEL (7)
 
-/* rational_c:rational_static_interfaces */
-
-static void reduce_fraction(rational_t *number);
-
-static long long_gcd(long a, long b);
-
 /* rational_c:long_static_overflow_helpers */
 
-static int long_add(long a, long b, long *c) {
+int long_add(long a, long b, long *c) {
     return __builtin_saddl_overflow(a, b, c) == 0;
 }
 
-static int long_multiply(long a, long b, long *c) {
+int long_multiply(long a, long b, long *c) {
     return __builtin_smull_overflow(a, b, c) == 0;
 }
 
-static int long_subtract(long a, long b, long *c) {
+int long_subtract(long a, long b, long *c) {
     return __builtin_ssubl_overflow(a, b, c) == 0;
 }
 
@@ -77,9 +71,9 @@ void rational_print(rational_t *number, FILE *stream, int nl) {
 
 /* rational_c:long_gcd */
 
-static long long_gcd(long a, long b) {
+long long_gcd(long a, long b) {
     if (a == 0 && b == 0) {
-        lwlog_err("Either a (== %d) or b (== %d) must be non-zero", a, b);
+        lwlog_err("Either a (== %ld) or b (== %ld) must be non-zero", a, b);
         return 0;
     }
 
@@ -92,7 +86,7 @@ static long long_gcd(long a, long b) {
 
 /* rational_c:reduce_fraction */
 
-static void reduce_fraction(rational_t *number) {
+void reduce_fraction(rational_t *number) {
     long common_divisor = long_gcd(number->numerator, number->denominator);
     if (common_divisor == 0)
         return;
