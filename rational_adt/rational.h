@@ -44,9 +44,9 @@ extern void rational_print(rational_t* number, FILE* stream, int nl);
 
 /* rational_h:utililties */
 
-extern inline long long_add(long a, long b, long *c);
-extern inline long long_multiply(long a, long b, long *c);
-extern inline long long_subtract(long a, long b, long *c);
+extern long long_add(long a, long b, long *c);
+extern long long_multiply(long a, long b, long *c);
+extern long long_subtract(long a, long b, long *c);
 
 /* rational_c:rational_static_interfaces */
 

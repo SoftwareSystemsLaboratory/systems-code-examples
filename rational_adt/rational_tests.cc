@@ -1,8 +1,46 @@
 /* test cases */
 
 #include <gtest/gtest.h>
+#include <limits.h>
 
 #include "rational.hh"
+
+/* rational_tests:HelpersUtilities */
+
+TEST(RationalTest, HelpersUtilities) {
+    long a, b, c, success;
+
+    /* test LONG_MAX boundaries */
+
+    a = LONG_MAX;
+    b = 1;
+    ASSERT_FALSE(long_add(a, b, &c)); /* overflow on LONG_MAX + 1 */
+    ASSERT_TRUE(long_subtract(a, b, &c)); /* no overflow on LONG_MAX - 1 */
+    ASSERT_TRUE(long_multiply(a, b, &c)); /* no overflow on LONG_MAX * 1 */
+
+    /* test LONG_MIN boundaries */
+
+    a = LONG_MIN;
+    ASSERT_FALSE(long_subtract(a, b, &c)); /* underflow on LONG_MAX - 1 */
+    ASSERT_TRUE(long_add(a, b, &c)); /* no underflow on LONG_MAX + 1 */
+    ASSERT_TRUE(long_multiply(a, b, &c)); /* no underflow on LONG_MAX * 1 */
+
+    /* test LONG_MIN and LONG_MAX overflows on multiply */
+
+    a = LONG_MAX;
+    b = 2;
+    ASSERT_FALSE(long_multiply(a, b, &c)); /* overflow on LONG_MAX * 2 */
+    a = LONG_MIN;
+    b = 2;
+    ASSERT_FALSE(long_multiply(a, b, &c)); /* underflow on LONG_MIN * 2 */
+
+    /* test normal in-range behavior (things not expected to over/underflow */
+    a = 25;
+    b = 35;
+    ASSERT_TRUE(long_add(a, b, &c)); /* no overflow on a + b */
+    ASSERT_TRUE(long_subtract(a, b, &c)); /* no overflow on a - b */
+    ASSERT_TRUE(long_multiply(a, b, &c)); /* no overflow on a * b */
+}
 
 /* rational_tests:Initialization */
 
