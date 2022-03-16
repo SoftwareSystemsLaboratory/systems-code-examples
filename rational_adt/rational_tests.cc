@@ -50,19 +50,19 @@ TEST(RationalTest, Initialization) {
     rational_init(&r1, 1, 2);
     rational_init(&r2, 300, 400);
 
-    ASSERT_EQ( rational_numerator(&r1), 1L);
-    ASSERT_EQ( rational_denominator(&r1), 2L);
+    ASSERT_EQ(rational_numerator(&r1), 1L);
+    ASSERT_EQ(rational_denominator(&r1), 2L);
 
-    ASSERT_EQ( rational_numerator(&r2), 3L);
-    ASSERT_EQ( rational_denominator(&r2), 4L);
+    ASSERT_EQ(rational_numerator(&r2), 3L);
+    ASSERT_EQ(rational_denominator(&r2), 4L);
 
     rational_from_rational(&r3, &r1);
-    ASSERT_EQ( rational_numerator(&r3), 1L);
-    ASSERT_EQ( rational_denominator(&r3), 2L);
+    ASSERT_EQ(rational_numerator(&r3), 1L);
+    ASSERT_EQ(rational_denominator(&r3), 2L);
 
     rational_from_long(&r3, 4L);
-    ASSERT_EQ( rational_numerator(&r3), 4L);
-    ASSERT_EQ( rational_denominator(&r3), 1L);
+    ASSERT_EQ(rational_numerator(&r3), 4L);
+    ASSERT_EQ(rational_denominator(&r3), 1L);
 }
 
 /* rational_tests:SimpleComparison */
@@ -169,17 +169,18 @@ TEST(RationalTest, SimpleNegate) {
 /* rational_tests:RandomAdd */
 
 TEST(RationalTest, RandomAdd) {
-    for (int i=0; i < 10; i++) {
-       rational_t r1, r2, expected, result;
-       rational_comparison_t comparison;
+    for (int i = 0; i < 10; i++) {
+        rational_t r1, r2, expected, result;
+        rational_comparison_t comparison;
 
-       rational_init(&r1, 1000 - rand() % 1000, 1 + rand() % 1000);
-       rational_init(&r2, 1000 - rand() % 1000, 1 + rand() % 1000);
-       long add_numerator = rational_numerator(&r1) * rational_denominator(&r2) + rational_denominator(&r1) * rational_numerator(&r2);
-       long add_denominator = rational_denominator(&r1) * rational_denominator(&r2);
-       rational_init(&expected, add_numerator, add_denominator);
-       rational_add(&r1, &r2, &result);
-       ASSERT_EQ(rational_compare(&result, &expected, &comparison), 0);
+        rational_init(&r1, 1000 - rand() % 1000, 1 + rand() % 1000);
+        rational_init(&r2, 1000 - rand() % 1000, 1 + rand() % 1000);
+        long add_numerator = rational_numerator(&r1) * rational_denominator(&r2) +
+                             rational_denominator(&r1) * rational_numerator(&r2);
+        long add_denominator = rational_denominator(&r1) * rational_denominator(&r2);
+        rational_init(&expected, add_numerator, add_denominator);
+        rational_add(&r1, &r2, &result);
+        ASSERT_EQ(rational_compare(&result, &expected, &comparison), 0);
     }
 }
 

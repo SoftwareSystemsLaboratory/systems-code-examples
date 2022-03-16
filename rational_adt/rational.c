@@ -27,6 +27,11 @@ inline long long_subtract(long a, long b, long *c) {
     return __builtin_ssubl_overflow(a, b, c) == 0;
 }
 
+/* rational_c:statics */
+
+static void rational_internal_init(rational_t *number, long numerator, long denominator, int valid);
+
+
 /* rational_c:rational_allocate */
 
 rational_t *rational_allocate() {
@@ -38,28 +43,29 @@ rational_t *rational_allocate() {
 void rational_init(rational_t *number, long numerator, long denominator) {
     number->numerator = numerator;
     number->denominator = denominator;
-    if (number->valid && denominator == 0)
-        number->valid = 0;
-    reduce_fraction(number);
+    rational_internal_init(number, numerator, denominator, 1);
 }
 
-/* rational_c:rational_invalidate */
+/* rational_c:rational_internal_init */
 
-void rational_invalidate(rational_t *number) {
-    number->valid = 0;
+static void rational_internal_init(rational_t *number, long numerator, long denominator, int valid) {
+    number->numerator = numerator;
+    number->denominator = denominator;
+    number->valid = (denominator != 0) ? valid : 0;
+    reduce_fraction(number);
 }
 
 /* rational_c:rational_from_rational */
 
 void rational_from_rational(rational_t *number, rational_t *another) {
-    rational_init(number, another->numerator, another->denominator);
+    rational_internal_init(number, another->numerator, another->denominator, 1);
     reduce_fraction(number);
 }
 
 /* rational_c:rational_from_long */
 
 void rational_from_long(rational_t *number, long whole_number) {
-    rational_init(number, whole_number, 1L);
+    rational_internal_init(number, whole_number, 1L, 1);
     reduce_fraction(number);
 }
 
@@ -127,24 +133,24 @@ void rational_add(rational_t *n1, rational_t *n2, rational_t *result) {
 
     long nd_product, dn_product, dd_product, nd_dn_product_sum;
 
-    result->valid = n1->valid & n2->valid
-            & long_multiply(n1->numerator, n2->denominator, &nd_product)
-            & long_multiply(n2->numerator, n1->denominator, &dn_product)
-            & long_multiply(n1->denominator, n2->denominator, &dd_product)
-            & long_add(nd_product, dn_product, &nd_dn_product_sum);
-    rational_init(result, nd_dn_product_sum, dd_product);
+    int valid = n1->valid & n2->valid
+                & long_multiply(n1->numerator, n2->denominator, &nd_product)
+                & long_multiply(n2->numerator, n1->denominator, &dn_product)
+                & long_multiply(n1->denominator, n2->denominator, &dd_product)
+                & long_add(nd_product, dn_product, &nd_dn_product_sum);
+    rational_internal_init(result, nd_dn_product_sum, dd_product, valid);
 }
 
 /* rational_c:rational_subtract */
 
 void rational_subtract(rational_t *n1, rational_t *n2, rational_t *result) {
     long nd_product, dn_product, dd_product, nd_dn_product_diff;
-    result->valid = n1->valid & n2->valid
-            & long_multiply(n1->numerator, n2->denominator, &nd_product)
-            & long_multiply(n2->numerator, n1->denominator, &dn_product)
-            & long_multiply(n1->denominator, n2->denominator, &dd_product)
-            & long_subtract(nd_product, dn_product, &nd_dn_product_diff);
-    rational_init(result, nd_dn_product_diff, dd_product);
+    int valid = n1->valid & n2->valid
+                & long_multiply(n1->numerator, n2->denominator, &nd_product)
+                & long_multiply(n2->numerator, n1->denominator, &dn_product)
+                & long_multiply(n1->denominator, n2->denominator, &dd_product)
+                & long_subtract(nd_product, dn_product, &nd_dn_product_diff);
+    rational_internal_init(result, nd_dn_product_diff, dd_product, valid);
 }
 
 
@@ -152,20 +158,20 @@ void rational_subtract(rational_t *n1, rational_t *n2, rational_t *result) {
 
 void rational_multiply(rational_t *n1, rational_t *n2, rational_t *result) {
     long nn_product, dd_product;
-    result->valid = n1->valid & n2->valid
-            & long_multiply(n1->numerator, n2->numerator, &nn_product)
-            & long_multiply(n2->denominator, n1->denominator, &dd_product);
-    rational_init(result, nn_product, dd_product);
+    int valid = n1->valid & n2->valid
+                & long_multiply(n1->numerator, n2->numerator, &nn_product)
+                & long_multiply(n2->denominator, n1->denominator, &dd_product);
+    rational_internal_init(result, nn_product, dd_product, valid);
 }
 
 /* rational_c:rational_divide */
 
 void rational_divide(rational_t *n1, rational_t *n2, rational_t *result) {
     long nd_product, dn_product;
-    result->valid = n1->valid & n2->valid
-        & long_multiply(n1->numerator, n2->denominator, &nd_product)
-        & long_multiply(n2->denominator, n1->numerator, &dn_product);
-    rational_init(result, nd_product, dn_product);
+    int valid = n1->valid & n2->valid
+                & long_multiply(n1->numerator, n2->denominator, &nd_product)
+                & long_multiply(n2->denominator, n1->numerator, &dn_product);
+    rational_internal_init(result, nd_product, dn_product, valid);
 }
 
 /* rational_c:rational_compare */
@@ -173,9 +179,9 @@ void rational_divide(rational_t *n1, rational_t *n2, rational_t *result) {
 long rational_compare(rational_t *n1, rational_t *n2, rational_comparison_t *result) {
     long nd_product, dn_product, nd_dn_product_diff;
     result->valid = n1->valid & n2->valid
-            & long_multiply(n1->numerator, n2->denominator, &nd_product)
-            & long_multiply(n2->numerator, n1->denominator, &dn_product)
-            & long_subtract(nd_product, dn_product, &nd_dn_product_diff);
+                    & long_multiply(n1->numerator, n2->denominator, &nd_product)
+                    & long_multiply(n2->numerator, n1->denominator, &dn_product)
+                    & long_subtract(nd_product, dn_product, &nd_dn_product_diff);
     result->comparison = nd_dn_product_diff;
     return result->comparison;
 }
@@ -185,7 +191,7 @@ long rational_compare(rational_t *n1, rational_t *n2, rational_comparison_t *res
 void rational_reciprocal(rational_t *number) {
     long numerator = number->numerator;
     long denominator = number->denominator;
-    rational_init(number, denominator, numerator);
+    rational_internal_init(number, denominator, numerator, 1);
 }
 
 /* rational_c:rational_negate */
