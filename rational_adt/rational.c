@@ -15,15 +15,15 @@
 
 /* rational_c:long_static_overflow_helpers */
 
-inline int long_add(long a, long b, long *c) {
+inline long long_add(long a, long b, long *c) {
     return __builtin_saddl_overflow(a, b, c) == 0;
 }
 
-inline int long_multiply(long a, long b, long *c) {
+inline long long_multiply(long a, long b, long *c) {
     return __builtin_smull_overflow(a, b, c) == 0;
 }
 
-inline int long_subtract(long a, long b, long *c) {
+inline long long_subtract(long a, long b, long *c) {
     return __builtin_ssubl_overflow(a, b, c) == 0;
 }
 
@@ -139,7 +139,7 @@ void rational_add(rational_t *n1, rational_t *n2, rational_t *result) {
 
 void rational_subtract(rational_t *n1, rational_t *n2, rational_t *result) {
     long nd_product, dn_product, dd_product, nd_dn_product_diff;
-    result->valid = n1->valid && n2->valid
+    result->valid = n1->valid & n2->valid
             & long_multiply(n1->numerator, n2->denominator, &nd_product)
             & long_multiply(n2->numerator, n1->denominator, &dn_product)
             & long_multiply(n1->denominator, n2->denominator, &dd_product)
@@ -152,7 +152,7 @@ void rational_subtract(rational_t *n1, rational_t *n2, rational_t *result) {
 
 void rational_multiply(rational_t *n1, rational_t *n2, rational_t *result) {
     long nn_product, dd_product;
-    result->valid = n1->valid && n2->valid
+    result->valid = n1->valid & n2->valid
             & long_multiply(n1->numerator, n2->numerator, &nn_product)
             & long_multiply(n2->denominator, n1->denominator, &dd_product);
     rational_init(result, nn_product, dd_product);

@@ -67,6 +67,7 @@ TEST(RationalTest, SimpleSubtract) {
     rational_init(&expected, 5, 6);
 
     rational_subtract(&r1, &r2, &result);
+
     ASSERT_EQ(rational_compare(&result, &expected, &comparison), 0);
 }
 
