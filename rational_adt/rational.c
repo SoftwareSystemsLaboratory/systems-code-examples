@@ -13,7 +13,7 @@
 #define LOG_COLOR (1)
 #define LOG_LEVEL (7)
 
-/* rational_c:long_static_overflow_helpers */
+/* module:long_static_overflow_helpers */
 
 inline long long_add(long a, long b, long *c) {
     return __builtin_saddl_overflow(a, b, c) == 0;
@@ -27,18 +27,18 @@ inline long long_subtract(long a, long b, long *c) {
     return __builtin_ssubl_overflow(a, b, c) == 0;
 }
 
-/* rational_c:statics */
+/* module:statics */
 
 static void rational_internal_init(rational_t *number, long numerator, long denominator, int valid);
 
 
-/* rational_c:rational_allocate */
+/* module:rational_allocate */
 
 rational_t *rational_allocate() {
     return (rational_t *) malloc(sizeof(rational_t));
 }
 
-/* rational_c:rational_init */
+/* module:rational_init */
 
 void rational_init(rational_t *number, long numerator, long denominator) {
     number->numerator = numerator;
@@ -46,7 +46,7 @@ void rational_init(rational_t *number, long numerator, long denominator) {
     rational_internal_init(number, numerator, denominator, 1);
 }
 
-/* rational_c:rational_internal_init */
+/* module:rational_internal_init */
 
 static void rational_internal_init(rational_t *number, long numerator, long denominator, int valid) {
     number->numerator = numerator;
@@ -55,28 +55,28 @@ static void rational_internal_init(rational_t *number, long numerator, long deno
     reduce_fraction(number);
 }
 
-/* rational_c:rational_from_rational */
+/* module:rational_from_rational */
 
 void rational_from_rational(rational_t *number, rational_t *another) {
     rational_internal_init(number, another->numerator, another->denominator, 1);
     reduce_fraction(number);
 }
 
-/* rational_c:rational_from_long */
+/* module:rational_from_long */
 
 void rational_from_long(rational_t *number, long whole_number) {
     rational_internal_init(number, whole_number, 1L, 1);
     reduce_fraction(number);
 }
 
-/* rational_c:rational_print */
+/* module:rational_print */
 
 void rational_print(rational_t *number, FILE *stream, int nl) {
     fprintf(stream, "%ld/%ld (valid=%d)", number->numerator, number->denominator, number->valid);
     if (nl) fprintf(stream, "\n");
 }
 
-/* rational_c:long_gcd */
+/* module:long_gcd */
 
 long long_gcd(long a, long b) {
     if (a == 0 && b == 0) {
@@ -91,7 +91,7 @@ long long_gcd(long a, long b) {
     }
 }
 
-/* rational_c:reduce_fraction */
+/* module:reduce_fraction */
 
 void reduce_fraction(rational_t *number) {
     long common_divisor = long_gcd(number->numerator, number->denominator);
@@ -106,19 +106,18 @@ void reduce_fraction(rational_t *number) {
     }
 }
 
-/* rational_c:rational_numerator */
+/* module:rational_numerator */
 
 long rational_numerator(rational_t *number) {
     return number->numerator;
 }
 
-/* rational_c:rational_denominator */
+/* module:rational_denominator */
 
 long rational_denominator(rational_t *number) {
     return number->denominator;
 }
 
-/* rational_c:rational_add */
 
 /*
  * rational addition is:
@@ -128,6 +127,8 @@ long rational_denominator(rational_t *number) {
  *    the result is not valid. C does not have exceptions, so we check the result status.
  *    The & is used instead of && to avoid short circuiting.
  */
+
+/* module:rational_add */
 
 void rational_add(rational_t *n1, rational_t *n2, rational_t *result) {
 
@@ -141,7 +142,7 @@ void rational_add(rational_t *n1, rational_t *n2, rational_t *result) {
     rational_internal_init(result, nd_dn_product_sum, dd_product, valid);
 }
 
-/* rational_c:rational_subtract */
+/* module:rational_subtract */
 
 void rational_subtract(rational_t *n1, rational_t *n2, rational_t *result) {
     long nd_product, dn_product, dd_product, nd_dn_product_diff;
@@ -154,7 +155,7 @@ void rational_subtract(rational_t *n1, rational_t *n2, rational_t *result) {
 }
 
 
-/* rational_c:rational_multiply */
+/* module:rational_multiply */
 
 void rational_multiply(rational_t *n1, rational_t *n2, rational_t *result) {
     long nn_product, dd_product;
@@ -164,7 +165,7 @@ void rational_multiply(rational_t *n1, rational_t *n2, rational_t *result) {
     rational_internal_init(result, nn_product, dd_product, valid);
 }
 
-/* rational_c:rational_divide */
+/* module:rational_divide */
 
 void rational_divide(rational_t *n1, rational_t *n2, rational_t *result) {
     long nd_product, dn_product;
@@ -174,9 +175,9 @@ void rational_divide(rational_t *n1, rational_t *n2, rational_t *result) {
     rational_internal_init(result, nd_product, dn_product, valid);
 }
 
-/* rational_c:rational_compare */
+/* module:rational_compare */
 
-long rational_compare(rational_t *n1, rational_t *n2, rational_comparison_t *result) {
+long moduleompare(rational_t *n1, rational_t *n2, rational_comparison_t *result) {
     long nd_product, dn_product, nd_dn_product_diff;
     result->valid = n1->valid & n2->valid
                     & long_multiply(n1->numerator, n2->denominator, &nd_product)
@@ -186,7 +187,7 @@ long rational_compare(rational_t *n1, rational_t *n2, rational_comparison_t *res
     return result->comparison;
 }
 
-/* rational_c:rational_reciprocal */
+/* module:rational_reciprocal */
 
 void rational_reciprocal(rational_t *number) {
     long numerator = number->numerator;
@@ -194,7 +195,7 @@ void rational_reciprocal(rational_t *number) {
     rational_internal_init(number, denominator, numerator, 1);
 }
 
-/* rational_c:rational_negate */
+/* module:rational_negate */
 
 void rational_negate(rational_t *number) {
     number->numerator = -number->numerator;
