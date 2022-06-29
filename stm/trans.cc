@@ -1,31 +1,37 @@
 #include "trans.hh"
 #include <stdio.h>
 
-MemHandle::MemHandle(int value, int event) {
+MemHandle::MemHandle(int value, int event)
+{
     Value = value;
     _event = event;
 }
 
-int MemHandle::getEvent() {
+int MemHandle::getEvent()
+{
     return _event;
 }
 
-Transaction::Transaction(volatile int *value) {
+Transaction::Transaction(volatile int *value)
+{
     _value = value;
     _event = 0;
     _rollbacks = 0;
     _lock = new Mutex();
 }
 
-Transaction::~Transaction() {
+Transaction::~Transaction()
+{
     delete _lock;
 }
 
-int Transaction::GetRollbackCount() {
+int Transaction::GetRollbackCount()
+{
     return _rollbacks;
 }
 
-MemHandle* Transaction::Begin() {
+MemHandle* Transaction::Begin()
+{
     MemHandle* handle;
     _lock->Lock();
     handle = new MemHandle(*_value, _event);
@@ -33,14 +39,18 @@ MemHandle* Transaction::Begin() {
     return handle;
 }
 
-bool Transaction::TryCommit(MemHandle* value) {
+bool Transaction::TryCommit(MemHandle* value)
+{
     bool success = false;
     _lock->Lock();
-    if(_event == value->getEvent()) {
+    if(_event == value->getEvent())
+    {
         *_value = value->Value;
         _event += 1;
         success = true;
-    } else {
+    }
+    else
+    {
         _rollbacks += 1;
     }
     _lock->Unlock();

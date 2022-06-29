@@ -9,13 +9,17 @@ int count;
 Monitor *monitor = new Monitor();
 Queue *queue = new Queue();
 
-void increment() {
+void increment()
+{
     monitor->Enter();
-    while(queue->HasWorkLeft()) {
-        while(queue->IsEmpty() && queue->HasWorkLeft()) {
+    while(queue->HasWorkLeft())
+    {
+        while(queue->IsEmpty() && queue->HasWorkLeft())
+        {
             monitor->Wait();
         }
-        if(!queue->IsEmpty()) {
+        if(!queue->IsEmpty())
+        {
             int c = queue->Dequeue();
             count = count + c;
         }
@@ -23,8 +27,10 @@ void increment() {
     monitor->Exit();
 }
 
-void populateQueue() {
-    for(int i = 0; i < countPerThread*2; i++) {
+void populateQueue()
+{
+    for(int i = 0; i < countPerThread*2; i++)
+    {
         monitor->Enter();
         queue->Enqueue(1);
         monitor->Pulse();
@@ -35,7 +41,8 @@ void populateQueue() {
     monitor->Exit();
 }
 
-int main( int argc, char* argv[]) {
+int main( int argc, char* argv[])
+{
 
     pthread_t thread1, thread2;
     pthread_attr_t threadAttribute;
@@ -53,9 +60,12 @@ int main( int argc, char* argv[]) {
     pthread_join(thread1, NULL);
     pthread_join(thread2, NULL);
 
-    if( count != 2 * countPerThread ) {
+    if( count != 2 * countPerThread )
+    {
         printf("****** Error. Final count is %d\n", count);
-    } else {
+    }
+    else
+    {
         printf("****** OK. Final count is %d\n", count);
     }
 

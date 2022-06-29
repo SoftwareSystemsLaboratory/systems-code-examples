@@ -5,8 +5,10 @@
 int count;
 Mutex *lock = new Mutex();
 
-void increment( int ntimes ) {
-    for(int i = 0; i < ntimes; i++) {
+void increment( int ntimes )
+{
+    for(int i = 0; i < ntimes; i++)
+    {
         int c;
         lock->Lock();
         c = count;
@@ -16,7 +18,8 @@ void increment( int ntimes ) {
     }
 }
 
-int main( int argc, char* argv[]) {
+int main( int argc, char* argv[])
+{
     const int n = 100000000;
 
     pthread_t thread1, thread2;
@@ -33,9 +36,12 @@ int main( int argc, char* argv[]) {
     pthread_join(thread1, NULL);
     pthread_join(thread2, NULL);
 
-    if( count != 2 * n ) {
+    if( count != 2 * n )
+    {
         printf("****** Error. Final count is %d\n", count);
-    } else {
+    }
+    else
+    {
         printf("****** OK. Final count is %d\n", count);
     }
 

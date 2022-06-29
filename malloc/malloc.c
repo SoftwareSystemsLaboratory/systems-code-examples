@@ -9,7 +9,8 @@ int has_initialized = 0;
 void *managed_memory_start;
 void *last_valid_address;
 
-struct mem_control_block {
+struct mem_control_block
+{
     int is_available;
     int size;
 };
@@ -26,7 +27,8 @@ void malloc_init()
     has_initialized = 1;
 }
 
-void myfree(void *firstbyte) {
+void myfree(void *firstbyte)
+{
     struct mem_control_block *mcb;
     /* Backup from the given pointer to find the
      * mem_control_block
@@ -38,7 +40,8 @@ void myfree(void *firstbyte) {
     return;
 }
 
-void *mymalloc(long numbytes) {
+void *mymalloc(long numbytes)
+{
     /* Holds where we are looking in memory */
     void *current_location;
     /* This is the same as current_location, but cast to a
@@ -50,7 +53,8 @@ void *mymalloc(long numbytes) {
      */
     void *memory_location;
     /* Initialize if we haven't already done so */
-    if(! has_initialized)   {
+    if(! has_initialized)
+    {
         malloc_init();
     }
     /* The memory we search for has to include the memory

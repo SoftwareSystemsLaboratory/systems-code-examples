@@ -7,7 +7,8 @@
 
 /* rational_tests:HelpersUtilities */
 
-TEST(RationalTest, HelpersUtilities) {
+TEST(RationalTest, HelpersUtilities)
+{
     long a, b, c, success;
 
     /* test LONG_MAX boundaries */
@@ -44,7 +45,8 @@ TEST(RationalTest, HelpersUtilities) {
 
 /* rational_tests:Initialization */
 
-TEST(RationalTest, Initialization) {
+TEST(RationalTest, Initialization)
+{
     rational_t r1, r2, r3;
 
     rational_init(&r1, 1, 2);
@@ -67,7 +69,8 @@ TEST(RationalTest, Initialization) {
 
 /* rational_tests:SimpleComparison */
 
-TEST(RationalTest, SimpleComparison) {
+TEST(RationalTest, SimpleComparison)
+{
     rational_t r1, r2, r3;
     rational_comparison_t comparison;
 
@@ -82,7 +85,8 @@ TEST(RationalTest, SimpleComparison) {
 
 /* rational_tests:SimpleAdd */
 
-TEST(RationalTest, SimpleAdd) {
+TEST(RationalTest, SimpleAdd)
+{
     rational_t r1, r2, expected, result;
     rational_comparison_t comparison;
 
@@ -96,7 +100,8 @@ TEST(RationalTest, SimpleAdd) {
 
 /* rational_tests:SimpleSubtract  */
 
-TEST(RationalTest, SimpleSubtract) {
+TEST(RationalTest, SimpleSubtract)
+{
     rational_t r1, r2, expected, result;
     rational_comparison_t comparison;
 
@@ -112,7 +117,8 @@ TEST(RationalTest, SimpleSubtract) {
 
 /* rational_tests:SimpleMultiply */
 
-TEST(RationalTest, SimpleMultiply) {
+TEST(RationalTest, SimpleMultiply)
+{
     rational_t r1, r2, expected, result;
     rational_comparison_t comparison;
 
@@ -126,7 +132,8 @@ TEST(RationalTest, SimpleMultiply) {
 
 /* rational_tests:SimpleDivide */
 
-TEST(RationalTest, SimpleDivide) {
+TEST(RationalTest, SimpleDivide)
+{
     rational_t r1, r2, expected, result;
     rational_comparison_t comparison;
 
@@ -140,7 +147,8 @@ TEST(RationalTest, SimpleDivide) {
 
 /* rational_tests:SimpleReciprocal  */
 
-TEST(RationalTest, SimpleReciprocal) {
+TEST(RationalTest, SimpleReciprocal)
+{
     rational_t r1, r2, expected, result;
     rational_comparison_t comparison;
 
@@ -154,7 +162,8 @@ TEST(RationalTest, SimpleReciprocal) {
 
 /* rational_tests:SimpleNegate */
 
-TEST(RationalTest, SimpleNegate) {
+TEST(RationalTest, SimpleNegate)
+{
     rational_t r1, r2, expected, result;
     rational_comparison_t comparison;
 
@@ -168,8 +177,10 @@ TEST(RationalTest, SimpleNegate) {
 
 /* rational_tests:RandomAdd */
 
-TEST(RationalTest, RandomAdd) {
-    for (int i = 0; i < 10; i++) {
+TEST(RationalTest, RandomAdd)
+{
+    for (int i = 0; i < 10; i++)
+    {
         rational_t r1, r2, expected, result;
         rational_comparison_t comparison;
 
@@ -187,7 +198,8 @@ TEST(RationalTest, RandomAdd) {
 
 /* rational_tests:main */
 
-int main(int argc, char **argv) {
+int main(int argc, char **argv)
+{
     testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
 }

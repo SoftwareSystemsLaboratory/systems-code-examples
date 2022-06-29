@@ -3,7 +3,8 @@
 #include <unistd.h>
 #include <sys/syscall.h>
 
-int main(int argc, char* argv[]) {
+int main(int argc, char* argv[])
+{
     char* hello_with_syscall = "Hello World with syscall\n";
     char* hello_without_syscall = "Hello World without syscall\n";
     char* hello_with_printf = "Hello World with printf\n";

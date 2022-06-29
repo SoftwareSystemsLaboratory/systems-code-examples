@@ -1,8 +1,10 @@
 #include <stdio.h>
 
-int my_strlen(const char *str) {
+int my_strlen(const char *str)
+{
     int length = 0;
-    while(*str != 0) {
+    while(*str != 0)
+    {
         str++;
         length++;
     }
@@ -10,7 +12,8 @@ int my_strlen(const char *str) {
 }
 
 
-int main(int argc, char* argv[]) {
+int main(int argc, char* argv[])
+{
 
     const char *str = "hello world";
 

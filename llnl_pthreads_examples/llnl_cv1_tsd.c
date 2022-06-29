@@ -7,19 +7,21 @@
 #define TCOUNT 10
 #define COUNT_LIMIT 12
 
-/* this version eliminates global variable declarations and uses thread-specific data with 
+/* this version eliminates global variable declarations and uses thread-specific data with
  * a pointer to any data that is shared but under mutex control
  */
 
-typedef struct {
-   int count;
-   pthread_mutex_t count_mutex;
-   pthread_cond_t count_threshold_cv;
+typedef struct
+{
+    int count;
+    pthread_mutex_t count_mutex;
+    pthread_cond_t count_threshold_cv;
 } shared_data_t;
 
-typedef struct {
-  int my_id;
-  shared_data_t* common; /* the mutex, cv, and count are all kept in a common structure */
+typedef struct
+{
+    int my_id;
+    shared_data_t* common; /* the mutex, cv, and count are all kept in a common structure */
 } tsd_t;
 
 void *inc_count(void *t)
@@ -28,7 +30,8 @@ void *inc_count(void *t)
     long my_id = tsd->my_id;
     int i;
 
-    for (i=0; i<TCOUNT; i++) {
+    for (i=0; i<TCOUNT; i++)
+    {
         pthread_mutex_lock(&tsd->common->count_mutex);
         tsd->common->count++;
 
@@ -36,7 +39,8 @@ void *inc_count(void *t)
         Check the value of count and signal waiting thread when condition is
         reached.  Note that this occurs while mutex is locked.
         */
-        if (tsd->common->count == COUNT_LIMIT) {
+        if (tsd->common->count == COUNT_LIMIT)
+        {
             pthread_cond_signal(&tsd->common->count_threshold_cv);
             printf("inc_count(): thread %ld, count = %d  Threshold reached.\n",
                    my_id, tsd->common->count);
@@ -66,7 +70,8 @@ void *watch_count(void *t)
     from never returning.
     */
     pthread_mutex_lock(&tsd->common->count_mutex);
-    while (tsd->common->count<COUNT_LIMIT) {
+    while (tsd->common->count<COUNT_LIMIT)
+    {
         pthread_cond_wait(&tsd->common->count_threshold_cv, &tsd->common->count_mutex);
         printf("watch_count(): thread %ld Condition signal received.\n", my_id);
     }
@@ -95,9 +100,10 @@ int main (int argc, char *argv[])
     /* For portability, explicitly create threads in a joinable state */
     pthread_attr_init(&attr);
     pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE);
-    for (int i=0; i < NUM_THREADS; i++) {
-       tsd[i].my_id = i+1;
-       tsd[i].common = &shared_data;
+    for (int i=0; i < NUM_THREADS; i++)
+    {
+        tsd[i].my_id = i+1;
+        tsd[i].common = &shared_data;
     }
 
     pthread_create(&threads[0], &attr, watch_count, (void *)&tsd[0]);
@@ -105,7 +111,8 @@ int main (int argc, char *argv[])
     pthread_create(&threads[2], &attr, inc_count, (void *)&tsd[2]);
 
     /* Wait for all threads to complete */
-    for (i=0; i<NUM_THREADS; i++) {
+    for (i=0; i<NUM_THREADS; i++)
+    {
         pthread_join(threads[i], NULL);
     }
     printf ("Main(): Waited on %d  threads. Done.\n", NUM_THREADS);

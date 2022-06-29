@@ -7,7 +7,8 @@
 #include <unistd.h>
 #include <strings.h>
 
-int main(int argc, char* argv[]) {
+int main(int argc, char* argv[])
+{
 
     const char *data = "Hello World";
     int dataSize = sizeof(char) * strlen(data) + sizeof(char);
@@ -18,17 +19,20 @@ int main(int argc, char* argv[]) {
     const int dummyValue = 0;
     int fd = open(sharedFileName, openFlags, mode);
 
-    if(fd == (-1)) {
+    if(fd == (-1))
+    {
         printf("open returned (-1)\n");
         return (-1);
     }
 
-    if(lseek(fd, dataSize, SEEK_SET) == (-1)) {
+    if(lseek(fd, dataSize, SEEK_SET) == (-1))
+    {
         printf("error in lseek\n");
         close(fd);
         return (-1);
     }
-    if(write(fd, (char*)&dummyValue, sizeof(char)) == (-1)) {
+    if(write(fd, (char*)&dummyValue, sizeof(char)) == (-1))
+    {
         printf("error in write\n");
         close(fd);
         return (-1);
@@ -38,7 +42,8 @@ int main(int argc, char* argv[]) {
     int mapFlags   = MAP_SHARED;
     void* map = mmap(NULL, dataSize, protection, mapFlags, fd, 0);
 
-    if(map == (void*)(-1)) {
+    if(map == (void*)(-1))
+    {
         printf("mmap returned -1\n");
         close(fd);
         return (-1);
@@ -49,7 +54,8 @@ int main(int argc, char* argv[]) {
     printf("memory mapped. press any key to exit...\n");
     getchar();
 
-    if(munmap(map, dataSize) == (-1)) {
+    if(munmap(map, dataSize) == (-1))
+    {
         printf("munmap returned -1\n");
         close(fd);
         return (-1);

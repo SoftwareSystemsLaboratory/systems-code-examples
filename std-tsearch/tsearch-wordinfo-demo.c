@@ -17,7 +17,8 @@ static char *data[] = { "alpha", "bravo", "charlie", "delta",
                       };
 
 
-typedef struct _wordinfo_t {
+typedef struct _wordinfo_t
+{
     char* word;
     int count;
 } wordinfo_t;
@@ -36,7 +37,8 @@ static void action(const void *nodep, VISIT which, int depth)
     //int *datap;
     wordinfo_t* datap;
 
-    switch (which) {
+    switch (which)
+    {
     case preorder:
         break;
     case postorder:
@@ -60,14 +62,16 @@ int main(void)
     int data_size = sizeof(data) / sizeof(char*);
     void *root = NULL;
 
-    for (i = 0; i < data_size; i++) {
+    for (i = 0; i < data_size; i++)
+    {
         printf("insert word %s\n", data[i]);
         ptr = (wordinfo_t*) malloc(sizeof(wordinfo_t));
         ptr->word = data[i];
         ptr->count = 0;
         if (ptr == NULL) break;
         val = (wordinfo_t**) tsearch((void *) ptr, &root, compare_by_word);
-        if (val != NULL)  {
+        if (val != NULL)
+        {
             wordinfo_t* entry = *val;
             entry->count++;
         }

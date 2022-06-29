@@ -7,9 +7,10 @@
 
 TAILQ_HEAD(charlist_t, charentry_t);
 
-struct charentry_t {
-  char c;
-  TAILQ_ENTRY(charentry_t) entries;
+struct charentry_t
+{
+    char c;
+    TAILQ_ENTRY(charentry_t) entries;
 };
 
 extern void charlist_add_char(struct charlist_t* head_ptr, char c);

@@ -7,9 +7,10 @@
 
 TAILQ_HEAD(wordlist_t, wordentry_t);
 
-struct wordentry_t {
-  char* text;
-  TAILQ_ENTRY(wordentry_t) entries;
+struct wordentry_t
+{
+    char* text;
+    TAILQ_ENTRY(wordentry_t) entries;
 };
 
 extern void wordlist_add(struct wordlist_t* head_ptr, char* word);

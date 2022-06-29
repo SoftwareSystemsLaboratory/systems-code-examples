@@ -1,5 +1,5 @@
 /*
- * This example is often seen in OOP books. 
+ * This example is often seen in OOP books.
  * It is to represent a 2D point. We start with double x, y.
  */
 
@@ -8,7 +8,8 @@
 
 #include <stdio.h>
 
-typedef struct _point_t {
+typedef struct _point_t
+{
     double x, y;
 } point_t;
 

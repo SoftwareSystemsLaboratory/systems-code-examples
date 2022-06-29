@@ -4,7 +4,8 @@
 
 #include "point.hh"
 
-TEST(PointTest, Initialization) {
+TEST(PointTest, Initialization)
+{
     point_t p1, p2, p3;
 
     point_init(&p1, 3, 0);
@@ -23,7 +24,8 @@ TEST(PointTest, Initialization) {
 }
 
 
-TEST(PointTest, Add) {
+TEST(PointTest, Add)
+{
     point_t p1, p2, p3;
 
     point_new(&p3);
@@ -35,7 +37,8 @@ TEST(PointTest, Add) {
     ASSERT_FLOAT_EQ( point_y(&p3), 4.0);
 }
 
-TEST(PointTest, Distance) {
+TEST(PointTest, Distance)
+{
     point_t p1, p2, p3;
 
     point_init(&p1, 3, 0);
@@ -43,7 +46,8 @@ TEST(PointTest, Distance) {
     ASSERT_FLOAT_EQ( point_distance(&p1, &p2), 5.0);
 }
 
-int main(int argc, char **argv) {
+int main(int argc, char **argv)
+{
     testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
 }

@@ -9,14 +9,16 @@
 
 #include <search.h>
 
-typedef struct _wordtable_t {
-  struct hsearch_data wtable;
-  int size;
+typedef struct _wordtable_t
+{
+    struct hsearch_data wtable;
+    int size;
 } wordtable_t;
 
-typedef struct _wordentry_t {
-  char* word;
-  long count;
+typedef struct _wordentry_t
+{
+    char* word;
+    long count;
 } wordentry_t;
 
 extern void wordtable_init(wordtable_t* wt_ptr, int size);

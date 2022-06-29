@@ -9,10 +9,12 @@ char *file_data2 = "abcdefghijk";
 char *file_data3 = "lmnopqrstuvwxyz";
 const char *file_name = "temp.dat";
 
-int main(int argc, char* argv[]) {
+int main(int argc, char* argv[])
+{
 
     int fd = open(file_name, O_CREAT | O_TRUNC | O_RDWR, 0666);
-    if(fd == (-1)) {
+    if(fd == (-1))
+    {
         printf("open returned (-1)\n");
         return (-1);
     }
@@ -26,7 +28,8 @@ int main(int argc, char* argv[]) {
     buffers[2].iov_len = strlen(file_data3);
 
     int written = writev(fd, buffers, 3);
-    if(written == (-1)) {
+    if(written == (-1))
+    {
         printf("writev returned (-1)\n");
         return (-1);
     }

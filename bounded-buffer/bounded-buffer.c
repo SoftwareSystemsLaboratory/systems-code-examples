@@ -24,7 +24,8 @@
  * - because consumers will stop after they have gotten their share of values, others are allowed to consume their fair share
  */
 
-typedef struct {
+typedef struct
+{
     bb_options_t* options;
     bounded_buffer_t* bb;
     int id;
@@ -38,13 +39,14 @@ void* supplier(void *tsd)
     int my_id = bb_tsd->id;
 
     lwlog_info("supplier { id: %d, state : \"running\", gen: %d }\n", my_id, options->gen_count);
-    for (int i=0; i < options->gen_count; i++) {
+    for (int i=0; i < options->gen_count; i++)
+    {
         millisecond_sleep( rand() % options->supplier_max_delay_ms);
         entry_t* new_entry = (entry_t*) malloc(sizeof(entry_t));
         new_entry->value = my_id * options->gen_count + i;
         bounded_buffer_put(bb, new_entry);
         lwlog_info("supplier { id: %d,  entry: %d }\n", my_id, new_entry->value);
-        bounded_buffer_print_info(bb); 
+        bounded_buffer_print_info(bb);
     }
     lwlog_info("supplier { id: %d, state: \"exit\" }\n", my_id);
     pthread_exit(NULL);
@@ -64,11 +66,12 @@ void* consumer(void *tsd)
     if (my_id < not_consumed)
         max_to_consume++;
     lwlog_info("consumer { id: %d, state: \"running\", messages: %d }\n", my_id, max_to_consume);
-    for (int i=0; i < max_to_consume; i++) {
+    for (int i=0; i < max_to_consume; i++)
+    {
         entry_t* entry = bounded_buffer_get(bb);
         millisecond_sleep( rand() % options->consumer_max_delay_ms);
         lwlog_info("consumer { id: %d, entry: %d }\n", my_id, entry->value);
-        bounded_buffer_print_info(bb); 
+        bounded_buffer_print_info(bb);
         free(entry);
     }
     lwlog_info("consumer { id: %d, state: \"exit\" }\n", my_id);
@@ -94,24 +97,33 @@ int main (int argc, char *argv[])
     pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE);
 
     /* create supplier threads */
-    for (int i=0; i < options.no_suppliers; i++) {
+    for (int i=0; i < options.no_suppliers; i++)
+    {
         int thread_number = i;
-        bb_tsd[thread_number] = (bb_tsd_t) { .options = &options, .bb = &bb, .id = i };
+        bb_tsd[thread_number] = (bb_tsd_t)
+        {
+            .options = &options, .bb = &bb, .id = i
+        };
         lwlog_info("pthread_create ( thread: %d, type: \"supplier\", id: %d }\n", thread_number, i);
         pthread_create(&threads[thread_number], &attr, supplier, (void *)&bb_tsd[thread_number]);
     }
 
     /* create supplier threads */
-    for (int i=0; i < options.no_consumers; i++) {
+    for (int i=0; i < options.no_consumers; i++)
+    {
         int thread_number = i+options.no_suppliers;
-        bb_tsd[thread_number] = (bb_tsd_t) { .options = &options, .bb = &bb, .id = i };
+        bb_tsd[thread_number] = (bb_tsd_t)
+        {
+            .options = &options, .bb = &bb, .id = i
+        };
         lwlog_info("pthread_create ( thread: %d, type: \"consumer\", id: %d }\n", thread_number, i);
         pthread_create(&threads[thread_number], &attr, consumer, (void *)&bb_tsd[thread_number]);
     }
 
     lwlog_info("main { threads:  %d, state: \"started\" }\n", no_threads);
 
-    for (int i=0; i < no_threads; i++) {
+    for (int i=0; i < no_threads; i++)
+    {
         pthread_join(threads[i], NULL);
     }
 
@@ -120,7 +132,8 @@ int main (int argc, char *argv[])
     lwlog_info("main { extra_entires:  %d }\n", bounded_buffer_count(&bb));
 
     int bb_size = bounded_buffer_count(&bb);
-    for (int i=0; i < bb_size; i++) {
+    for (int i=0; i < bb_size; i++)
+    {
         entry_t* e = bounded_buffer_get(&bb);
         lwlog_info("main { removed: %d }\n", e->value);
         free(e);

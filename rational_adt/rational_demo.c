@@ -3,7 +3,8 @@
 
 #include "rational.h"
 
-int main(int argc, char *argv[]) {
+int main(int argc, char *argv[])
+{
     rational_t r1, r2, r3, result;
 
     rational_init(&r1, 25, 75);
@@ -34,11 +35,13 @@ int main(int argc, char *argv[]) {
     rational_print(&result, stdout, 1);
 
     rational_init(&result, 1, 1);
-    for (int i = 0; i < 64; i++) {
+    for (int i = 0; i < 64; i++)
+    {
         printf("r1^%d = ", i);
         if (result.valid)
             rational_print(&result, stdout, 1);
-        else {
+        else
+        {
             rational_print(&result, stdout, 0);
             printf(" [underflow]\n");
 

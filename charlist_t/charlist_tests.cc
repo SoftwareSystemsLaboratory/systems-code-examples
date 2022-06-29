@@ -5,20 +5,23 @@
 
 #include "charlist.hh"
 
-TEST(CharListTest, Initialization) {
+TEST(CharListTest, Initialization)
+{
     charlist_t char_list;
 
     charlist_init(&char_list);
     charlist_delete(&char_list);
 }
 
-TEST(CharListTest, AddChar) {
+TEST(CharListTest, AddChar)
+{
     charlist_t char_list;
     char word[] = "C Programming";
     int word_length = sizeof(word) / sizeof(char);
     charlist_init(&char_list);
 
-    for (int i=0; i < word_length; i++) {
+    for (int i=0; i < word_length; i++)
+    {
         charlist_add_char(&char_list, word[i]);
         ASSERT_EQ(charlist_size_slow(&char_list), i+1);
     }
@@ -26,7 +29,8 @@ TEST(CharListTest, AddChar) {
     charlist_delete(&char_list);
 }
 
-TEST(CharListTest, AddSring) {
+TEST(CharListTest, AddSring)
+{
     charlist_t char_list;
     char word[] = "C Programming";
     charlist_init(&char_list);
@@ -37,7 +41,8 @@ TEST(CharListTest, AddSring) {
     charlist_delete(&char_list);
 }
 
-TEST(CharListTest, ToString) {
+TEST(CharListTest, ToString)
+{
     charlist_t char_list;
     char word[] = "C Programming";
     charlist_init(&char_list);
@@ -49,7 +54,8 @@ TEST(CharListTest, ToString) {
 }
 
 
-int main(int argc, char **argv) {
+int main(int argc, char **argv)
+{
     testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
 }

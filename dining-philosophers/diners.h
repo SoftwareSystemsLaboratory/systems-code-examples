@@ -10,12 +10,14 @@
 #define MAX_EAT_TIME 7
 #define MAIN_THREAD_SLEEP_TIME 51
 
-typedef struct {
+typedef struct
+{
     char id;
     pthread_mutex_t lock;
 } fork_t;
 
-typedef struct {
+typedef struct
+{
     char id;
     char state;
     fork_t *left;
@@ -43,7 +45,8 @@ extern void diner_await(diner_t *diner);
 
 extern void *diner_run(void *tsd);
 
-enum dining_policy_t {
+enum dining_policy_t
+{
     NO_FORK_REORDERING, FORK_REORDERING
 };
 

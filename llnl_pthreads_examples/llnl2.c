@@ -8,7 +8,8 @@
 
 #define NUM_THREADS     5
 
-struct thread_data {
+struct thread_data
+{
     long tid;
     long square;
 };
@@ -38,12 +39,14 @@ int main (int argc, char *argv[])
     pthread_attr_init(&attr);
     pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE);
 
-    for(t=0; t<NUM_THREADS; t++) {
+    for(t=0; t<NUM_THREADS; t++)
+    {
         thread_data[t].tid = t;
         thread_data[t].square = t * t;
         printf("In main: creating thread %ld\n", t);
         rc = pthread_create(&threads[t], &attr, PrintHello, &thread_data[t]);
-        if (rc) {
+        if (rc)
+        {
             printf("ERROR; return code from pthread_create() is %d\n", rc);
             exit(-1);
         }
@@ -51,9 +54,11 @@ int main (int argc, char *argv[])
 
     pthread_attr_destroy(&attr);
 
-    for(t=0; t<NUM_THREADS; t++) {
+    for(t=0; t<NUM_THREADS; t++)
+    {
         rc = pthread_join(threads[t], &status);
-        if (rc) {
+        if (rc)
+        {
             printf("ERROR; return code from pthread_join() is %d\n", rc);
             exit(-1);
         }

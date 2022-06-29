@@ -40,7 +40,8 @@ action(const void *nodep, VISIT which, int depth)
 {
     int *datap;
 
-    switch (which) {
+    switch (which)
+    {
     case preorder:
         break;
     case postorder:
@@ -62,7 +63,8 @@ int main(void)
     void *val;
 
     srand(time(NULL));
-    for (i = 0; i < 12; i++) {
+    for (i = 0; i < 12; i++)
+    {
         ptr = xmalloc(sizeof(int));
         *ptr = rand() & 0xff;
         val = tsearch((void *) ptr, &root, compare);

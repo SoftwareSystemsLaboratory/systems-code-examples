@@ -10,7 +10,8 @@
 #define BB_SIZE 100
 #define GEN_COUNT 2000
 
-typedef struct {
+typedef struct
+{
     int no_suppliers;
     int no_consumers;
     int supplier_max_delay_ms;

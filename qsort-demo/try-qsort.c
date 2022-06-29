@@ -7,7 +7,8 @@
  * Can easly be adapted for other needs!
  */
 
-typedef struct wordcount_info_t {
+typedef struct wordcount_info_t
+{
     const char *word;
     int count;
 } wordcount_info_t;
@@ -15,9 +16,11 @@ typedef struct wordcount_info_t {
 
 enum sort_order_enum { sort_order_ascending, sort_order_descending };
 
-int comparewordcount_info_t(enum sort_order_enum order, wordcount_info_t * wcA, wordcount_info_t * wcB) {
+int comparewordcount_info_t(enum sort_order_enum order, wordcount_info_t * wcA, wordcount_info_t * wcB)
+{
     //printf("A=%s/%d B=%s/%d\n", wcA->word, wcA->count, wcB->word, wcB->count);
-    switch (order) {
+    switch (order)
+    {
     case sort_order_descending:
         return -(wcA->count - wcB->count);
     case sort_order_ascending:
@@ -53,14 +56,16 @@ int main(int argc, char *argv[])
     /* note: this is not intended to be a wordcount program. There's intentionally no I/O */
 
     wordcount_info_t **word_counts = (wordcount_info_t **) malloc(items * sizeof(wordcount_info_t*));
-    for (int i=0; i < items; i++) {
+    for (int i=0; i < items; i++)
+    {
         word_counts[i] = (wordcount_info_t *)malloc(sizeof(wordcount_info_t));
         word_counts[i]->word = some_words[i];
         word_counts[i]->count = some_counts[i];
     }
 
     printf("Word Array\n");
-    for (int i=0; i < items; i++) {
+    for (int i=0; i < items; i++)
+    {
         printf("word %s: %d\n", word_counts[i]->word, word_counts[i]->count);
     }
     printf("\n");
@@ -69,7 +74,8 @@ int main(int argc, char *argv[])
     qsort(word_counts, items, sizeof(wordcount_info_t*), qsort_cmp_wordcount);
 
     printf("Sorted Word Array by Count\n");
-    for (int i=0; i < items; i++) {
+    for (int i=0; i < items; i++)
+    {
         printf("{ word : '%s',  count : %d }\n", word_counts[i]->word, word_counts[i]->count);
     }
     printf("\n");
@@ -77,12 +83,14 @@ int main(int argc, char *argv[])
     /* use general bsearch() using library function -  requires data to be sorted */
     /* because we use the same comparison function for qsort() and bsearch(), we can do a bsearch() on data in ascending or descending order */
     printf("Search Results\n");
-    for (int count=0; count < 15; count++) {
+    for (int count=0; count < 15; count++)
+    {
         wordcount_info_t *search_key = (wordcount_info_t *)malloc(sizeof(wordcount_info_t));
         search_key->word = "any";
         search_key->count = count;
         wordcount_info_t **item = (wordcount_info_t **) bsearch (&search_key, word_counts, items, sizeof (wordcount_info_t*), qsort_cmp_wordcount);
-        if (item != NULL)  {
+        if (item != NULL)
+        {
             printf("{ word : '%s' : count : %d }\n", (*item)->word, (*item)->count);;
         }
         free(search_key);

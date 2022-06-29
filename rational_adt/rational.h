@@ -4,13 +4,15 @@
 #include <stdio.h>
 
 /* header:typedef */
-typedef struct {
+typedef struct
+{
     long numerator;
     long denominator;
     int valid;
 } rational_t;
 
-typedef struct {
+typedef struct
+{
     long comparison; /* boolean for type of condition */
     int valid; /* whether valid (arising from overflow, etc.) */
 } rational_comparison_t;

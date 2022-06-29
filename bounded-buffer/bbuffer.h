@@ -9,11 +9,13 @@
 #define LOG_COLOR (1) // 0: off, 1: on, default: 1
 #define LOG_LEVEL (7) // -1: off, 0~7: different log levels, default: 7
 
-typedef struct {
+typedef struct
+{
     int value;
 } entry_t;
 
-typedef struct {
+typedef struct
+{
     int size;
     entry_t** entries;
     int head;

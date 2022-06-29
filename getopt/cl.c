@@ -36,8 +36,10 @@ void my_program_options_delete(my_options_t *options)
     free(options);
 }
 
-void print_options(my_options_t *options) {
-    if (options->print_options) {
+void print_options(my_options_t *options)
+{
+    if (options->print_options)
+    {
         fprintf(stderr, "how_many: %d, last_n_words: %d, min_length: %d, every_steps: %d, ignore_case: %d\n",
                 options->how_many, options->last_n_words, options->min_length, options->every_steps, options->ignore_case);
     }

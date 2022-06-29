@@ -8,13 +8,15 @@
 #include <unistd.h>
 #include <strings.h>
 
-int getFileSize(const char *fileName) {
+int getFileSize(const char *fileName)
+{
     struct stat fileStat;
     stat(fileName, &fileStat);
     return fileStat.st_size;
 }
 
-int main(int argc, char* argv[]) {
+int main(int argc, char* argv[])
+{
 
     const mode_t mode = 0666;
     const int openFlag = (O_RDWR);
@@ -22,7 +24,8 @@ int main(int argc, char* argv[]) {
     int fileSize = getFileSize(fileName);
 
     int fd = open(fileName, openFlag, mode);
-    if(fd == (-1)) {
+    if(fd == (-1))
+    {
         printf("error in open\n");
         return (-1);
     }
@@ -31,7 +34,8 @@ int main(int argc, char* argv[]) {
     int mapFlags = MAP_SHARED;
     void* map = mmap(NULL, fileSize, protection, mapFlags, fd, 0);
 
-    if(map == (void*)(-1)) {
+    if(map == (void*)(-1))
+    {
         printf("mmap() returned -1\n");
         close(fd);
     }
@@ -44,7 +48,8 @@ int main(int argc, char* argv[]) {
 
     free(data);
 
-    if(munmap(map, fileSize) == (-1)) {
+    if(munmap(map, fileSize) == (-1))
+    {
         printf("munmap() failed\n");
         close(fd);
         return (-1);

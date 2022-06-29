@@ -28,17 +28,20 @@ int main(void)
 
     hcreate_r(30, &htable);
 
-    for (i = 0; i < 24; i++) {
+    for (i = 0; i < 24; i++)
+    {
         e.key = data[i];
         e.data = (void *) (i + 0L);
         hsearch_r(e, ENTER, &ep, &htable);
-        if (ep == NULL) {
+        if (ep == NULL)
+        {
             fprintf(stderr, "entry failed\n");
             exit(EXIT_FAILURE);
         }
     }
 
-    for (i = 22; i < 26; i++) {
+    for (i = 22; i < 26; i++)
+    {
         e.key = data[i];
         hsearch_r(e, FIND, &ep, &htable);
         printf("%9.9s -> %9.9s:%ld\n", e.key,

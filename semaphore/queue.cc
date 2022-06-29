@@ -1,34 +1,42 @@
 #include "queue.hh"
 #include "debug.hh"
 
-Node::Node(int value) {
+Node::Node(int value)
+{
     _value = value;
 }
 
-Node::~Node() {
+Node::~Node()
+{
 }
 
-int Node::getValue() {
+int Node::getValue()
+{
     return this->_value;
 }
 
-Node* Node::getNext() {
+Node* Node::getNext()
+{
     return this->_next;
 }
 
-void Node::setNext(Node *next) {
+void Node::setNext(Node *next)
+{
     this->_next = next;
 }
 
-Node* Node::getPrev() {
+Node* Node::getPrev()
+{
     return this->_prev;
 }
 
-void Node::setPrev(Node* prev) {
+void Node::setPrev(Node* prev)
+{
     this->_prev = prev;
 }
 
-Queue::Queue() {
+Queue::Queue()
+{
     _tail = new Node((-1));
     _head = new Node((-1));
     _head->setNext(_tail);
@@ -41,8 +49,10 @@ Queue::Queue() {
     assert(_tail->getPrev() == _head)
 }
 
-Queue::~Queue() {
-    for(Node* curr = _head->getNext(); curr != _tail; ) {
+Queue::~Queue()
+{
+    for(Node* curr = _head->getNext(); curr != _tail; )
+    {
         Node* toDelete = curr;
         curr = curr->getNext();
         assert(curr != NULL)
@@ -52,7 +62,8 @@ Queue::~Queue() {
     delete _head;
 }
 
-void Queue::Enqueue(int x) {
+void Queue::Enqueue(int x)
+{
     Node *prev = _tail->getPrev();
     Node *curr = new Node(x);
     assert(prev != NULL)
@@ -63,7 +74,8 @@ void Queue::Enqueue(int x) {
     _tail->setPrev(curr);
 }
 
-int Queue::Dequeue() {
+int Queue::Dequeue()
+{
     Node* node = _head->getNext();
     node->getPrev()->setNext(node->getNext());
     node->getNext()->setPrev(node->getPrev());
@@ -72,11 +84,13 @@ int Queue::Dequeue() {
     return value;
 }
 
-bool Queue::HasWorkLeft() {
+bool Queue::HasWorkLeft()
+{
     return _head->getNext() != _tail || _workLeft;
 }
 
-void Queue::DoneAdding() {
+void Queue::DoneAdding()
+{
     _workLeft = false;
 }
 

@@ -16,11 +16,11 @@ int my_module_init( void )
 
 {
 
-  printk(KERN_INFO "my_module_init called.  Module is now loaded.\n");
+    printk(KERN_INFO "my_module_init called.  Module is now loaded.\n");
 
 
 
-  return 0;
+    return 0;
 
 }
 
@@ -32,11 +32,11 @@ void my_module_cleanup( void )
 
 {
 
-  printk(KERN_INFO "my_module_cleanup called.  Module is now unloaded.\n");
+    printk(KERN_INFO "my_module_cleanup called.  Module is now unloaded.\n");
 
 
 
-  return;
+    return;
 
 }
 

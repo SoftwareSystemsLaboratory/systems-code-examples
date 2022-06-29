@@ -4,21 +4,24 @@
 #include <fcntl.h>
 #include <unistd.h>
 
-int main(int argc, char* argv[]) {
+int main(int argc, char* argv[])
+{
 
     const char *sharedFileName = "shared.dat";
     const mode_t mode = 0666;
     const int openFlags = (O_CREAT | O_TRUNC | O_RDWR);
     int fd = open(sharedFileName, openFlags, mode);
 
-    if(fd == (-1)) {
+    if(fd == (-1))
+    {
         printf("open returned (-1)\n");
         return (-1);
     }
 
     Message* msg = Message::CopyToMemoryMappedFile(fd);
 
-    for(int i = 0; i < 100; i++) {
+    for(int i = 0; i < 100; i++)
+    {
         char message[10];
         sprintf(message, "%d\n", i);
         msg->EnqueueMessage(&message[0]);

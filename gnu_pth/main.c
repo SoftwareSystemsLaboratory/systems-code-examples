@@ -24,7 +24,8 @@ static void *ticker(void *_arg)
     char *ct;
     float load;
 
-    for (;;) {
+    for (;;)
+    {
         pth_sleep(5);
         now = time(NULL);
         ct = ctime(&now);
@@ -64,7 +65,8 @@ int main(int argc, char *argv[])
     listen(sa, 10);
 
     pth_attr_set(attr, PTH_ATTR_NAME, "handler");
-    for (;;) {
+    for (;;)
+    {
         sw = pth_accept(sa, (struct sockaddr *)&peer_addr, &peer_len);
         pth_spawn(attr, handler, (void *)&sw);
     }

@@ -1,35 +1,43 @@
 #include "list.hh"
 #include "debug.hh"
 
-Node::Node(int value) {
+Node::Node(int value)
+{
     assert(value != 0)
     _value = value;
 }
 
-Node::~Node() {
+Node::~Node()
+{
 }
 
-int Node::getValue() {
+int Node::getValue()
+{
     return this->_value;
 }
 
-Node* Node::getNext() {
+Node* Node::getNext()
+{
     return this->_next;
 }
 
-void Node::setNext(Node *next) {
+void Node::setNext(Node *next)
+{
     this->_next = next;
 }
 
-Node* Node::getPrev() {
+Node* Node::getPrev()
+{
     return this->_prev;
 }
 
-void Node::setPrev(Node* prev) {
+void Node::setPrev(Node* prev)
+{
     this->_prev = prev;
 }
 
-List::List() {
+List::List()
+{
     _tail = new Node((-1));
     _head = new Node((-1));
     _head->setNext(_tail);
@@ -41,8 +49,10 @@ List::List() {
     assert(_tail->getPrev() == _head)
 }
 
-List::~List() {
-    for(Node* curr = _head->getNext(); curr != _tail; ) {
+List::~List()
+{
+    for(Node* curr = _head->getNext(); curr != _tail; )
+    {
         Node* toDelete = curr;
         curr = curr->getNext();
         assert(curr != NULL)
@@ -52,7 +62,8 @@ List::~List() {
     delete _head;
 }
 
-void List::Add(int x) {
+void List::Add(int x)
+{
     Node *prev = _tail->getPrev();
     Node *curr = new Node(x);
     assert(prev != NULL)
@@ -63,27 +74,32 @@ void List::Add(int x) {
     _tail->setPrev(curr);
 }
 
-int List::Count() {
+int List::Count()
+{
     int count = 0;
     for(Node* curr = _head->getNext();
             curr != _tail;
-            curr = curr->getNext()) {
+            curr = curr->getNext())
+    {
         assert(curr != NULL)
         count += 1;
     }
     return count;
 }
 
-Node* find(Node* head, int offset) {
+Node* find(Node* head, int offset)
+{
     Node* curr = head->getNext();
-    for(int i = 0; i < offset; i++) {
+    for(int i = 0; i < offset; i++)
+    {
         assert(curr != NULL)
         curr = curr->getNext();
     }
     return curr;
 }
 
-void List::Remove(int index) {
+void List::Remove(int index)
+{
     Node* node = find(_head, index);
     assert(node != NULL)
     assert(node->getPrev() != NULL)
@@ -93,7 +109,8 @@ void List::Remove(int index) {
     delete node;
 }
 
-int List::Get(int index) {
+int List::Get(int index)
+{
     Node* node = find(_head, index);
     assert(node != NULL)
     return node->getValue();

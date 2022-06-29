@@ -2,7 +2,8 @@
 #include "list.hh"
 #include "tests.hh"
 
-bool testAdd() {
+bool testAdd()
+{
     List *list = new List();
 
     int pass = 0;
@@ -17,7 +18,8 @@ bool testAdd() {
     return pass == 3;
 }
 
-bool testRemove() {
+bool testRemove()
+{
     List *list = new List();
 
     int pass = 0;
@@ -30,7 +32,8 @@ bool testRemove() {
     return pass == 2;
 }
 
-bool testGet() {
+bool testGet()
+{
     List* list = new List();
 
     int pass = 0;
@@ -48,7 +51,8 @@ bool testGet() {
     return pass;
 }
 
-int runTests() {
+int runTests()
+{
     int passCount = 0;
 
     passCount += testAdd() ? 1 : 0;

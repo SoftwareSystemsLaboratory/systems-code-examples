@@ -11,13 +11,18 @@ Mutex *lock = new Mutex();
 Semaphore *semaphore = new Semaphore(0);
 Queue *queue = new Queue();
 
-void increment() {
+void increment()
+{
     bool workLeft = true;
-    while(workLeft) {
+    while(workLeft)
+    {
         lock->Lock();
-        if(!queue->HasWorkLeft()) {
+        if(!queue->HasWorkLeft())
+        {
             workLeft = false;
-        } else if(semaphore->Down()) {
+        }
+        else if(semaphore->Down())
+        {
             int c = queue->Dequeue();
             count = count + c;
         }
@@ -25,8 +30,10 @@ void increment() {
     }
 }
 
-void populateQueue() {
-    for(int i = 0; i < countPerThread*2; i++) {
+void populateQueue()
+{
+    for(int i = 0; i < countPerThread*2; i++)
+    {
         lock->Lock();
         queue->Enqueue(1);
         semaphore->Up();
@@ -37,7 +44,8 @@ void populateQueue() {
     lock->Unlock();
 }
 
-int main( int argc, char* argv[]) {
+int main( int argc, char* argv[])
+{
 
     pthread_t thread1, thread2;
     pthread_attr_t threadAttribute;
@@ -55,9 +63,12 @@ int main( int argc, char* argv[]) {
     pthread_join(thread1, NULL);
     pthread_join(thread2, NULL);
 
-    if( count != 2 * countPerThread ) {
+    if( count != 2 * countPerThread )
+    {
         printf("****** Error. Final count is %d\n", count);
-    } else {
+    }
+    else
+    {
         printf("****** OK. Final count is %d\n", count);
     }
 

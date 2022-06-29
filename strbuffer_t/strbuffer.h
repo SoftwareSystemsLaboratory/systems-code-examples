@@ -8,7 +8,8 @@
 #ifndef _STRINGBUFFER_H_
 #define _STRINGBUFFER_H_
 
-typedef struct _strbuffer_t {
+typedef struct _strbuffer_t
+{
     char* data;
     int capacity;
     int increment;

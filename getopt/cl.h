@@ -7,7 +7,8 @@
 #include <unistd.h>
 #include <regex.h>
 
-typedef struct my_options_t {
+typedef struct my_options_t
+{
     int how_many;
     int last_n_words;
     int min_length;
