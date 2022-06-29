@@ -4,7 +4,6 @@ project(OpSystemsCodeExamples)
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
-option(BUILD_PTH_EXAMPLE "Build GNU PTH example" OFF)
 option(BUILD_OPTIONAL_EXAMPLES "Build optional examples" OFF)
 
 if(UNIX AND APPLE)
@@ -69,13 +68,6 @@ add_subdirectory(charlist_t)
 if(BUILD_OPTIONAL_EXAMPLES)
 
     if(UNIX AND NOT APPLE)
-      if(BUILD_PTH_EXAMPLE)
-         message("Building GNU PTH example")
-         add_subdirectory(gnu_pth)
-      else()
-         message("Not building GNU PTH example")
-      endif()
-
       add_subdirectory(monitor)
       add_subdirectory(mutex)
       add_subdirectory(semaphore)
