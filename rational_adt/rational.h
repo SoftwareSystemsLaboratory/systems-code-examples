@@ -3,7 +3,7 @@
 
 #include <stdio.h>
 
-/* header:typedef */
+// {{OSSP:header-typedef:begin}}
 typedef struct
 {
     long numerator;
@@ -13,24 +13,28 @@ typedef struct
 
 typedef struct
 {
-    long comparison; /* boolean for type of condition */
-    int valid; /* whether valid (arising from overflow, etc.) */
+    long comparison; // boolean for type of condition
+    int valid; // whether valid (arising from overflow, etc.)
 } rational_comparison_t;
+// {{OSSP:header-typedef:end}}
 
-/* header:basic-init */
+// {{OSSP:header-basic-init:begin}}
 extern void rational_init(rational_t *number, long numerator, long denominator);
+// {{OSSP:header-basic-init:end}}
 
-/* header:advanced-init */
+// {{OSSP:header-advanced-init:begin}}
 extern void rational_from_rational(rational_t *number, rational_t *another);
 
 extern void rational_from_long(rational_t *number, long whole_number);
+// {{OSSP:header-advanced-init:end}}
 
-/* header:accessors */
+// {{OSSP:header-accessors:begin}}
 extern long rational_numerator(rational_t *number);
 
 extern long rational_denominator(rational_t *number);
+// {{OSSP:header-accessors:end}}
 
-/* header:arithmetic */
+// {{OSSP:header-arithmetic:begin}}
 extern void rational_add(rational_t *n1, rational_t *n2, rational_t *result);
 
 extern void rational_subtract(rational_t *n1, rational_t *n2, rational_t *result);
@@ -38,33 +42,40 @@ extern void rational_subtract(rational_t *n1, rational_t *n2, rational_t *result
 extern void rational_multiply(rational_t *n1, rational_t *n2, rational_t *result);
 
 extern void rational_divide(rational_t *n1, rational_t *n2, rational_t *result);
+// {{OSSP:header-arithmetic:end}}
 
-/* header:unary-inplace */
+// {{OSSP:header-unary-inplace:begin}}
 extern void rational_negate(rational_t *number);
 
 extern void rational_reciprocal(rational_t *number);
+// {{OSSP:header-unary-inplace:end}}
 
-/* header:compare */
+// {{OSSP:header-compare:begin}}
 extern long rational_compare(rational_t *n1, rational_t *n2, rational_comparison_t *result);
+// {{OSSP:header-compare:end}}
 
-/* header:print */
+// {{OSSP:header-print:begin}}
 extern void rational_print(rational_t *number, FILE *stream, int nl);
+// {{OSSP:header-print:end}}
 
-/* header:utililties */
-
+// {{OSSP:header-utililties:begin}}
 extern long long_add(long a, long b, long *c);
 
 extern long long_multiply(long a, long b, long *c);
 
 extern long long_subtract(long a, long b, long *c);
+// {{OSSP:header-utililties:end}}
 
-/* header:rational_static_interfaces */
+
+// {{OSSP:header-rational_static_interfaces:begin}}
 
 extern void reduce_fraction(rational_t *number);
 
 extern long long_gcd(long a, long b);
+// {{OSSP:header-rational_static_interfaces:end}}
 
-/* header:allocate */
+// {{OSSP:header-allocate:begin}}
 extern rational_t *rational_allocate();
+// {{OSSP:header-allocate:end}}
 
 #endif
