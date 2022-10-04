@@ -68,7 +68,8 @@ static void rational_internal_init(rational_t *number, long numerator, long deno
 // {{OSSP:module-rational_from_rational:begin}}
 void rational_from_rational(rational_t *number, rational_t *another)
 {
-    rational_internal_init(number, another->numerator, another->denominator, 1);
+    rational_internal_init(number,
+        another->numerator, another->denominator, 1);
     reduce_fraction(number);
 }
 // {{OSSP:module-rational_from_rational:end}}
@@ -154,10 +155,10 @@ void rational_add(rational_t *n1, rational_t *n2, rational_t *result)
     long nd_product, dn_product, dd_product, nd_dn_product_sum;
 
     int valid = n1->valid && n2->valid
-                && long_multiply(n1->numerator, n2->denominator, &nd_product)
-                && long_multiply(n2->numerator, n1->denominator, &dn_product)
-                && long_multiply(n1->denominator, n2->denominator, &dd_product)
-                && long_add(nd_product, dn_product, &nd_dn_product_sum);
+        && long_multiply(n1->numerator, n2->denominator, &nd_product)
+        && long_multiply(n2->numerator, n1->denominator, &dn_product)
+        && long_multiply(n1->denominator, n2->denominator, &dd_product)
+        && long_add(nd_product, dn_product, &nd_dn_product_sum);
     rational_internal_init(result, nd_dn_product_sum, dd_product, valid);
 }
 // {{OSSP:module-rational_add:end}}
@@ -168,10 +169,10 @@ void rational_subtract(rational_t *n1, rational_t *n2, rational_t *result)
 {
     long nd_product, dn_product, dd_product, nd_dn_product_diff;
     int valid = n1->valid && n2->valid
-                && long_multiply(n1->numerator, n2->denominator, &nd_product)
-                && long_multiply(n2->numerator, n1->denominator, &dn_product)
-                && long_multiply(n1->denominator, n2->denominator, &dd_product)
-                && long_subtract(nd_product, dn_product, &nd_dn_product_diff);
+        && long_multiply(n1->numerator, n2->denominator, &nd_product)
+        && long_multiply(n2->numerator, n1->denominator, &dn_product)
+        && long_multiply(n1->denominator, n2->denominator, &dd_product)
+        && long_subtract(nd_product, dn_product, &nd_dn_product_diff);
     rational_internal_init(result, nd_dn_product_diff, dd_product, valid);
 }
 // {{OSSP:module-rational_subtract:end}}
@@ -182,8 +183,8 @@ void rational_multiply(rational_t *n1, rational_t *n2, rational_t *result)
 {
     long nn_product, dd_product;
     int valid = n1->valid && n2->valid
-                && long_multiply(n1->numerator, n2->numerator, &nn_product)
-                && long_multiply(n2->denominator, n1->denominator, &dd_product);
+        && long_multiply(n1->numerator, n2->numerator, &nn_product)
+        && long_multiply(n2->denominator, n1->denominator, &dd_product);
     rational_internal_init(result, nn_product, dd_product, valid);
 }
 // {{OSSP:module-rational_multiply:end}}
@@ -194,8 +195,8 @@ void rational_divide(rational_t *n1, rational_t *n2, rational_t *result)
 {
     long nd_product, dn_product;
     int valid = n1->valid && n2->valid
-                && long_multiply(n1->numerator, n2->denominator, &nd_product)
-                && long_multiply(n2->denominator, n1->numerator, &dn_product);
+        && long_multiply(n1->numerator, n2->denominator, &nd_product)
+        && long_multiply(n2->denominator, n1->numerator, &dn_product);
     rational_internal_init(result, nd_product, dn_product, valid);
 }
 // {{OSSP:module-rational_divide:end}}
@@ -205,9 +206,9 @@ long rational_compare(rational_t *n1, rational_t *n2, rational_comparison_t *res
 {
     long nd_product, dn_product, nd_dn_product_diff;
     result->valid = n1->valid && n2->valid
-                    && long_multiply(n1->numerator, n2->denominator, &nd_product)
-                    && long_multiply(n2->numerator, n1->denominator, &dn_product)
-                    && long_subtract(nd_product, dn_product, &nd_dn_product_diff);
+        && long_multiply(n1->numerator, n2->denominator, &nd_product)
+        && long_multiply(n2->numerator, n1->denominator, &dn_product)
+        && long_subtract(nd_product, dn_product, &nd_dn_product_diff);
     result->comparison = nd_dn_product_diff;
     return result->comparison;
 }
