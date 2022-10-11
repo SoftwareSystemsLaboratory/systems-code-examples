@@ -1,12 +1,9 @@
-/* test cases */
-
 #include <gtest/gtest.h>
 #include <limits.h>
 
 #include "rational.hh"
 
-/* rational_tests:HelpersUtilities */
-
+// {{OSSP:module-rational_tests_HelpersUtilities:begin}}
 TEST(RationalTest, HelpersUtilities)
 {
     long a, b, c, success;
@@ -42,9 +39,10 @@ TEST(RationalTest, HelpersUtilities)
     ASSERT_TRUE(long_subtract(a, b, &c)); /* no overflow on a - b */
     ASSERT_TRUE(long_multiply(a, b, &c)); /* no overflow on a * b */
 }
+// {{OSSP:module-rational_tests_HelpersUtilities:end}}
 
-/* rational_tests:Initialization */
 
+// {{OSSP:module-rational_tests_Initialization:begin}}
 TEST(RationalTest, Initialization)
 {
     rational_t r1, r2, r3;
@@ -66,9 +64,9 @@ TEST(RationalTest, Initialization)
     ASSERT_EQ(rational_numerator(&r3), 4L);
     ASSERT_EQ(rational_denominator(&r3), 1L);
 }
+// {{OSSP:module-rational_tests_Initialization:end}}
 
-/* rational_tests:SimpleComparison */
-
+// {{OSSP:module-rational_tests_SimpleComparison:begin}}
 TEST(RationalTest, SimpleComparison)
 {
     rational_t r1, r2, r3;
@@ -82,9 +80,9 @@ TEST(RationalTest, SimpleComparison)
     ASSERT_EQ(rational_compare(&r2, &r3, &comparison), 0);
     ASSERT_GT(rational_compare(&r3, &r1, &comparison), 0);
 }
+// {{OSSP:module-rational_tests_SimpleComparison:begin}}
 
-/* rational_tests:SimpleAdd */
-
+// {{OSSP:module-rational_tests_SimpleAdd:begin}}
 TEST(RationalTest, SimpleAdd)
 {
     rational_t r1, r2, expected, result;
@@ -97,9 +95,9 @@ TEST(RationalTest, SimpleAdd)
     rational_add(&r1, &r2, &result);
     ASSERT_EQ(rational_compare(&result, &expected, &comparison), 0);
 }
+// {{OSSP:module-rational_tests_SimpleAdd:end}}
 
-/* rational_tests:SimpleSubtract  */
-
+// {{OSSP:module-rational_tests_SimpleSubtract:begin}}
 TEST(RationalTest, SimpleSubtract)
 {
     rational_t r1, r2, expected, result;
@@ -113,10 +111,10 @@ TEST(RationalTest, SimpleSubtract)
 
     ASSERT_EQ(rational_compare(&result, &expected, &comparison), 0);
 }
+// {{OSSP:module-rational_tests_SimpleSubtract:end}
 
 
-/* rational_tests:SimpleMultiply */
-
+// {{OSSP:module-rational_tests_SimpleMultiply:begin}}
 TEST(RationalTest, SimpleMultiply)
 {
     rational_t r1, r2, expected, result;
@@ -129,9 +127,9 @@ TEST(RationalTest, SimpleMultiply)
     rational_multiply(&r1, &r2, &result);
     ASSERT_EQ(rational_compare(&result, &expected, &comparison), 0);
 }
+// {{OSSP:module-rational_tests_SimpleMultiply:end}}
 
-/* rational_tests:SimpleDivide */
-
+// {{OSSP:module-rational_tests_SimpleDivide:begin}}
 TEST(RationalTest, SimpleDivide)
 {
     rational_t r1, r2, expected, result;
@@ -144,8 +142,9 @@ TEST(RationalTest, SimpleDivide)
     rational_divide(&r1, &r2, &result);
     ASSERT_EQ(rational_compare(&result, &expected, &comparison), 0);
 }
+// {{OSSP:module-rational_tests_SimpleDivide:end}}
 
-/* rational_tests:SimpleReciprocal  */
+// {{OSSP:module-rational_tests_SimpleReciprocal:begin}}
 
 TEST(RationalTest, SimpleReciprocal)
 {
@@ -159,8 +158,9 @@ TEST(RationalTest, SimpleReciprocal)
     rational_multiply(&r1, &r2, &result);
     ASSERT_EQ(rational_compare(&result, &expected, &comparison), 0);
 }
+// {{OSSP:module-rational_tests_SimpleReciprocal:end}}
 
-/* rational_tests:SimpleNegate */
+// {{OSSP:module-rational_tests_SimpleNegate:begin}}
 
 TEST(RationalTest, SimpleNegate)
 {
@@ -174,9 +174,9 @@ TEST(RationalTest, SimpleNegate)
     rational_add(&r1, &r2, &result);
     ASSERT_EQ(rational_compare(&result, &expected, &comparison), 0);
 }
+// {{OSSP:module-rational_tests_SimpleNegate:end}}
 
-/* rational_tests:RandomAdd */
-
+// {{OSSP:module-rational_tests_RandomAdd:begin}}
 TEST(RationalTest, RandomAdd)
 {
     for (int i = 0; i < 10; i++)
@@ -194,12 +194,13 @@ TEST(RationalTest, RandomAdd)
         ASSERT_EQ(rational_compare(&result, &expected, &comparison), 0);
     }
 }
+// {{OSSP:module-rational_tests_RandomAdd:end}}
 
 
-/* rational_tests:main */
-
+// {{OSSP:module-rational_tests_main:begin}}
 int main(int argc, char **argv)
 {
     testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
 }
+// {{OSSP:module-rational_tests_main:end}}
