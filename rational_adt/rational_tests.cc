@@ -80,7 +80,7 @@ TEST(RationalTest, SimpleComparison)
     ASSERT_EQ(rational_compare(&r2, &r3, &comparison), 0);
     ASSERT_GT(rational_compare(&r3, &r1, &comparison), 0);
 }
-// {{OSSP:module-rational_tests_SimpleComparison:begin}}
+// {{OSSP:module-rational_tests_SimpleComparison:end}}
 
 // {{OSSP:module-rational_tests_SimpleAdd:begin}}
 TEST(RationalTest, SimpleAdd)
@@ -111,7 +111,7 @@ TEST(RationalTest, SimpleSubtract)
 
     ASSERT_EQ(rational_compare(&result, &expected, &comparison), 0);
 }
-// {{OSSP:module-rational_tests_SimpleSubtract:end}
+// {{OSSP:module-rational_tests_SimpleSubtract:end}}
 
 
 // {{OSSP:module-rational_tests_SimpleMultiply:begin}}
