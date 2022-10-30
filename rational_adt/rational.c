@@ -47,8 +47,6 @@ rational_t *rational_allocate()
 // {{OSSP:module-rational_init:begin}}
 void rational_init(rational_t *number, long numerator, long denominator)
 {
-    number->numerator = numerator;
-    number->denominator = denominator;
     rational_internal_init(number, numerator, denominator, 1);
 }
 // {{OSSP:module-rational_init:end}}
