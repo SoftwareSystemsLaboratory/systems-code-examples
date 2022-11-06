@@ -32,7 +32,8 @@ inline long long_subtract(long a, long b, long *c)
 
 
 // {{OSSP:module-statics:begin}}
-static void rational_internal_init(rational_t *number, long num, long den, bool valid);
+static void rational_internal_init(rational_t *number,
+                                   long num, long den, bool valid);
 // {{OSSP:module-statics:end}}
 
 
