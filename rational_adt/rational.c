@@ -54,7 +54,8 @@ void rational_init(rational_t *n, long num, long den)
 
 
 // {{OSSP:module-rational_internal_init:begin}}
-static void rational_internal_init(rational_t *number, long num, long den, bool valid)
+static void rational_internal_init(rational_t *number,
+                                   long num, long den, bool valid)
 {
     number->num = num;
     number->den = den;
