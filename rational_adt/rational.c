@@ -48,7 +48,7 @@ rational_t *rational_allocate()
 // {{OSSP:module-rational_init:begin}}
 void rational_init(rational_t *n, long num, long den)
 {
-    rational_internal_init(n, num, den, 1);
+    rational_internal_init(n, num, den, true);
 }
 // {{OSSP:module-rational_init:end}}
 
@@ -68,7 +68,7 @@ static void rational_internal_init(rational_t *number,
 // {{OSSP:module-rational_from_rational:begin}}
 void rational_from_rational(rational_t *number, rational_t *another)
 {
-    rational_internal_init(number,another->num, another->den, 1);
+    rational_internal_init(number,another->num, another->den, true);
     reduce_fraction(number);
 }
 // {{OSSP:module-rational_from_rational:end}}
@@ -77,7 +77,7 @@ void rational_from_rational(rational_t *number, rational_t *another)
 // {{OSSP:module-rational_from_long:begin}}
 void rational_from_long(rational_t *number, long whole_number)
 {
-    rational_internal_init(number, whole_number, 1L, 1);
+    rational_internal_init(number, whole_number, 1L, true);
     reduce_fraction(number);
 }
 // {{OSSP:module-rational_from_long:end}}
