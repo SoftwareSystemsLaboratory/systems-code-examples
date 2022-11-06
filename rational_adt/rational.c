@@ -219,7 +219,7 @@ void rational_reciprocal(rational_t *number)
 {
     long numerator = number->numerator;
     long denominator = number->denominator;
-    rational_internal_init(number, denominator, numerator, 1);
+    rational_internal_init(number, denominator, numerator, number->valid);
 }
 // {{OSSP:module-rational_reciprocal:end}}
 

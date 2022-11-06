@@ -48,4 +48,14 @@ int main(int argc, char *argv[])
         }
         rational_multiply(&result, &r1, &result);
     }
+
+    rational_init(&r3, 0, 25);
+    printf("r3 = "); 
+    rational_print(&r3, stdout, 1);
+    rational_reciprocal(&r3);
+    printf("r3 (reciprocal) = "); 
+    rational_print(&r3, stdout, 1);
+    rational_reciprocal(&r3);
+    printf("r3 (reciprocal of invalid) = "); 
+    rational_print(&r3, stdout, 1);
 }
