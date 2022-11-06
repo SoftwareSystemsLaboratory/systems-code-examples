@@ -32,7 +32,7 @@ inline long long_subtract(long a, long b, long *c)
 
 
 // {{OSSP:module-statics:begin}}
-static void rational_internal_init(rational_t *number, long numerator, long denominator, int valid);
+static void rational_internal_init(rational_t *number, long num, long den, bool valid);
 // {{OSSP:module-statics:end}}
 
 
@@ -45,19 +45,19 @@ rational_t *rational_allocate()
 
 
 // {{OSSP:module-rational_init:begin}}
-void rational_init(rational_t *number, long numerator, long denominator)
+void rational_init(rational_t *n, long num, long den)
 {
-    rational_internal_init(number, numerator, denominator, 1);
+    rational_internal_init(n, num, den, 1);
 }
 // {{OSSP:module-rational_init:end}}
 
 
 // {{OSSP:module-rational_internal_init:begin}}
-static void rational_internal_init(rational_t *number, long numerator, long denominator, int valid)
+static void rational_internal_init(rational_t *number, long num, long den, bool valid)
 {
-    number->numerator = numerator;
-    number->denominator = denominator;
-    number->valid = (denominator != 0) ? valid : 0;
+    number->num = num;
+    number->den = den;
+    number->valid = (den != 0) ? valid : 0;
     reduce_fraction(number);
 }
 // {{OSSP:module-rational_internal_init:end}}
@@ -66,8 +66,7 @@ static void rational_internal_init(rational_t *number, long numerator, long deno
 // {{OSSP:module-rational_from_rational:begin}}
 void rational_from_rational(rational_t *number, rational_t *another)
 {
-    rational_internal_init(number,
-        another->numerator, another->denominator, 1);
+    rational_internal_init(number,another->num, another->den, 1);
     reduce_fraction(number);
 }
 // {{OSSP:module-rational_from_rational:end}}
@@ -85,7 +84,7 @@ void rational_from_long(rational_t *number, long whole_number)
 // {{OSSP:module-rational_print:begin}}
 void rational_print(rational_t *number, FILE *stream, int nl)
 {
-    fprintf(stream, "%ld/%ld (valid=%d)", number->numerator, number->denominator, number->valid);
+    fprintf(stream, "%ld/%ld (valid=%d)", number->num, number->den, number->valid);
     if (nl) fprintf(stream, "\n");
 }
 // {{OSSP:module-rational_print:end}}
@@ -115,16 +114,16 @@ long long_gcd(long a, long b)
 // {{OSSP:module-reduce_fraction:begin}}
 void reduce_fraction(rational_t *number)
 {
-    long common_divisor = long_gcd(number->numerator, number->denominator);
+    long common_divisor = long_gcd(number->num, number->den);
     if (common_divisor == 0)
         return;
 
-    number->numerator /= common_divisor;
-    number->denominator /= common_divisor;
-    if (number->denominator < 0)
+    number->num /= common_divisor;
+    number->den /= common_divisor;
+    if (number->den < 0)
     {
-        number->denominator = -number->denominator;
-        number->numerator = -number->numerator;
+        number->den = -number->den;
+        number->num = -number->num;
     }
 }
 // {{OSSP:module-reduce_fraction:end}}
@@ -133,7 +132,7 @@ void reduce_fraction(rational_t *number)
 // {{OSSP:module-rational_numerator:begin}}
 long rational_numerator(rational_t *number)
 {
-    return number->numerator;
+    return number->num;
 }
 // {{OSSP:module-rational_numerator:end}}
 
@@ -141,7 +140,7 @@ long rational_numerator(rational_t *number)
 // {{OSSP:module-rational_denominator:begin}}
 long rational_denominator(rational_t *number)
 {
-    return number->denominator;
+    return number->den;
 }
 // {{OSSP:module-rational_denominator:end}}
 
@@ -152,10 +151,10 @@ void rational_add(rational_t *n1, rational_t *n2, rational_t *result)
 
     long num1_den2_product, den1_num2_product, dd_product, product_sum;
 
-    int valid = n1->valid && n2->valid;
-    valid = valid && long_multiply(n1->numerator, n2->denominator, &num1_den2_product);
-    valid = valid && long_multiply(n2->numerator, n1->denominator, &den1_num2_product);
-    valid = valid && long_multiply(n1->denominator, n2->denominator, &dd_product);
+    bool valid = n1->valid && n2->valid;
+    valid = valid && long_multiply(n1->num, n2->den, &num1_den2_product);
+    valid = valid && long_multiply(n2->num, n1->den, &den1_num2_product);
+    valid = valid && long_multiply(n1->den, n2->den, &dd_product);
     valid = valid && long_add(num1_den2_product, den1_num2_product, &product_sum);
     rational_internal_init(result, product_sum, dd_product, valid);
 }
@@ -166,11 +165,12 @@ void rational_add(rational_t *n1, rational_t *n2, rational_t *result)
 void rational_subtract(rational_t *n1, rational_t *n2, rational_t *result)
 {
     long num1_den2_product, den1_num2_product, dd_product, product_diff;
-    int valid = n1->valid && n2->valid;
-    valid = valid && long_multiply(n1->numerator, n2->denominator, &num1_den2_product);
-    valid = valid && long_multiply(n2->numerator, n1->denominator, &den1_num2_product);
-    valid = valid && long_multiply(n1->denominator, n2->denominator, &dd_product);
-    valid = valid && long_subtract(num1_den2_product, den1_num2_product, &product_diff);
+    bool v0 = n1->valid && n2->valid;
+    bool v1 = long_multiply(n1->num, n2->den, &num1_den2_product);
+    bool v2 = long_multiply(n2->num, n1->den, &den1_num2_product);
+    bool v3 = long_multiply(n1->den, n2->den, &dd_product);
+    bool v4 = long_subtract(num1_den2_product, den1_num2_product, &product_diff);
+    bool valid = v0 && v1 && v2 && v3 && v4;
     rational_internal_init(result, product_diff, dd_product, valid);
 }
 // {{OSSP:module-rational_subtract:end}}
@@ -179,11 +179,12 @@ void rational_subtract(rational_t *n1, rational_t *n2, rational_t *result)
 // {{OSSP:module-rational_multiply:begin}}
 void rational_multiply(rational_t *n1, rational_t *n2, rational_t *result)
 {
-    long nn_product, dd_product;
-    int valid = n1->valid && n2->valid;
-    valid = valid && long_multiply(n1->numerator, n2->numerator, &nn_product);
-    valid = valid && long_multiply(n2->denominator, n1->denominator, &dd_product);
-    rational_internal_init(result, nn_product, dd_product, valid);
+    long num1_x_num2, den1_x_den2;
+    bool v0 = n1->valid && n2->valid;
+    bool v1 = long_multiply(n1->num, n2->num, &num1_x_num2);
+    bool v2 = long_multiply(n2->den, n1->den, &den1_x_den2);
+    bool valid = v0 && v1 && v2;
+    rational_internal_init(result, num1_x_num2, den1_x_den2, valid);
 }
 // {{OSSP:module-rational_multiply:end}}
 
@@ -191,24 +192,25 @@ void rational_multiply(rational_t *n1, rational_t *n2, rational_t *result)
 // {{OSSP:module-rational_divide:begin}}
 void rational_divide(rational_t *n1, rational_t *n2, rational_t *result)
 {
-    long num1_den2_product, den1_num2_product;
-    int valid = n1->valid && n2->valid;
-    valid = valid && long_multiply(n1->numerator, n2->denominator, &num1_den2_product);
-    valid = valid && long_multiply(n2->denominator, n1->numerator, &den1_num2_product);
-    rational_internal_init(result, num1_den2_product, den1_num2_product, valid);
+    long num1_x_den2, den1_x_num2;
+    bool v0 = n1->valid && n2->valid;
+    bool v1 = long_multiply(n1->num, n2->den, &num1_x_den2);
+    bool v2 = long_multiply(n2->den, n1->num, &den1_x_num2);
+    bool valid = v0 && v1 && v2;
+    rational_internal_init(result, num1_x_den2, den1_x_num2, valid);
 }
 // {{OSSP:module-rational_divide:end}}
 
 // {{OSSP:module-rational_compare:begin}}
 long rational_compare(rational_t *n1, rational_t *n2, rational_comparison_t *result)
 {
-    long num1_den2_product, den1_num2_product, product_diff;
-    int valid = n1->valid && n2->valid;
-    valid = valid && long_multiply(n1->numerator, n2->denominator, &num1_den2_product);
-    valid = valid && long_multiply(n2->numerator, n1->denominator, &den1_num2_product);
-    valid = valid && long_subtract(num1_den2_product, den1_num2_product, &product_diff);
-    result->valid = valid;
-    result->comparison = product_diff;
+    long num1_x_den2, den1_x_num2, diff;
+    bool v0 = n1->valid && n2->valid;
+    bool v1 = long_multiply(n1->num, n2->den, &num1_x_den2);
+    bool v2 = long_multiply(n2->num, n1->den, &den1_x_num2);
+    bool v3 = long_subtract(num1_x_den2, den1_x_num2, &diff);
+    result->comparison = diff;
+    result->valid = v0 && v1 && v2 && v3;
     return result->comparison;
 }
 // {{OSSP:module-rational_compare:end}}
@@ -217,9 +219,10 @@ long rational_compare(rational_t *n1, rational_t *n2, rational_comparison_t *res
 // {{OSSP:module-rational_reciprocal:begin}}
 void rational_reciprocal(rational_t *number)
 {
-    long numerator = number->numerator;
-    long denominator = number->denominator;
-    rational_internal_init(number, denominator, numerator, number->valid);
+    long num = number->num;
+    long den = number->den;
+    bool valid = number->valid;
+    rational_internal_init(number, den, num, valid);
 }
 // {{OSSP:module-rational_reciprocal:end}}
 
@@ -227,6 +230,6 @@ void rational_reciprocal(rational_t *number)
 // {{OSSP:module-rational_negate:begin}}
 void rational_negate(rational_t *number)
 {
-    number->numerator = -number->numerator;
+    number->num = -number->num;
 }
 // {{OSSP:module-rational_negate:end}}

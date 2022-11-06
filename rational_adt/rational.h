@@ -2,24 +2,25 @@
 #define _RATIONAL_H_
 
 #include <stdio.h>
+#include <stdbool.h>
 
 // {{OSSP:header-typedef:begin}}
 typedef struct
 {
-    long numerator;
-    long denominator;
-    int valid;
+    long num;
+    long den;
+    bool valid;
 } rational_t;
 
 typedef struct
 {
     long comparison; // boolean for type of condition
-    int valid; // whether valid (arising from overflow, etc.)
+    bool valid; // whether valid (arising from overflow, etc.)
 } rational_comparison_t;
 // {{OSSP:header-typedef:end}}
 
 // {{OSSP:header-basic-init:begin}}
-extern void rational_init(rational_t *number, long numerator, long denominator);
+extern void rational_init(rational_t *n, long num, long den);
 // {{OSSP:header-basic-init:end}}
 
 // {{OSSP:header-advanced-init:begin}}
