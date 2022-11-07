@@ -20,7 +20,9 @@ typedef struct
 // {{OSSP:header-typedef:end}}
 
 // {{OSSP:header-basic-init:begin}}
-extern void rational_init(rational_t *n, long num, long den);
+extern void rational_init(rational_t *n,
+                          long num,
+                          long den);
 // {{OSSP:header-basic-init:end}}
 
 // {{OSSP:header-advanced-init:begin}}
@@ -36,13 +38,21 @@ extern long rational_denominator(rational_t *number);
 // {{OSSP:header-accessors:end}}
 
 // {{OSSP:header-arithmetic:begin}}
-extern void rational_add(rational_t *n1, rational_t *n2, rational_t *result);
+extern void rational_add(rational_t *n1,
+                         rational_t *n2,
+                         rational_t *result);
 
-extern void rational_subtract(rational_t *n1, rational_t *n2, rational_t *result);
+extern void rational_subtract(rational_t *n1,
+                              rational_t *n2,
+                              rational_t *result);
 
-extern void rational_multiply(rational_t *n1, rational_t *n2, rational_t *result);
+extern void rational_multiply(rational_t *n1,
+                              rational_t *n2,
+                              rational_t *result);
 
-extern void rational_divide(rational_t *n1, rational_t *n2, rational_t *result);
+extern void rational_divide(rational_t *n1,
+                            rational_t *n2,
+                            rational_t *result);
 // {{OSSP:header-arithmetic:end}}
 
 // {{OSSP:header-unary-inplace:begin}}
@@ -52,11 +62,15 @@ extern void rational_reciprocal(rational_t *number);
 // {{OSSP:header-unary-inplace:end}}
 
 // {{OSSP:header-compare:begin}}
-extern long rational_compare(rational_t *n1, rational_t *n2, rational_comparison_t *result);
+extern long rational_compare(rational_t *n1,
+                             rational_t *n2,
+                             rational_comparison_t *result);
 // {{OSSP:header-compare:end}}
 
 // {{OSSP:header-print:begin}}
-extern void rational_print(rational_t *number, FILE *stream, int nl);
+extern void rational_print(rational_t *number,
+                           FILE *stream,
+                           bool add_newline);
 // {{OSSP:header-print:end}}
 
 // {{OSSP:header-utililties:begin}}
