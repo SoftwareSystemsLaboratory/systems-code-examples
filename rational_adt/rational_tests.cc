@@ -186,10 +186,13 @@ TEST(RationalTest, RandomAdd)
 
         rational_init(&r1, 1000 - rand() % 1000, 1 + rand() % 1000);
         rational_init(&r2, 1000 - rand() % 1000, 1 + rand() % 1000);
-        long add_numerator = rational_numerator(&r1) * rational_denominator(&r2) +
-                             rational_denominator(&r1) * rational_numerator(&r2);
-        long add_denominator = rational_denominator(&r1) * rational_denominator(&r2);
-        rational_init(&expected, add_numerator, add_denominator);
+
+        long rand_num =
+                rational_numerator(&r1) * rational_denominator(&r2) +
+                rational_denominator(&r1) * rational_numerator(&r2);
+        long rand_den =
+                rational_denominator(&r1) * rational_denominator(&r2);
+        rational_init(&expected, rand_num, rand_den);
         rational_add(&r1, &r2, &result);
         ASSERT_EQ(rational_compare(&result, &expected, &comparison), 0);
     }
