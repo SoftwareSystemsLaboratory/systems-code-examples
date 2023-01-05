@@ -81,7 +81,6 @@ void rational_from_rational(rational_t *number,
                            another->num,
                            another->den,
                            true);
-    reduce_fraction(number);
 }
 // {{OSSP:module-rational_from_rational:end}}
 
@@ -94,7 +93,6 @@ void rational_from_long(rational_t *number,
                            whole_number,
                            1L,
                            true);
-    reduce_fraction(number);
 }
 // {{OSSP:module-rational_from_long:end}}
 
