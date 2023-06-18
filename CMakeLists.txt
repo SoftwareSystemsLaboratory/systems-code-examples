@@ -11,7 +11,7 @@ if(UNIX AND APPLE)
   message("--> Some GNU-specific examples will be disabled.")
 endif()
 
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 17)
 
 include(FetchContent)
 
@@ -33,6 +33,7 @@ add_subdirectory(bounded-buffer)
 add_subdirectory(c_intro)
 add_subdirectory(dining-philosophers)
 add_subdirectory(dir_list)
+add_subdirectory(dir_list_cpp)
 add_subdirectory(domain_sock)
 add_subdirectory(file_rw)
 add_subdirectory(fork)
