@@ -1,13 +1,78 @@
 #include <pthread.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 
 #include "diners.h"
 #include "millisleep.h"
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
 
-int main(int argc, char *argv[])
-{
+#define MAX_DINERS 5
+#define MAX_THINK_TIME 7
+#define MAX_EAT_TIME 7
+#define MAIN_THREAD_SLEEP_TIME 51
+
+typedef struct {
+    int num_philosophers;
+    int think_time;
+    int eat_time;
+    int enumerate_resources;
+} Configuration;
+
+void parseCommandLine(int argc, char **argv, Configuration *config) {
+    int opt;
+
+    while ((opt = getopt(argc, argv, "n:t:e:r")) != -1) {
+        switch (opt) {
+            case 'n': // Number of philosophers
+                config->num_philosophers = atoi(optarg);
+                if (config->num_philosophers > MAX_DINERS || config->num_philosophers < 1) {
+                    fprintf(stderr, "Number of philosophers must be between 1 and %d\n", MAX_DINERS);
+                    exit(EXIT_FAILURE);
+                }
+                break;
+            case 't': // Think time
+                config->think_time = atoi(optarg);
+                if (config->think_time > MAX_THINK_TIME || config->think_time < 0) {
+                    fprintf(stderr, "Think time must be between 0 and %d seconds\n", MAX_THINK_TIME);
+                    exit(EXIT_FAILURE);
+                }
+                break;
+            case 'e': // Eat time
+                config->eat_time = atoi(optarg);
+                if (config->eat_time > MAX_EAT_TIME || config->eat_time < 0) {
+                    fprintf(stderr, "Eat time must be between 0 and %d seconds\n", MAX_EAT_TIME);
+                    exit(EXIT_FAILURE);
+                }
+                break;
+            case 'r': // Enumerate resources
+                config->enumerate_resources = 1;
+                break;
+            default: /* '?' */
+                fprintf(stderr, "Usage: %s [-n num_philosophers] [-t think_time] [-e eat_time] [-r]\n",
+                        argv[0]);
+                exit(EXIT_FAILURE);
+        }
+    }
+}
+
+int main(int argc, char **argv) {
+    Configuration config = {
+        .num_philosophers = 5,      // default number of philosophers
+        .think_time = 2,            // default think time in seconds
+        .eat_time = 3,              // default eat time in seconds
+        .enumerate_resources = 0    // default for resource enumeration: off
+    };
+
+    parseCommandLine(argc, argv, &config);
+
+    printf("Number of Philosophers: %d\n", config.num_philosophers);
+    printf("Think Time: %d seconds\n", config.think_time);
+    printf("Eat Time: %d seconds\n", config.eat_time);
+    printf("Enumerate Resources: %s\n", config.enumerate_resources ? "Yes" : "No");
 
     fork_t fork[MAX_DINERS];
     diner_t diner[MAX_DINERS];
