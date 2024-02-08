@@ -75,3 +75,4 @@ lib/
 
 .idea/
 *-debug/
+cmake-*/

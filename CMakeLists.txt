@@ -28,6 +28,8 @@ FetchContent_MakeAvailable(googletest)
 
 add_subdirectory(lwlog-lib)
 add_subdirectory(lwlog-demo)
+add_subdirectory(bsd-tree-lib)
+add_subdirectory(bsd-tree-demo)
 add_subdirectory(better_gets)
 add_subdirectory(bounded-buffer)
 add_subdirectory(c_intro)
