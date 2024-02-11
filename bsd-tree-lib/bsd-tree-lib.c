@@ -4,7 +4,6 @@
 
 #include "bsd-tree.h"
 
-int tree_demo(void)
-{
+int tree_demo(void) {
     return 0;
 }

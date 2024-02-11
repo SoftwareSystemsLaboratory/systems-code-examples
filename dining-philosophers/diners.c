@@ -9,59 +9,50 @@
 #include "diners.h"
 #include "millisleep.h"
 
-void fork_init(fork_t *fork, int value)
-{
+void fork_init(fork_t *fork, int value) {
     fork->id = '0' + value;
     pthread_mutex_init(&fork->lock, NULL);
 }
 
-void fork_pickup(fork_t *fork)
-{
+void fork_pickup(fork_t *fork) {
     pthread_mutex_lock(&fork->lock);
 }
 
-void fork_putdown(fork_t *fork)
-{
+void fork_putdown(fork_t *fork) {
     pthread_mutex_unlock(&fork->lock);
 }
 
-void fork_free_resources(fork_t *fork)
-{
+void fork_free_resources(fork_t *fork) {
     pthread_mutex_destroy(&fork->lock);
 }
 
-void diner_init(diner_t *diner, int id, fork_t *left, fork_t *right)
-{
+void diner_init(diner_t *diner, int id, fork_t *left, fork_t *right) {
     diner->id = '0' + id;
     diner->state = 't';
     diner->left = left;
     diner->right = right;
 }
 
-void diner_start(diner_t *diner)
-{
+void diner_start(diner_t *diner) {
     pthread_attr_t attr;
 
     pthread_attr_init(&attr);
     pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE);
-    pthread_create(&diner->thread, &attr, diner_run, (void *)diner);
+    pthread_create(&diner->thread, &attr, diner_run, (void *) diner);
     pthread_attr_destroy(&attr);
 }
 
-void diner_await(diner_t *diner)
-{
+void diner_await(diner_t *diner) {
     void *result;
     pthread_join(diner->thread, &result);
 }
 
-void diner_think(diner_t *diner)
-{
+void diner_think(diner_t *diner) {
     diner->state = 't';
     millisecond_sleep(rand() % MAX_THINK_TIME);
 }
 
-void diner_eat(diner_t *diner)
-{
+void diner_eat(diner_t *diner) {
     diner->state = 'e';
     millisecond_sleep(rand() % MAX_EAT_TIME);
 }
@@ -70,8 +61,7 @@ void *diner_run(void *tsd)    /* tsd should be the diner object */
 {
     diner_t *diner = (diner_t *) tsd;
 
-    for (int i = 0; i < 1000; i++)
-    {
+    for (int i = 0; i < 1000; i++) {
 
         diner_think(diner);
         diner->state = diner->left->id;
@@ -88,8 +78,7 @@ void *diner_run(void *tsd)    /* tsd should be the diner object */
     pthread_exit(diner);
 }
 
-enum dining_policy_t get_dining_policy()
-{
+enum dining_policy_t get_dining_policy() {
     char *dining_policy = getenv("DINING_POLICY");
     if (dining_policy == NULL)
         return NO_FORK_REORDERING;

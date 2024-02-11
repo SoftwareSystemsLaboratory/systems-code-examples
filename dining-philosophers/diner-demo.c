@@ -61,10 +61,10 @@ void parseCommandLine(int argc, char **argv, Configuration *config) {
 
 int main(int argc, char **argv) {
     Configuration config = {
-        .num_philosophers = 5,      // default number of philosophers
-        .think_time = 2,            // default think time in seconds
-        .eat_time = 3,              // default eat time in seconds
-        .enumerate_resources = 0    // default for resource enumeration: off
+            .num_philosophers = 5,      // default number of philosophers
+            .think_time = 2,            // default think time in seconds
+            .eat_time = 3,              // default eat time in seconds
+            .enumerate_resources = 0    // default for resource enumeration: off
     };
 
     parseCommandLine(argc, argv, &config);
@@ -87,8 +87,7 @@ int main(int argc, char **argv) {
     // priority so it can continue doing something, even if (or when) the other
     // threads get deadlocked.
 
-    if (status != 0)
-    {
+    if (status != 0) {
         fprintf(stderr, "Cannot set main thread max prioirty. Fatal.\n");
         exit(1);
     }
@@ -98,24 +97,19 @@ int main(int argc, char **argv) {
         fork_init(&fork[i], i);
 
     /* initialize the diners to link to the shared resources (forks) */
-    for (int i = 0; i < MAX_DINERS; i++)
-    {
+    for (int i = 0; i < MAX_DINERS; i++) {
         int id1 = i;
         int id2 = (i + 1) % MAX_DINERS;
-        if (get_dining_policy() == FORK_REORDERING && id1 > id2)
-        {
+        if (get_dining_policy() == FORK_REORDERING && id1 > id2) {
             printf("Reordered forks %d and %d\n", id1, id2);
             diner_init(&diner[i], i, &fork[id2], &fork[id1]);
-        }
-        else
-        {
+        } else {
             diner_init(&diner[i], i, &fork[id1], &fork[id2]);
         }
     }
 
     /* start the actual threads for each diner */
-    for (int i = 0; i < MAX_DINERS; i++)
-    {
+    for (int i = 0; i < MAX_DINERS; i++) {
         printf("Creating thread %d", i);
         diner_start(&diner[i]);
     }
@@ -125,16 +119,13 @@ int main(int argc, char **argv) {
      * the diner threads a chance to do their thing.
      */
     int go_on = 1;
-    while (go_on)
-    {
-        for (int i = 0; i < MAX_DINERS; i++)
-        {
+    while (go_on) {
+        for (int i = 0; i < MAX_DINERS; i++) {
             putchar(diner[i].state);
         }
         putchar('\n');
         go_on = 0;
-        for (int i = 0; i < MAX_DINERS; i++)
-        {
+        for (int i = 0; i < MAX_DINERS; i++) {
             go_on |= diner[i].state != 'd';
         }
         millisecond_sleep(MAIN_THREAD_SLEEP_TIME);
@@ -144,8 +135,7 @@ int main(int argc, char **argv) {
      * can join with the main thread
      */
 
-    for (int i=0; i < MAX_DINERS; i++)
-    {
+    for (int i = 0; i < MAX_DINERS; i++) {
         diner_await(&diner[i]);
         printf("Diner id %c exited normally; state = %c\n", diner[i].id, diner[i].state);
     }

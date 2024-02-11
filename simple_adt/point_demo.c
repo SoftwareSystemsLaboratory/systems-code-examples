@@ -3,8 +3,7 @@
 
 #include "point.h"
 
-int main(int argc, char*argv[])
-{
+int main(int argc, char *argv[]) {
     point_t p1, p2;
 
     point_new(&p1);

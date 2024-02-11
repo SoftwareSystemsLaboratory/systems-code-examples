@@ -14,59 +14,69 @@
 #include <linux/kernel.h>
 #include <linux/module.h>
 #include <linux/fs.h>
-#include <asm/uaccess.h>	/* for put_user */
+#include <asm/uaccess.h>    /* for put_user */
 
 /*
  *  Prototypes - this would normally go in a .h file
  */
 int init_module(void);
+
 void cleanup_module(void);
+
 static int device_open(struct inode *, struct file *);
+
 static int device_release(struct inode *, struct file *);
+
 static ssize_t device_read(struct file *, char *, size_t, loff_t *);
+
 static ssize_t device_write(struct file *, const char *, size_t, loff_t *);
 
 #define SUCCESS 0
-#define DEVICE_NAME "chardev"	/* Dev name as it appears in /proc/devices   */
-#define BUF_LEN 80		/* Max length of the message from the device */
+#define DEVICE_NAME "chardev"    /* Dev name as it appears in /proc/devices   */
+#define BUF_LEN 80        /* Max length of the message from the device */
 
 /*
  * Global variables are declared as static, so are global within the file.
  */
 
-static int Major;		/* Major number assigned to our device driver */
-static int Device_Open = 0;	/* Is device open?
+static int Major;        /* Major number assigned to our device driver */
+static int Device_Open = 0;    /* Is device open?
 				 * Used to prevent multiple access to device */
-static char msg[BUF_LEN];	/* The msg the device will give when asked */
+static char msg[BUF_LEN];    /* The msg the device will give when asked */
 static char *msg_Ptr;
 
 static struct file_operations fops =
-{
-    .read = device_read,
-    .write = device_write,
-    .open = device_open,
-    .release = device_release
-};
+        {
+                .read = device_read,
+                .write = device_write,
+                .open = device_open,
+                .release = device_release
+        };
 
 /*
  * This function is called when the module is loaded
  */
-int init_module(void)
-{
+int init_module(void) {
     Major = register_chrdev(0, DEVICE_NAME, &fops);
 
-    if (Major < 0)
-    {
-        printk(KERN_ALERT "Registering char device failed with %d\n", Major);
+    if (Major < 0) {
+        printk(KERN_ALERT
+        "Registering char device failed with %d\n", Major);
         return Major;
     }
 
-    printk(KERN_INFO "I was assigned major number %d. To talk to\n", Major);
-    printk(KERN_INFO "the driver, create a dev file with\n");
-    printk(KERN_INFO "'mknod /dev/%s c %d 0'.\n", DEVICE_NAME, Major);
-    printk(KERN_INFO "Try various minor numbers. Try to cat and echo to\n");
-    printk(KERN_INFO "the device file.\n");
-    printk(KERN_INFO "Remove the device file and module when done.\n");
+    printk(KERN_INFO
+    "I was assigned major number %d. To talk to\n", Major);
+    printk(KERN_INFO
+    "the driver, create a dev file with\n");
+    printk(KERN_INFO
+    "'mknod /dev/%s c %d 0'.\n", DEVICE_NAME, Major);
+    printk(KERN_INFO
+    "Try various minor numbers. Try to cat and echo to\n");
+    printk(KERN_INFO
+    "the device file.\n");
+    printk(KERN_INFO
+    "Remove the device file and module when done.\n");
 
     return SUCCESS;
 }
@@ -74,8 +84,7 @@ int init_module(void)
 /*
  * This function is called when the module is unloaded
  */
-void cleanup_module(void)
-{
+void cleanup_module(void) {
     /*
      * Unregister the device
      */
@@ -92,8 +101,7 @@ void cleanup_module(void)
  * Called when a process tries to open the device file, like
  * "cat /dev/mycharfile"
  */
-static int device_open(struct inode *inode, struct file *file)
-{
+static int device_open(struct inode *inode, struct file *file) {
     static int counter = 0;
 
     if (Device_Open)
@@ -110,9 +118,8 @@ static int device_open(struct inode *inode, struct file *file)
 /*
  * Called when a process closes the device file.
  */
-static int device_release(struct inode *inode, struct file *file)
-{
-    Device_Open--;		/* We're now ready for our next caller */
+static int device_release(struct inode *inode, struct file *file) {
+    Device_Open--;        /* We're now ready for our next caller */
 
     /*
      * Decrement the usage count, or else once you opened the file, you'll
@@ -127,11 +134,10 @@ static int device_release(struct inode *inode, struct file *file)
  * Called when a process, which already opened the dev file, attempts to
  * read from it.
  */
-static ssize_t device_read(struct file *filp,	/* see include/linux/fs.h   */
-                           char *buffer,	/* buffer to fill with data */
-                           size_t length,	/* length of the buffer     */
-                           loff_t * offset)
-{
+static ssize_t device_read(struct file *filp,    /* see include/linux/fs.h   */
+                           char *buffer,    /* buffer to fill with data */
+                           size_t length,    /* length of the buffer     */
+                           loff_t *offset) {
     /*
      * Number of bytes actually written to the buffer
      */
@@ -147,8 +153,7 @@ static ssize_t device_read(struct file *filp,	/* see include/linux/fs.h   */
     /*
      * Actually put the data into the buffer
      */
-    while (length && *msg_Ptr)
-    {
+    while (length && *msg_Ptr) {
 
         /*
          * The buffer is in the user data segment, not the kernel
@@ -172,8 +177,8 @@ static ssize_t device_read(struct file *filp,	/* see include/linux/fs.h   */
  * Called when a process writes to dev file: echo "hi" > /dev/hello
  */
 static ssize_t
-device_write(struct file *filp, const char *buff, size_t len, loff_t * off)
-{
-    printk(KERN_ALERT "Sorry, this operation isn't supported.\n");
+device_write(struct file *filp, const char *buff, size_t len, loff_t *off) {
+    printk(KERN_ALERT
+    "Sorry, this operation isn't supported.\n");
     return -EINVAL;
 }

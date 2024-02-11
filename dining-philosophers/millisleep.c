@@ -6,13 +6,11 @@
 #include <errno.h>
 #include <time.h>
 
-int millisecond_sleep(long milliseconds)
-{
+int millisecond_sleep(long milliseconds) {
     struct timespec sleep_time;
     int status;
 
-    if (milliseconds < 0)
-    {
+    if (milliseconds < 0) {
         errno = EINVAL;
         return -1;
     }
@@ -20,11 +18,9 @@ int millisecond_sleep(long milliseconds)
     sleep_time.tv_sec = milliseconds / 1000;
     sleep_time.tv_nsec = (milliseconds % 1000) * 1000000;
 
-    do
-    {
+    do {
         status = nanosleep(&sleep_time, &sleep_time);
-    }
-    while (status && errno == EINTR);
+    } while (status && errno == EINTR);
 
     return status;
 }

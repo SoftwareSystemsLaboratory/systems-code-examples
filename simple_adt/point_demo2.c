@@ -3,10 +3,9 @@
 
 #include "point.h"
 
-int main(int argc, char*argv[])
-{
-    point_t* p1 = point_allocate();
-    point_t* p2 = point_allocate();
+int main(int argc, char *argv[]) {
+    point_t *p1 = point_allocate();
+    point_t *p2 = point_allocate();
 
     point_new(p1);
     point_init(p1, 3.0, 0);

@@ -3,8 +3,7 @@
 
 #include "rational.h"
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
     rational_t r1, r2, r3, result;
 
     rational_init(&r1, 25, 75);
@@ -35,13 +34,11 @@ int main(int argc, char *argv[])
     rational_print(&result, stdout, 1);
 
     rational_init(&result, 1, 1);
-    for (int i = 0; i < 64; i++)
-    {
+    for (int i = 0; i < 64; i++) {
         printf("r1^%d = ", i);
         if (result.valid)
             rational_print(&result, stdout, 1);
-        else
-        {
+        else {
             rational_print(&result, stdout, 0);
             printf(" [underflow]\n");
 
@@ -50,12 +47,12 @@ int main(int argc, char *argv[])
     }
 
     rational_init(&r3, 0, 25);
-    printf("r3 = "); 
+    printf("r3 = ");
     rational_print(&r3, stdout, 1);
     rational_reciprocal(&r3);
-    printf("r3 (reciprocal) = "); 
+    printf("r3 (reciprocal) = ");
     rational_print(&r3, stdout, 1);
     rational_reciprocal(&r3);
-    printf("r3 (reciprocal of invalid) = "); 
+    printf("r3 (reciprocal of invalid) = ");
     rational_print(&r3, stdout, 1);
 }

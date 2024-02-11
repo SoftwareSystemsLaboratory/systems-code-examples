@@ -42,13 +42,13 @@ void int_stack_print(int_stack_t *stk, FILE *file) {
     int_entry_t *entry;
     int pos = 0;
     if (stk->size == 0) {
-	fprintf(file, "empty stack\n");
-	return;
+        fprintf(file, "empty stack\n");
+        return;
     }
-	
+
     SLIST_FOREACH(entry, &stk->head, entries) {
         fprintf(file, "%d: %d\n", pos, entry->value);
-	pos++;
+        pos++;
     }
 }
 

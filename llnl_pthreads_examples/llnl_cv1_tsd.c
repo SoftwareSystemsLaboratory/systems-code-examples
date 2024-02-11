@@ -11,27 +11,23 @@
  * a pointer to any data that is shared but under mutex control
  */
 
-typedef struct
-{
+typedef struct {
     int count;
     pthread_mutex_t count_mutex;
     pthread_cond_t count_threshold_cv;
 } shared_data_t;
 
-typedef struct
-{
+typedef struct {
     int my_id;
-    shared_data_t* common; /* the mutex, cv, and count are all kept in a common structure */
+    shared_data_t *common; /* the mutex, cv, and count are all kept in a common structure */
 } tsd_t;
 
-void *inc_count(void *t)
-{
-    tsd_t* tsd = (tsd_t*) t;
+void *inc_count(void *t) {
+    tsd_t *tsd = (tsd_t *) t;
     long my_id = tsd->my_id;
     int i;
 
-    for (i=0; i<TCOUNT; i++)
-    {
+    for (i = 0; i < TCOUNT; i++) {
         pthread_mutex_lock(&tsd->common->count_mutex);
         tsd->common->count++;
 
@@ -39,8 +35,7 @@ void *inc_count(void *t)
         Check the value of count and signal waiting thread when condition is
         reached.  Note that this occurs while mutex is locked.
         */
-        if (tsd->common->count == COUNT_LIMIT)
-        {
+        if (tsd->common->count == COUNT_LIMIT) {
             pthread_cond_signal(&tsd->common->count_threshold_cv);
             printf("inc_count(): thread %ld, count = %d  Threshold reached.\n",
                    my_id, tsd->common->count);
@@ -55,9 +50,8 @@ void *inc_count(void *t)
     pthread_exit(NULL);
 }
 
-void *watch_count(void *t)
-{
-    tsd_t* tsd = (tsd_t*) t;
+void *watch_count(void *t) {
+    tsd_t *tsd = (tsd_t *) t;
     long my_id = tsd->my_id;
 
     printf("Starting watch_count(): thread %ld\n", my_id);
@@ -70,8 +64,7 @@ void *watch_count(void *t)
     from never returning.
     */
     pthread_mutex_lock(&tsd->common->count_mutex);
-    while (tsd->common->count<COUNT_LIMIT)
-    {
+    while (tsd->common->count < COUNT_LIMIT) {
         pthread_cond_wait(&tsd->common->count_threshold_cv, &tsd->common->count_mutex);
         printf("watch_count(): thread %ld Condition signal received.\n", my_id);
     }
@@ -81,8 +74,7 @@ void *watch_count(void *t)
     pthread_exit(NULL);
 }
 
-int main (int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
     int i, rc;
 
     shared_data_t shared_data;
@@ -95,27 +87,25 @@ int main (int argc, char *argv[])
     /* Initialize mutex and condition variable objects */
     shared_data.count = 0;
     pthread_mutex_init(&shared_data.count_mutex, NULL);
-    pthread_cond_init (&shared_data.count_threshold_cv, NULL);
+    pthread_cond_init(&shared_data.count_threshold_cv, NULL);
 
     /* For portability, explicitly create threads in a joinable state */
     pthread_attr_init(&attr);
     pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE);
-    for (int i=0; i < NUM_THREADS; i++)
-    {
-        tsd[i].my_id = i+1;
+    for (int i = 0; i < NUM_THREADS; i++) {
+        tsd[i].my_id = i + 1;
         tsd[i].common = &shared_data;
     }
 
-    pthread_create(&threads[0], &attr, watch_count, (void *)&tsd[0]);
-    pthread_create(&threads[1], &attr, inc_count, (void *)&tsd[1]);
-    pthread_create(&threads[2], &attr, inc_count, (void *)&tsd[2]);
+    pthread_create(&threads[0], &attr, watch_count, (void *) &tsd[0]);
+    pthread_create(&threads[1], &attr, inc_count, (void *) &tsd[1]);
+    pthread_create(&threads[2], &attr, inc_count, (void *) &tsd[2]);
 
     /* Wait for all threads to complete */
-    for (i=0; i<NUM_THREADS; i++)
-    {
+    for (i = 0; i < NUM_THREADS; i++) {
         pthread_join(threads[i], NULL);
     }
-    printf ("Main(): Waited on %d  threads. Done.\n", NUM_THREADS);
+    printf("Main(): Waited on %d  threads. Done.\n", NUM_THREADS);
 
     /* Clean up and exit */
     pthread_attr_destroy(&attr);

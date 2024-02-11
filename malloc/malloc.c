@@ -9,14 +9,12 @@ int has_initialized = 0;
 void *managed_memory_start;
 void *last_valid_address;
 
-struct mem_control_block
-{
+struct mem_control_block {
     int is_available;
     int size;
 };
 
-void malloc_init()
-{
+void malloc_init() {
     /* grab the last valid address from the OS */
     last_valid_address = sbrk(0);
     /* we don't have any memory to manage yet, so
@@ -27,21 +25,19 @@ void malloc_init()
     has_initialized = 1;
 }
 
-void myfree(void *firstbyte)
-{
+void myfree(void *firstbyte) {
     struct mem_control_block *mcb;
     /* Backup from the given pointer to find the
      * mem_control_block
      */
-    mcb = (struct mem_control_block*)(firstbyte - sizeof(struct mem_control_block));
+    mcb = (struct mem_control_block *) (firstbyte - sizeof(struct mem_control_block));
     /* Mark the block as being available */
     mcb->is_available = 1;
     /* That's It!  We're done. */
     return;
 }
 
-void *mymalloc(long numbytes)
-{
+void *mymalloc(long numbytes) {
     /* Holds where we are looking in memory */
     void *current_location;
     /* This is the same as current_location, but cast to a
@@ -53,8 +49,7 @@ void *mymalloc(long numbytes)
      */
     void *memory_location;
     /* Initialize if we haven't already done so */
-    if(! has_initialized)
-    {
+    if (!has_initialized) {
         malloc_init();
     }
     /* The memory we search for has to include the memory
@@ -69,19 +64,16 @@ void *mymalloc(long numbytes)
     /* Begin searching at the start of managed memory */
     current_location = managed_memory_start;
     /* Keep going until we have searched all allocated space */
-    while(current_location != last_valid_address)
-    {
+    while (current_location != last_valid_address) {
         /* current_location and current_location_mcb point
          * to the same address.  However, current_location_mcb
          * is of the correct type, so we can use it as a struct.
          * current_location is a void pointer so we can use it
          * to calculate addresses.
          */
-        current_location_mcb = (struct mem_control_block *)current_location;
-        if(current_location_mcb->is_available)
-        {
-            if(current_location_mcb->size >= numbytes)
-            {
+        current_location_mcb = (struct mem_control_block *) current_location;
+        if (current_location_mcb->is_available) {
+            if (current_location_mcb->size >= numbytes) {
                 /* Woohoo!  We've found an open,
                  * appropriately-size location.
                  */
@@ -102,8 +94,7 @@ void *mymalloc(long numbytes)
     /* If we still don't have a valid location, we'll
      * have to ask the operating system for more memory
      */
-    if(!memory_location)
-    {
+    if (!memory_location) {
         /* Move the program break numbytes further */
         sbrk(numbytes);
         /* The new memory will be where the last valid
@@ -115,7 +106,7 @@ void *mymalloc(long numbytes)
          */
         last_valid_address = last_valid_address + numbytes;
         /* We need to initialize the mem_control_block */
-        current_location_mcb = (struct mem_control_block*)memory_location;
+        current_location_mcb = (struct mem_control_block *) memory_location;
         current_location_mcb->is_available = 0;
         current_location_mcb->size = numbytes;
     }

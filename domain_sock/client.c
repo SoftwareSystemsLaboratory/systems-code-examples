@@ -4,11 +4,9 @@
 #include <unistd.h>
 #include <string.h>
 
-int client_connect(const char* fileName)
-{
+int client_connect(const char *fileName) {
     int socket_fd = socket(PF_UNIX, SOCK_STREAM, 0);
-    if(socket_fd < 0)
-    {
+    if (socket_fd < 0) {
         printf("socket() failed\n");
         return (-1);
     }
@@ -18,8 +16,7 @@ int client_connect(const char* fileName)
     address.sun_family = AF_UNIX;
     sprintf(address.sun_path, fileName);
 
-    if(connect(socket_fd, (struct sockaddr*)&address, sizeof(struct sockaddr_un)) != 0)
-    {
+    if (connect(socket_fd, (struct sockaddr *) &address, sizeof(struct sockaddr_un)) != 0) {
         printf("connect() failed\n");
         return (-1);
     }
@@ -38,10 +35,8 @@ int client_connect(const char* fileName)
     return 0;
 }
 
-int main(int argc, char* argv[])
-{
-    if(argc != 2)
-    {
+int main(int argc, char *argv[]) {
+    if (argc != 2) {
         printf("usage:\n");
         printf("client [socket file]\n");
         return (-1);

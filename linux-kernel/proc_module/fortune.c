@@ -24,45 +24,52 @@ static int cookie_index;  // Index to write next fortune
 static int next_fortune;  // Index to read next fortune
 
 static const struct file_operations fops =
+        {
+                .owner = THIS_MODULE
+        };
+
+ssize_t fortune_write(struct file *filp, const char __user
+
+*buff,
+unsigned long len,
+void *data
+)
 {
-    .owner = THIS_MODULE
-};
+int space_available = (MAX_COOKIE_LENGTH - cookie_index) + 1;
 
-ssize_t fortune_write(struct file *filp, const char __user *buff, unsigned long len, void *data )
+if (len > space_available)
 {
-    int space_available = (MAX_COOKIE_LENGTH-cookie_index)+1;
-
-    if (len > space_available)
-    {
-        printk(KERN_INFO "fortune: cookie pot is full!\n");
-        return -ENOSPC;
-    }
-
-    if (copy_from_user( &cookie_pot[cookie_index], buff, len ))
-    {
-        return -EFAULT;
-    }
-
-    cookie_index += len;
-
-    cookie_pot[cookie_index-1] = 0;
-
-    return len;
+printk(KERN_INFO
+"fortune: cookie pot is full!\n");
+return -
+ENOSPC;
 }
 
-int fortune_read( char *page, char **start, off_t off, int count, int *eof, void *data )
+if (copy_from_user( &cookie_pot[cookie_index], buff, len ))
 {
+return -
+EFAULT;
+}
+
+cookie_index +=
+len;
+
+cookie_pot[cookie_index-1] = 0;
+
+return
+len;
+}
+
+int fortune_read(char *page, char **start, off_t off, int count, int *eof, void *data) {
     int len;
-    if (off > 0)
-    {
+    if (off > 0) {
         *eof = 1;
         return 0;
     }
 
     /* Wrap-around */
 
-    if (next_fortune >= cookie_index)
-    {
+    if (next_fortune >= cookie_index) {
         next_fortune = 0;
     }
     len = sprintf(page, "%s\n", &cookie_pot[next_fortune]);
@@ -71,45 +78,40 @@ int fortune_read( char *page, char **start, off_t off, int count, int *eof, void
     return len;
 }
 
-int init_fortune_module( void )
-{
+int init_fortune_module(void) {
     int ret = 0;
-    cookie_pot = (char *)vmalloc( MAX_COOKIE_LENGTH );
+    cookie_pot = (char *) vmalloc(MAX_COOKIE_LENGTH);
 
-    if (!cookie_pot)
-    {
+    if (!cookie_pot) {
         ret = -ENOMEM;
-    }
-    else
-    {
-        memset( cookie_pot, 0, MAX_COOKIE_LENGTH );
+    } else {
+        memset(cookie_pot, 0, MAX_COOKIE_LENGTH);
 
-        proc_entry = create_proc_entry( "fortune", 0666, NULL );
+        proc_entry = create_proc_entry("fortune", 0666, NULL);
 
-        if (proc_entry == NULL)
-        {
+        if (proc_entry == NULL) {
             ret = -ENOMEM;
             vfree(cookie_pot);
-            printk(KERN_INFO "fortune: Couldn't create proc entry\n");
-        }
-        else
-        {
+            printk(KERN_INFO
+            "fortune: Couldn't create proc entry\n");
+        } else {
             cookie_index = 0;
             next_fortune = 0;
             proc_entry->read_proc = fortune_read;
             proc_entry->write_proc = fortune_write;
             proc_entry->size = MAX_COOKIE_LENGTH;
-            printk(KERN_INFO "fortune: Module loaded.\n");
+            printk(KERN_INFO
+            "fortune: Module loaded.\n");
         }
     }
     return ret;
 }
 
-void cleanup_fortune_module( void )
-{
+void cleanup_fortune_module(void) {
     remove_proc_entry("fortune", &proc_entry);
     vfree(cookie_pot);
-    printk(KERN_INFO "fortune: Module unloaded.\n");
+    printk(KERN_INFO
+    "fortune: Module unloaded.\n");
 }
 
 

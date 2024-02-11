@@ -14,8 +14,7 @@
 
 #include "lwlog.h"
 
-int main(void)
-{
+int main(void) {
     lwlog_emerg("This a emerge log.");
     lwlog_alert("This a alert log.");
     lwlog_crit("This a crit log.");

@@ -11,18 +11,15 @@
 
 #define DELIMS " \n\r\t"
 
-int main(int argc, char* argv[])
-{
+int main(int argc, char *argv[]) {
     strbuffer_t buffer;
     strbuffer_init(&buffer, 80, 10);
-    for (;;)
-    {
+    for (;;) {
         int eof;
-        char* line = strbuffer_getline(&buffer, &eof);
+        char *line = strbuffer_getline(&buffer, &eof);
         if (eof) break;
-        char* next_word = strtok(line, DELIMS);
-        while (next_word != NULL)
-        {
+        char *next_word = strtok(line, DELIMS);
+        while (next_word != NULL) {
             printf("word: %s\n", next_word);
             next_word = strtok(NULL, DELIMS);
         }

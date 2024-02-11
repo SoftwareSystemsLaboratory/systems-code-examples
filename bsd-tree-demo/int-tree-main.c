@@ -14,13 +14,13 @@ int main() {
 
     // Find and print a value
 
-    for (int value=0; value <= 10; value++) {
-       int_tree_node_t *found = int_tree_find(&tree, value);
-       if (found) {
-           printf("Found: %d\n", found->value);
-       } else {
-           printf("Not found: %d\n", value);
-       }
+    for (int value = 0; value <= 10; value++) {
+        int_tree_node_t *found = int_tree_find(&tree, value);
+        if (found) {
+            printf("Found: %d\n", found->value);
+        } else {
+            printf("Not found: %d\n", value);
+        }
     }
 
     // Cleanup and other operations...
