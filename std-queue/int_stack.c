@@ -49,6 +49,26 @@ int int_stack_top(int_stack_t *stk, int *top_value) {
     return 0; // fail
 }
 
+/* Quick Demo of two simple functions needed for FORTH assignment. */
+
+int int_stack_dup(int_stack_t *stk) {
+    if (stk->size < 1)
+        return 0;
+    int top_value;
+    int_stack_top(stk, &top_value);
+    return int_stack_push(stk, top_value); // success only if last operation succeeds
+}
+
+int int_stack_swap(int_stack_t *stk) {
+    if (stk->size < 2)
+        return 0;
+    int top_value, next_to_top_value;
+    int_stack_pop(stk, &top_value);
+    int_stack_pop(stk, &next_to_top_value);
+    int_stack_push(stk, top_value);
+    return int_stack_push(stk, next_to_top_value); // success only if last operation succeeds
+}
+
 void int_stack_print(int_stack_t *stk, FILE *file) {
     int_entry_t *entry;
     int pos = 0;
