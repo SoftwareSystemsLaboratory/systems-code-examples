@@ -23,6 +23,7 @@ int int_stack_pop(int_stack_t *stk, int *top_value);
 int int_stack_top(int_stack_t *stk, int *top_value);
 int int_stack_dup(int_stack_t *stk);
 int int_stack_swap(int_stack_t *stk);
+int int_stack_add(int_stack_t *stk);
 void int_stack_print(int_stack_t *stk, FILE *file);
 
 
