@@ -41,10 +41,10 @@ int main() {
     int_stack_swap(&myStack);
     int_stack_print(&myStack, stdout);
     int_stack_add(&myStack);
-    int_stack_print(&myStack, stdout); // hopefully, 56 only item on stack!
+    int_stack_print(&myStack, stdout); // hopefully, 15 only item on stack!
     int_stack_dup(&myStack);
     int_stack_add(&myStack);
-    int_stack_print(&myStack, stdout); // hopefully, 56 only item on stack!
+    int_stack_print(&myStack, stdout); // hopefully, 30 only item on stack!
     return 0;
 }
 
