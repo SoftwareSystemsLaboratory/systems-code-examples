@@ -11,10 +11,10 @@ void int_stack_init(int_stack_t *stk, int capacity) {
     stk->capacity = capacity;
 }
 
-void int_stack_push(int_stack_t *stk, int value) {
+int int_stack_push(int_stack_t *stk, int value) {
     if (stk->size >= stk->capacity) {
         printf("Stack is at full capacity.\n");
-        return;
+        return 0; // fail
     }
 
     int_entry_t *newEntry = malloc(sizeof(int_entry_t));
@@ -22,20 +22,31 @@ void int_stack_push(int_stack_t *stk, int value) {
         newEntry->value = value;
         SLIST_INSERT_HEAD(&stk->head, newEntry, entries);
         stk->size++;
+        return 1; //success
     }
+    return 0; // fail
 }
 
-int int_stack_pop(int_stack_t *stk) {
+int int_stack_pop(int_stack_t *stk, int *top_value) {
     int_entry_t *entry = SLIST_FIRST(&stk->head);
     if (entry) {
         int value = entry->value;
         SLIST_REMOVE_HEAD(&stk->head, entries);
         free(entry);
         stk->size--;
-        return value;
+        *top_value = value;
+        return 1; // success
     }
-    printf("Stack is empty.\n");
-    return -1; // Indicate empty stack/error.
+    return 0; // fail
+}
+
+int int_stack_top(int_stack_t *stk, int *top_value) {
+    int_entry_t *entry = SLIST_FIRST(&stk->head);
+    if (entry) {
+        *top_value = entry->value;
+        return 1; // success
+    }
+    return 0; // fail
 }
 
 void int_stack_print(int_stack_t *stk, FILE *file) {
@@ -43,7 +54,6 @@ void int_stack_print(int_stack_t *stk, FILE *file) {
     int pos = 0;
     if (stk->size == 0) {
         fprintf(file, "empty stack\n");
-        return;
     }
 
     SLIST_FOREACH(entry, &stk->head, entries) {

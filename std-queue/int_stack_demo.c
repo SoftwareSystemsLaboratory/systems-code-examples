@@ -12,7 +12,10 @@ int main() {
 
     // Push values onto the stack.
     for (int i = 0; i < capacity; i++) {
-        int_stack_push(&myStack, i);
+        int success = int_stack_push(&myStack, i);
+        if (!success) {
+            fprintf(stderr, "Stack overflow: %d\n", i);
+        }
     }
 
     // Print the stack (top to bottom)
@@ -20,7 +23,11 @@ int main() {
 
     // Pop values from the stack and print them.
     for (int i = 0; i < capacity; i++) {
-        printf("Popped value: %d\n", int_stack_pop(&myStack));
+        int top_value;
+        int success = int_stack_pop(&myStack, &top_value);
+        if (!success) {
+            fprintf(stderr, "Stack empty\n");
+        }
     }
 
     // Print the stack (top to bottom)

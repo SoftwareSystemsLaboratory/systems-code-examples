@@ -18,8 +18,9 @@ typedef struct int_stack {
 } int_stack_t;
 
 void int_stack_init(int_stack_t *stk, int capacity);
-void int_stack_push(int_stack_t *stk, int value);
-int int_stack_pop(int_stack_t *stk);
+int int_stack_push(int_stack_t *stk, int value);
+int int_stack_pop(int_stack_t *stk, int *top_value);
+int int_stack_top(int_stack_t *stk, int *top_value);
 void int_stack_print(int_stack_t *stk, FILE *file);
 
 
