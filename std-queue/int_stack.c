@@ -49,7 +49,7 @@ int int_stack_top(int_stack_t *stk, int *top_value) {
     return 0; // fail
 }
 
-/* Functiosn for FORTH langauge stack operators */
+/* Functions for FORTH langauge stack operators */
 
 int int_stack_dup(int_stack_t *stk) {
     if (stk->size < 1)
@@ -91,6 +91,7 @@ void int_stack_print(int_stack_t *stk, FILE *file) {
         fprintf(file, "%d: %d\n", pos, entry->value);
         pos++;
     }
+    printf("\n");
 }
 
 

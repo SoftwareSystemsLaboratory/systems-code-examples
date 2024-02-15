@@ -17,14 +17,14 @@ typedef struct int_stack {
     int capacity;
 } int_stack_t;
 
-void int_stack_init(int_stack_t *stk, int capacity);
-int int_stack_push(int_stack_t *stk, int value);
-int int_stack_pop(int_stack_t *stk, int *top_value);
-int int_stack_top(int_stack_t *stk, int *top_value);
-int int_stack_dup(int_stack_t *stk);
-int int_stack_swap(int_stack_t *stk);
-int int_stack_add(int_stack_t *stk);
-void int_stack_print(int_stack_t *stk, FILE *file);
+extern void int_stack_init(int_stack_t *stk, int capacity);
+extern int int_stack_push(int_stack_t *stk, int value);
+extern int int_stack_pop(int_stack_t *stk, int *top_value);
+extern int int_stack_top(int_stack_t *stk, int *top_value);
+extern int int_stack_dup(int_stack_t *stk);
+extern int int_stack_swap(int_stack_t *stk);
+extern int int_stack_add(int_stack_t *stk);
+extern void int_stack_print(int_stack_t *stk, FILE *file);
 
 
 #endif // INT_STACK_H
