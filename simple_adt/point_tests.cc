@@ -32,6 +32,8 @@ TEST(PointTest, Add)
     point_init(&p1, 3, 0);
     point_init(&p2, 0, 4);
     point_add(&p3, &p1);
+    ASSERT_FLOAT_EQ( point_x(&p3), 3.0);
+    ASSERT_FLOAT_EQ( point_y(&p3), 0.0);
     point_add(&p3, &p2);
     ASSERT_FLOAT_EQ( point_x(&p3), 3.0);
     ASSERT_FLOAT_EQ( point_y(&p3), 4.0);
