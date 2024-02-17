@@ -22,7 +22,8 @@ target_link_libraries(
   point_tests
   gtest_main
   -lpthread
-) 
+)
+
 
 include(GoogleTest)
 gtest_discover_tests(point_tests)
