@@ -18,7 +18,7 @@ TEST(IntStackTests, Initialization)
 // Then it attempts to fill the stack beyond capacity.
 // Does not check whether pushed values are valid.
 
-TEST(IntStackTets, PushToCapacityAndOverflow)
+TEST(IntStackTests, PushToCapacityAndOverflow)
 {
     int_stack_t stack1;
     const int capacity = 10;
@@ -36,7 +36,7 @@ TEST(IntStackTets, PushToCapacityAndOverflow)
 // Then it pops items one at a time and checks that they are the expected values.
 // Then it attempts to pop from empty stack.
 
-TEST(IntStackTets, PushToCapcacityPopUntilUnderflow
+TEST(IntStackTests, PushToCapcacityPopUntilUnderflow
 )
 {
     int_stack_t stack1;
