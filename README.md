@@ -20,17 +20,38 @@ Recent Developments
 - Many new examples with *pthreads*.
 
 
+Building
+---------
+
+The default build compiles the example programs. GoogleTest-based test binaries
+are optional and are enabled with `-DBUILD_TESTING=ON`.
+
+Default build:
+
+- `git clone https://github.com/SoftwareSystemsLaboratory/systems-code-examples`
+- `cd systems-code-examples`
+- `cmake -S . -B build`
+- `cmake --build build`
+
+Build and run tests:
+
+- `cmake -S . -B build -DBUILD_TESTING=ON`
+- `cmake --build build`
+- `ctest --test-dir build --output-on-failure`
+
+Build the Linux-only optional examples:
+
+- `cmake -S . -B build -DBUILD_OPTIONAL_EXAMPLES=ON`
+- `cmake --build build`
+
 Debian/Linux/GNU Systems
 -------------------------
 
 - `git clone https://github.com/SoftwareSystemsLaboratory/systems-code-examples`
 - `apt install build-essential cmake`
-- Install GoogleTest using instructions at https://github.com/SoftwareSystemsLaboratory/googletest-mva.
 - `cd systems-code-examples`
-- `mkdir build`
-- `cd build`
-- `cmake ..`
-- `make`
+- `cmake -S . -B build`
+- `cmake --build build`
 
 OS X via Homebrew
 ------------------
@@ -43,13 +64,14 @@ Nevertheless, if you want to try, do the following:
 
 
 - `git clone https://github.com/SoftwareSystemsLaboratory/systems-code-examples`
-- `brew install cmake gcc@11`
-- Install GoogleTest using instructions at https://github.com/SoftwareSystemsLaboratory/googletest-mva.
+- `brew install cmake`
 - `cd systems-code-examples`
-- `mkdir build`
-- `cd build`
-- `cmake -DCMAKE_C_COMPILER=$(which gcc-11) -DCMAKE_CXX_COMPILER=$(which g++-11) ..`
-- `make`
+- `cmake -S . -B build`
+- `cmake --build build`
+
+To build the GoogleTest-based test binaries, configure with `-DBUILD_TESTING=ON`.
+This requires network access during CMake configuration unless GoogleTest has
+already been downloaded or supplied through CMake's FetchContent options.
 
 Hopefully, by end of the Fall semester, I will be able to get the 5 pesky examples to build/run on OS X.
 It's not a matter of *if* but *when*.
