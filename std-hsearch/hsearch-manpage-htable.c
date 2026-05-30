@@ -6,12 +6,7 @@
 
 #include <search.h>
 
-/*
- * This example is adapted from the man page for hsearch.
- * Annoyingly, that example has a single hashtable that made reuse of that code nearly impossible.
- * This one uses the _r() functions, which not only are able to work on different hashtables
- * but are also reentrant. Sadly, these are a bit GNU specific, but who doesn't use gcc? LOL
- */
+/* Adapted from the hsearch man page, using GNU reentrant _r functions. */
 
 static char *data[] = {"alpha", "bravo", "charlie", "delta",
                        "echo", "foxtrot", "golf", "hotel", "india", "juliet",

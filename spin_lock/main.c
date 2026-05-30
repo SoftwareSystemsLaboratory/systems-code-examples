@@ -10,6 +10,7 @@ void *increment(void *vp_iterations) {
     long iterations = (long) vp_iterations;
     for (long i = 0; i < iterations; i++) {
         int local_count;
+        /* Uncomment the lock calls to make the update atomic. */
         //spin_lock(&lock);
         local_count = count;
         local_count = local_count + 1;

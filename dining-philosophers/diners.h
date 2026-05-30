@@ -1,7 +1,3 @@
-//
-// Created by gkt on 10/16/20.
-//
-
 #ifndef DINERS_H
 #define DINERS_H
 
@@ -52,4 +48,4 @@ enum dining_policy_t
 
 extern enum dining_policy_t get_dining_policy();
 
-#endif //DINERS_DININGPHILOSOPHERS_H
+#endif

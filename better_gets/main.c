@@ -80,7 +80,6 @@ void better_gets(char *buffer, int len) {
         }
     }
     buffer[i] = (char) 0;
-    //printf("read: [%s]\n", buffer);
 }
 
 void parent() {

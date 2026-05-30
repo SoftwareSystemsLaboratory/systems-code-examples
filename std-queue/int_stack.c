@@ -1,5 +1,3 @@
-// int_stack.c
-
 #include "int_stack.h"
 
 #include <stdlib.h>
@@ -14,7 +12,7 @@ void int_stack_init(int_stack_t *stack, int capacity) {
 int int_stack_push(int_stack_t *stack, int value) {
     if (stack->size >= stack->capacity) {
         printf("Stack is at full capacity.\n");
-        return 0; // fail
+        return 0;
     }
 
     int_entry_t *new_entry = malloc(sizeof(int_entry_t));
@@ -22,9 +20,9 @@ int int_stack_push(int_stack_t *stack, int value) {
         new_entry->value = value;
         SLIST_INSERT_HEAD(&stack->head, new_entry, entries);
         stack->size++;
-        return 1; //success
+        return 1;
     }
-    return 0; // fail
+    return 0;
 }
 
 int int_stack_pop(int_stack_t *stack, int *top_value) {
@@ -35,28 +33,26 @@ int int_stack_pop(int_stack_t *stack, int *top_value) {
         free(entry);
         stack->size--;
         *top_value = value;
-        return 1; // success
+        return 1;
     }
-    return 0; // fail
+    return 0;
 }
 
 int int_stack_top(int_stack_t *stack, int *top_value) {
     int_entry_t *entry = SLIST_FIRST(&stack->head);
     if (entry) {
         *top_value = entry->value;
-        return 1; // success
+        return 1;
     }
-    return 0; // fail
+    return 0;
 }
-
-/* Functions for FORTH langauge stack operators */
 
 int int_stack_dup(int_stack_t *stack) {
     if (stack->size < 1)
         return 0;
     int top_value;
     int_stack_top(stack, &top_value);
-    return int_stack_push(stack, top_value); // success only if last operation succeeds
+    return int_stack_push(stack, top_value);
 }
 
 int int_stack_swap(int_stack_t *stack) {
@@ -66,10 +62,8 @@ int int_stack_swap(int_stack_t *stack) {
     int_stack_pop(stack, &top_value);
     int_stack_pop(stack, &next_to_top_value);
     int_stack_push(stack, top_value);
-    return int_stack_push(stack, next_to_top_value); // success only if last operation succeeds
+    return int_stack_push(stack, next_to_top_value);
 }
-
-/* Example of how to create a binary operator that works o top two elements (if present) */
 
 int int_stack_add(int_stack_t *stack) {
     if (stack->size < 2)

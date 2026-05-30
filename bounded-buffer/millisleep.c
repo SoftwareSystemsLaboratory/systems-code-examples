@@ -1,7 +1,3 @@
-//
-// Created by gkt on 10/16/20.
-//
-
 #include "millisleep.h"
 #include <errno.h>
 #include <time.h>

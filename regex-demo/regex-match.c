@@ -1,10 +1,5 @@
 
-/* Credit: https://www.lemoda.net/c/unix-regex/ */
-/* Credit: GNU C docs */
-/* Credit to self for fixing some problems with handling on OS X and Linux */
-/* Credit to self for finding a nicer way to separate matching code from
- * match results
- */
+/* Based on examples from GNU C docs and lemoda.net. */
 
 #include "regex-match.h"
 
@@ -40,7 +35,6 @@ void basic_matchlist_delete(basic_matchlist_t *head_ptr) {
 void basic_matchlist_init(basic_matchlist_t *head_ptr) {
     basic_matchlist_t head = TAILQ_HEAD_INITIALIZER(head);
     *head_ptr = head;
-    /* create a tail queue */
     TAILQ_INIT(head_ptr);
 }
 
@@ -71,11 +65,6 @@ static void record_match(const char *to_match, const char *match_start,
     basic_matchlist_add(match_list, start, finish, matched_text);
 }
 
-/*
-  Match the string in "to_match" against the compiled regular
-  expression in "r".
- */
-
 int regex_match(regex_t *r, const char *to_match, basic_matchlist_t *match_list) {
     const char *p = to_match;
     const int n_matches = 10;
@@ -85,16 +74,13 @@ int regex_match(regex_t *r, const char *to_match, basic_matchlist_t *match_list)
         int i = 0;
         int nomatch = regexec(r, p, n_matches, m, 0);
         if (nomatch) {
-            //printf ("No more matches.\n");
             return nomatch;
         }
-        //printf("nomatch = %d\n", nomatch);
         for (i = 0; i < n_matches; i++) {
             if (m[i].rm_so == -1) {
                 break;
             }
 
-            //printf("Match %d at %d, %d\n", i, m[i].rm_so, m[i].rm_eo);
             record_match(to_match, p, &m[i], match_list);
             break;
         }
@@ -103,29 +89,3 @@ int regex_match(regex_t *r, const char *to_match, basic_matchlist_t *match_list)
     }
     return 0;
 }
-
-/*
-int main (int argc, char ** argv)
-{
-    regex_t r;
-    const char * regex_text;
-    const char * find_text;
-    if (argc != 3) {
-        //regex_text = "([[:digit:]]+)[^[:digit:]]+([[:digit:]]+)";
-        regex_text = "(\\w+)";
-        find_text = "All cows eat grass. Call 773.555.1212.";
-    }
-    else {
-        regex_text = argv[1];
-        find_text = argv[2];
-    }
-    printf ("Trying to find '%s' in '%s'\n", regex_text, find_text);
-    compile_regex (& r, regex_text);
-    basic_matchlist_t match_list;
-    basic_matchlist_init(&match_list);
-    match_regex (& r, find_text, &match_list);
-    basic_matchlist_print(&match_list);
-    regfree (& r);
-    return 0;
-}
-*/

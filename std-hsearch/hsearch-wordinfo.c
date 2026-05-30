@@ -6,12 +6,7 @@
 
 #include <search.h>
 
-/*
- * This example is adapted from the man page for hsearch.
- * Annoyingly, that example has a single haswtable that made reuse of that code nearly impossible.
- * This one uses the _r() functions, which not only are able to work on different haswtables
- * but are also reentrant. Sadly, these are a bit GNU specific, but who doesn't use gcc? LOL
- */
+/* Adapted from the hsearch man page, using GNU reentrant _r functions. */
 
 static char *data[] = {"alpha", "bravo", "charlie", "delta",
                        "echo", "foxtrot", "golf", "hotel", "india", "juliet",
@@ -41,28 +36,9 @@ wordentry_t *wordtable_lookup(wordtable_t *wt_ptr, char *word) {
     return ep ? (wordentry_t *) ep->data : NULL;
 }
 
-/*
-long haswtable_adjust(struct hsearch_data* ht_ptr, char* word, int delta) {
-    if (ep != NULL) {
-       long new_count = delta + (long)ep->data;
-       new_count = new_count >= 0 ? new_count : 0;
-       ep->data = (void*) new_count;
-       return new_count;
-    }
-
-    hsearch_r(e, ENTER, &ep, ht_ptr);
-    if (ep == NULL) {
-       fprintf(stderr, "entry failed\n");
-       exit(EXIT_FAILURE);
-    }
-    return (long)ep->data;
-}
-*/
-
 wordentry_t *wordtable_upsert(wordtable_t *wt_ptr, char *word, int delta) {
     wordentry_t *wp = wordtable_lookup(wt_ptr, word);
     if (wp != NULL) {
-        //printf("Found word %s, count = %ld, address %p\n", wp->word, wp->count, wp);
         if (wp->count > 0) wp->count += delta;
         return wp;
     } else {
@@ -73,20 +49,9 @@ wordentry_t *wordtable_upsert(wordtable_t *wt_ptr, char *word, int delta) {
         e.key = word;
         e.data = wp;
         hsearch_r(e, ENTER, &ep, &wt_ptr->wtable);
-        //printf("new word %s, count = %ld, address = %p\n", wp->word, wp->count, wp);
         return ep == NULL ? NULL : wp;
     }
 }
-
-
-/*
-long haswtable_decrement(struct hsearch_data* ht_ptr, char* word) {
-   return haswtable_adjust(ht_ptr, word, -1);
-}
-long haswtable_increment(struct hsearch_data* ht_ptr, char* word) {
-   return haswtable_adjust(ht_ptr, word, 1);
-}
-*/
 
 wordentry_t *wordtable_decrement(wordtable_t *wt_ptr, char *word) {
     return wordtable_upsert(wt_ptr, word, -1);
@@ -96,12 +61,6 @@ wordentry_t *wordtable_decrement(wordtable_t *wt_ptr, char *word) {
 wordentry_t *wordtable_increment(wordtable_t *wt_ptr, char *word) {
     return wordtable_upsert(wt_ptr, word, 1);
 }
-
-/*
-void haswtable_delete(struct hsearch_data* ht_ptr) {
-    hdestroy_r(ht_ptr);
-}
-*/
 
 void wordtable_delete(wordtable_t *wt_ptr) {
 
@@ -146,10 +105,8 @@ int main(void) {
     wordtable_init(&wtable);
     int data_size = sizeof(data) / sizeof(char *);
 
-    /* insert all words to get word counts */
     insert_words(&wtable, data_size);
 
-    /* delete every 4th word */
     decrement_sample_words(&wtable, data_size);
 
     print_nonzero_words(&wtable, data_size);

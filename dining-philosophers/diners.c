@@ -1,7 +1,3 @@
-//
-// Created by gkt on 10/16/20.
-//
-
 #include <string.h>
 #include <stdlib.h>
 #include <pthread.h>
@@ -57,7 +53,7 @@ void diner_eat(diner_t *diner) {
     millisecond_sleep(rand() % MAX_EAT_TIME);
 }
 
-void *diner_run(void *tsd)    /* tsd should be the diner object */
+void *diner_run(void *tsd)
 {
     diner_t *diner = (diner_t *) tsd;
 

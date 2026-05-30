@@ -6,7 +6,6 @@
 #define SUPPLIER_DELAY 300
 #define CONSUMER_DELAY 1000
 
-/* TODO: Add options for these */
 #define BB_SIZE 100
 #define GEN_COUNT 2000
 
@@ -16,7 +15,7 @@ typedef struct
     int no_consumers;
     int supplier_max_delay_ms;
     int consumer_max_delay_ms;
-    int gen_count; /* # generated per supplier */
+    int gen_count;
     int bsize;
 } bb_options_t;
 

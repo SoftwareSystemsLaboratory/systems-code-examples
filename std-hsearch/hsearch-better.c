@@ -6,12 +6,7 @@
 
 #include <search.h>
 
-/*
- * This example is adapted from the man page for hsearch.
- * Annoyingly, that example has a single hashtable that made reuse of that code nearly impossible.
- * This one uses the _r() functions, which not only are able to work on different hashtables
- * but are also reentrant. Sadly, these are a bit GNU specific, but who doesn't use gcc? LOL
- */
+/* Adapted from the hsearch man page, using GNU reentrant _r functions. */
 
 static char *data[] = {"alpha", "bravo", "charlie", "delta",
                        "echo", "foxtrot", "golf", "hotel", "india", "juliet",
@@ -37,7 +32,6 @@ long wordtable_adjust(struct hsearch_data *ht_ptr, char *word, int delta) {
     e.key = word;
     e.data = (void *) 1L;
     ep = wordtable_lookup(ht_ptr, word);
-    /* if entry exists, increment it */
     if (ep != NULL) {
         long new_count = delta + (long) ep->data;
         new_count = new_count >= 0 ? new_count : 0;
@@ -74,7 +68,6 @@ int main(void) {
     int i;
 
     printf("insertions:\n");
-    /* insert all words to get word counts */
     for (int i = 0; i < data_size; i++) {
         long new_count = wordtable_increment(&htable, data[i]);
         printf("incremented word i=%d, data=%s, count=%ld\n", i, data[i], new_count);
@@ -82,7 +75,6 @@ int main(void) {
 
     printf("\n");
     printf("insertions:\n");
-    /* delete every 4th word */
     for (int i = 0; i < data_size; i += 4) {
         long new_count = wordtable_decrement(&htable, data[i]);
         printf("decrementing word i=%d, data=%s, count=%ld\n", i, data[i], new_count);

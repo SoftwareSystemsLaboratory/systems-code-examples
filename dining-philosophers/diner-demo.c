@@ -27,31 +27,31 @@ void parse_command_line(int argc, char **argv, configuration_t *config) {
 
     while ((opt = getopt(argc, argv, "n:t:e:r")) != -1) {
         switch (opt) {
-            case 'n': // Number of philosophers
+            case 'n':
                 config->num_philosophers = atoi(optarg);
                 if (config->num_philosophers > MAX_DINERS || config->num_philosophers < 1) {
                     fprintf(stderr, "Number of philosophers must be between 1 and %d\n", MAX_DINERS);
                     exit(EXIT_FAILURE);
                 }
                 break;
-            case 't': // Think time
+            case 't':
                 config->think_time = atoi(optarg);
                 if (config->think_time > MAX_THINK_TIME || config->think_time < 0) {
                     fprintf(stderr, "Think time must be between 0 and %d seconds\n", MAX_THINK_TIME);
                     exit(EXIT_FAILURE);
                 }
                 break;
-            case 'e': // Eat time
+            case 'e':
                 config->eat_time = atoi(optarg);
                 if (config->eat_time > MAX_EAT_TIME || config->eat_time < 0) {
                     fprintf(stderr, "Eat time must be between 0 and %d seconds\n", MAX_EAT_TIME);
                     exit(EXIT_FAILURE);
                 }
                 break;
-            case 'r': // Enumerate resources
+            case 'r':
                 config->enumerate_resources = 1;
                 break;
-            default: /* '?' */
+            default:
                 fprintf(stderr, "Usage: %s [-n num_philosophers] [-t think_time] [-e eat_time] [-r]\n",
                         argv[0]);
                 exit(EXIT_FAILURE);
@@ -132,10 +132,10 @@ void cleanup_forks(fork_t *fork) {
 
 int main(int argc, char **argv) {
     configuration_t config = {
-            .num_philosophers = 5,      // default number of philosophers
-            .think_time = 2,            // default think time in seconds
-            .eat_time = 3,              // default eat time in seconds
-            .enumerate_resources = 0    // default for resource enumeration: off
+            .num_philosophers = 5,
+            .think_time = 2,
+            .eat_time = 3,
+            .enumerate_resources = 0
     };
 
     parse_command_line(argc, argv, &config);
@@ -144,37 +144,18 @@ int main(int argc, char **argv) {
     fork_t fork[MAX_DINERS];
     diner_t diner[MAX_DINERS];
 
-    /* The main thread  */
     configure_main_thread_priority();
 
-    // the main thread monitors the state of the diners and runs at highest
-    // priority so it can continue doing something, even if (or when) the other
-    // threads get deadlocked.
-
-    /* initialize the shared resources (forks) */
     initialize_forks(fork);
 
-    /* initialize the diners to link to the shared resources (forks) */
     initialize_diners(diner, fork);
 
-    /* start the actual threads for each diner */
     start_diners(diner);
 
-    /* monitor the state of the diners in the main (highest-priority) thread
-     * because it is high priority, it must sleep for a short time to give
-     * the diner threads a chance to do their thing.
-     */
+    /* The main thread sleeps briefly while monitoring diner state. */
     monitor_diners(diner);
-
-    /* assuming no deadlock happened, this code will be reached so we
-     * can join with the main thread
-     */
 
     join_diners(diner);
 
-    /* locks associated with forks need to be cleaned up */
     cleanup_forks(fork);
-
-    /* attribute object should also be freed (could do earlier, too) */
-    //pthread_attr_destroy(&attr);
 }

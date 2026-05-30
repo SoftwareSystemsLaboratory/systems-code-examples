@@ -10,18 +10,8 @@
 #include "millisleep.h"
 
 
-/*
- * bounded buffer example where there can be any number of suppliers and consumers
- *
- * in this design:
- * - each supplier and consumer runs as a separate thread
- *   thread-specific data allows each to share the bound_buffer_t* instance and command-line options/config
- *   each supplier and consumer knows its own id.
- * - suppliers each generate options->gen_count values
- *   consumers consume only (options->gen_count * options->no_suppliers) / options->no_consumers entries
- *   some entries may NOT be consumed (ok under most circumstances)
- * - because consumers will stop after they have gotten their share of values, others are allowed to consume their fair share
- */
+/* Suppliers and consumers run as separate threads sharing the buffer through thread-specific data. */
+/* Consumers split generated entries evenly; a remainder is assigned to lower consumer IDs. */
 
 typedef struct {
     bb_options_t *options;
@@ -48,8 +38,6 @@ void *supplier(void *tsd) {
     pthread_exit(NULL);
 }
 
-
-/* note: consumer only consumesm options->no_suppliers * options->gen_count / options->no_consumers  entries (some may not be consumed, which is ok) */
 
 void *consumer(void *tsd) {
     bb_tsd_t *bb_tsd = (bb_tsd_t *) tsd;

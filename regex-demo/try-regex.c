@@ -1,10 +1,5 @@
-/* Credit: https://www.lemoda.net/c/unix-regex/ */
-/* Credit: GNU C docs */
-/* Credit to self for fixing some problems with handling on OS X and Linux */
-
-
 #define WORD_REGEX "(\\w+)"
-#define ALT_WORD_REGEX "([[:digit:]]+)[^[:digit:]]+([[:digit:]]+)" // not used (yet)
+#define ALT_WORD_REGEX "([[:digit:]]+)[^[:digit:]]+([[:digit:]]+)"
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -20,7 +15,6 @@ int main(int argc, char **argv) {
     int eof;
     const char *regex_text = WORD_REGEX;
 
-    // if no arguments read text from stdin; else use argv[1] as text
     if (argc < 2) {
         strbuffer_t buffer;
         strbuffer_init(&buffer, 80, 10);

@@ -1,5 +1,3 @@
-// int_stack.h - interface to the int_stack
-
 #ifndef INT_STACK_H
 #define INT_STACK_H
 
@@ -28,4 +26,4 @@ extern void int_stack_print(int_stack_t *stack, FILE *file);
 extern int int_stack_size(int_stack_t* stack);
 extern int int_stack_capacity(int_stack_t* stack);
 
-#endif // INT_STACK_H
+#endif
