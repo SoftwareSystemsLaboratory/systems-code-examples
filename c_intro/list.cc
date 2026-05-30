@@ -11,27 +11,27 @@ Node::~Node()
 {
 }
 
-int Node::getValue()
+int Node::get_value()
 {
     return this->_value;
 }
 
-Node* Node::getNext()
+Node* Node::get_next()
 {
     return this->_next;
 }
 
-void Node::setNext(Node *next)
+void Node::set_next(Node *next)
 {
     this->_next = next;
 }
 
-Node* Node::getPrev()
+Node* Node::get_prev()
 {
     return this->_prev;
 }
 
-void Node::setPrev(Node* prev)
+void Node::set_prev(Node* prev)
 {
     this->_prev = prev;
 }
@@ -40,46 +40,46 @@ List::List()
 {
     _tail = new Node((-1));
     _head = new Node((-1));
-    _head->setNext(_tail);
-    _head->setPrev(NULL);
-    _tail->setNext(NULL);
-    _tail->setPrev(_head);
+    _head->set_next(_tail);
+    _head->set_prev(NULL);
+    _tail->set_next(NULL);
+    _tail->set_prev(_head);
 
-    assert(_head->getNext() == _tail)
-    assert(_tail->getPrev() == _head)
+    assert(_head->get_next() == _tail)
+    assert(_tail->get_prev() == _head)
 }
 
 List::~List()
 {
-    for(Node* curr = _head->getNext(); curr != _tail; )
+    for(Node* curr = _head->get_next(); curr != _tail; )
     {
-        Node* toDelete = curr;
-        curr = curr->getNext();
+        Node* to_delete = curr;
+        curr = curr->get_next();
         assert(curr != NULL)
-        delete toDelete;
+        delete to_delete;
     }
     delete _tail;
     delete _head;
 }
 
-void List::Add(int x)
+void List::add(int value)
 {
-    Node *prev = _tail->getPrev();
-    Node *curr = new Node(x);
+    Node *prev = _tail->get_prev();
+    Node *curr = new Node(value);
     assert(prev != NULL)
     assert(curr != NULL)
-    curr->setNext(_tail);
-    curr->setPrev(prev);
-    prev->setNext(curr);
-    _tail->setPrev(curr);
+    curr->set_next(_tail);
+    curr->set_prev(prev);
+    prev->set_next(curr);
+    _tail->set_prev(curr);
 }
 
-int List::Count()
+int List::count()
 {
     int count = 0;
-    for(Node* curr = _head->getNext();
+    for(Node* curr = _head->get_next();
             curr != _tail;
-            curr = curr->getNext())
+            curr = curr->get_next())
     {
         assert(curr != NULL)
         count += 1;
@@ -89,30 +89,29 @@ int List::Count()
 
 Node* find(Node* head, int offset)
 {
-    Node* curr = head->getNext();
+    Node* curr = head->get_next();
     for(int i = 0; i < offset; i++)
     {
         assert(curr != NULL)
-        curr = curr->getNext();
+        curr = curr->get_next();
     }
     return curr;
 }
 
-void List::Remove(int index)
+void List::remove(int index)
 {
     Node* node = find(_head, index);
     assert(node != NULL)
-    assert(node->getPrev() != NULL)
-    assert(node->getNext() != NULL)
-    node->getPrev()->setNext(node->getNext());
-    node->getNext()->setPrev(node->getPrev());
+    assert(node->get_prev() != NULL)
+    assert(node->get_next() != NULL)
+    node->get_prev()->set_next(node->get_next());
+    node->get_next()->set_prev(node->get_prev());
     delete node;
 }
 
-int List::Get(int index)
+int List::get(int index)
 {
     Node* node = find(_head, index);
     assert(node != NULL)
-    return node->getValue();
+    return node->get_value();
 }
-

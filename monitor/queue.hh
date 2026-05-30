@@ -5,11 +5,11 @@ class Node {
 public:
     Node(int value);
     ~Node();
-    int getValue();
-    Node* getNext();
-    void setNext(Node *next);
-    Node* getPrev();
-    void setPrev(Node *prev);
+    int get_value();
+    Node* get_next();
+    void set_next(Node *next);
+    Node* get_prev();
+    void set_prev(Node *prev);
 private:
     Node* _next;
     Node* _prev;
@@ -20,16 +20,15 @@ class Queue {
 public:
     Queue();
     ~Queue();
-    void Enqueue(int val);
-    int Dequeue();
-    bool IsEmpty();
-    bool HasWorkLeft();
-    void DoneAdding();
+    void enqueue(int value);
+    int dequeue();
+    bool is_empty();
+    bool has_work_left();
+    void done_adding();
 private:
     Node* _head;
     Node* _tail;
-    bool _workLeft;
+    bool _work_left;
 };
 
 #endif
-

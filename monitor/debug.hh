@@ -8,8 +8,7 @@
 
 #define assert(x) assertmsg(x, nomsg)
 
-int assertEquals(int expected, int actual, const char *msg);
-int assertEquals(int expected, int actual);
+int assert_equals(int expected, int actual, const char *msg);
+int assert_equals(int expected, int actual);
 
 #endif
-

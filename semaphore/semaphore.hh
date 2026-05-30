@@ -5,14 +5,13 @@
 
 class Semaphore {
 public:
-    Semaphore(int initialValue);
+    Semaphore(int initial_value);
     ~Semaphore();
-    void Up();
-    bool Down();
+    void up();
+    bool down();
 private:
     Mutex *_lock;
     volatile int _count;
 };
 
 #endif
-

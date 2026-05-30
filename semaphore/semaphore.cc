@@ -3,10 +3,10 @@
 #include <stdio.h>
 #include <pthread.h>
 
-Semaphore::Semaphore(int initialValue)
+Semaphore::Semaphore(int initial_value)
 {
     _lock = new Mutex();
-    _count = initialValue;
+    _count = initial_value;
 }
 
 Semaphore::~Semaphore()
@@ -14,24 +14,23 @@ Semaphore::~Semaphore()
     delete _lock;
 }
 
-void Semaphore::Up()
+void Semaphore::up()
 {
-    _lock->Lock();
+    _lock->lock();
     _count += 1;
-    _lock->Unlock();
+    _lock->unlock();
 }
 
-bool Semaphore::Down()
+bool Semaphore::down()
 {
     bool success = false;
-    _lock->Lock();
+    _lock->lock();
     if(_count > 0)
     {
         _count -= 1;
         success = true;
     }
-    _lock->Unlock();
+    _lock->unlock();
     return success;
 }
-
 

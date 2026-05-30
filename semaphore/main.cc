@@ -5,7 +5,7 @@
 #include <pthread.h>
 #include <stdio.h>
 
-const int countPerThread = 10000000;
+const int count_per_thread = 10000000;
 int count;
 Mutex *lock = new Mutex();
 Semaphore *semaphore = new Semaphore(0);
@@ -13,57 +13,57 @@ Queue *queue = new Queue();
 
 void increment()
 {
-    bool workLeft = true;
-    while(workLeft)
+    bool work_left = true;
+    while(work_left)
     {
-        lock->Lock();
-        if(!queue->HasWorkLeft())
+        lock->lock();
+        if(!queue->has_work_left())
         {
-            workLeft = false;
+            work_left = false;
         }
-        else if(semaphore->Down())
+        else if(semaphore->down())
         {
-            int c = queue->Dequeue();
-            count = count + c;
+            int work_item = queue->dequeue();
+            count = count + work_item;
         }
-        lock->Unlock();
+        lock->unlock();
     }
 }
 
-void populateQueue()
+void populate_queue()
 {
-    for(int i = 0; i < countPerThread*2; i++)
+    for(int i = 0; i < count_per_thread*2; i++)
     {
-        lock->Lock();
-        queue->Enqueue(1);
-        semaphore->Up();
-        lock->Unlock();
+        lock->lock();
+        queue->enqueue(1);
+        semaphore->up();
+        lock->unlock();
     }
-    lock->Lock();
-    queue->DoneAdding();
-    lock->Unlock();
+    lock->lock();
+    queue->done_adding();
+    lock->unlock();
 }
 
 int main( int argc, char* argv[])
 {
 
     pthread_t thread1, thread2;
-    pthread_attr_t threadAttribute;
+    pthread_attr_t thread_attribute;
 
-    pthread_attr_init(&threadAttribute);
-    pthread_attr_setscope(&threadAttribute, PTHREAD_SCOPE_SYSTEM);
+    pthread_attr_init(&thread_attribute);
+    pthread_attr_setscope(&thread_attribute, PTHREAD_SCOPE_SYSTEM);
 
-    printf("starting test. final count should be %d\n", 2*countPerThread);
+    printf("starting test. final count should be %d\n", 2*count_per_thread);
 
-    pthread_create(&thread1, &threadAttribute, (void * (*)(void*))increment, (void*)NULL);
-    pthread_create(&thread2, &threadAttribute, (void * (*)(void*))increment, (void*)NULL);
+    pthread_create(&thread1, &thread_attribute, (void * (*)(void*))increment, (void*)NULL);
+    pthread_create(&thread2, &thread_attribute, (void * (*)(void*))increment, (void*)NULL);
 
-    populateQueue();
+    populate_queue();
 
     pthread_join(thread1, NULL);
     pthread_join(thread2, NULL);
 
-    if( count != 2 * countPerThread )
+    if( count != 2 * count_per_thread )
     {
         printf("****** Error. Final count is %d\n", count);
     }
@@ -74,5 +74,3 @@ int main( int argc, char* argv[])
 
     return 1;
 }
-
-

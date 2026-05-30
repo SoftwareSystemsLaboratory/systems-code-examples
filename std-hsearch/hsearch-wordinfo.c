@@ -108,39 +108,53 @@ void wordtable_delete(wordtable_t *wt_ptr) {
     hdestroy_r(&wt_ptr->wtable);
 }
 
+void insert_words(wordtable_t *wtable, int data_size) {
+    for (int i = 0; i < data_size; i++) {
+        wordentry_t *wp = wordtable_increment(wtable, data[i]);
+        printf("new word i=%d, data=%s, count=%ld, id=%p\n", i, data[i], wp->count, wp);
+    }
+    printf("\n");
+}
+
+void decrement_sample_words(wordtable_t *wtable, int data_size) {
+    for (int i = 0; i < data_size; i += 4) {
+        wordentry_t *wp = wordtable_decrement(wtable, data[i]);
+        printf("dec word i=%d, data=%s, count=%ld, id=%p\n", i, data[i], wp->count, wp);
+    }
+    printf("\n");
+}
+
+void print_nonzero_words(wordtable_t *wtable, int data_size) {
+    for (int i = 0; i < data_size; i++) {
+        wordentry_t *wp = wordtable_lookup(wtable, data[i]);
+        if (wp == NULL || wp->count == 0) continue;
+        printf("non-zero word= %s, count=%ld, id=%p\n", data[i], wp->count, wp);
+    }
+}
+
+void print_zero_words(wordtable_t *wtable, int data_size) {
+    printf("\n");
+    for (int i = 0; i < data_size; i++) {
+        wordentry_t *wp = wordtable_lookup(wtable, data[i]);
+        if (wp == NULL || wp->count > 0) continue;
+        printf("zero word= %s, count=%ld, id=%p\n", data[i], wp->count, wp);
+    }
+}
 
 int main(void) {
     wordtable_t wtable;
     wordtable_init(&wtable);
     int data_size = sizeof(data) / sizeof(char *);
-    int i;
 
     /* insert all words to get word counts */
-    for (int i = 0; i < data_size; i++) {
-        wordentry_t *wp = wordtable_increment(&wtable, data[i]);
-        printf("new word i=%d, data=%s, count=%ld, id=%p\n", i, data[i], wp->count, wp);
-    }
-    printf("\n");
+    insert_words(&wtable, data_size);
 
     /* delete every 4th word */
-    for (int i = 0; i < data_size; i += 4) {
-        wordentry_t *wp = wordtable_decrement(&wtable, data[i]);
-        printf("dec word i=%d, data=%s, count=%ld, id=%p\n", i, data[i], wp->count, wp);
-    }
-    printf("\n");
+    decrement_sample_words(&wtable, data_size);
 
-    for (int i = 0; i < data_size; i++) {
-        wordentry_t *wp = wordtable_lookup(&wtable, data[i]);
-        if (wp == NULL || wp->count == 0) continue;
-        printf("non-zero word= %s, count=%ld, id=%p\n", data[i], wp->count, wp);
-    }
+    print_nonzero_words(&wtable, data_size);
+    print_zero_words(&wtable, data_size);
 
-    printf("\n");
-    for (int i = 0; i < data_size; i++) {
-        wordentry_t *wp = wordtable_lookup(&wtable, data[i]);
-        if (wp == NULL || wp->count > 0) continue;
-        printf("zero word= %s, count=%ld, id=%p\n", data[i], wp->count, wp);
-    }
     wordtable_delete(&wtable);
     exit(EXIT_SUCCESS);
 }

@@ -6,8 +6,8 @@
 class MemHandle {
 public:
     MemHandle(int value, int event);
-    int Value;
-    int getEvent();
+    int value;
+    int get_event();
 private:
     int _event;
 };
@@ -16,9 +16,9 @@ class Transaction {
 public:
     Transaction(volatile int* value);
     ~Transaction();
-    bool TryCommit(MemHandle* value);
-    MemHandle* Begin();
-    int GetRollbackCount();
+    bool try_commit(MemHandle* value);
+    MemHandle* begin();
+    int get_rollback_count();
 private:
     Mutex* _lock;
     volatile int* _value;

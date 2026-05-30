@@ -3,11 +3,11 @@
 
 MemHandle::MemHandle(int value, int event)
 {
-    Value = value;
+    this->value = value;
     _event = event;
 }
 
-int MemHandle::getEvent()
+int MemHandle::get_event()
 {
     return _event;
 }
@@ -25,27 +25,27 @@ Transaction::~Transaction()
     delete _lock;
 }
 
-int Transaction::GetRollbackCount()
+int Transaction::get_rollback_count()
 {
     return _rollbacks;
 }
 
-MemHandle* Transaction::Begin()
+MemHandle* Transaction::begin()
 {
     MemHandle* handle;
-    _lock->Lock();
+    _lock->lock();
     handle = new MemHandle(*_value, _event);
-    _lock->Unlock();
+    _lock->unlock();
     return handle;
 }
 
-bool Transaction::TryCommit(MemHandle* value)
+bool Transaction::try_commit(MemHandle* value)
 {
     bool success = false;
-    _lock->Lock();
-    if(_event == value->getEvent())
+    _lock->lock();
+    if(_event == value->get_event())
     {
-        *_value = value->Value;
+        *_value = value->value;
         _event += 1;
         success = true;
     }
@@ -53,8 +53,7 @@ bool Transaction::TryCommit(MemHandle* value)
     {
         _rollbacks += 1;
     }
-    _lock->Unlock();
+    _lock->unlock();
     delete value;
     return success;
 }
-

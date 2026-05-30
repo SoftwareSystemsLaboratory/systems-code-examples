@@ -14,19 +14,19 @@ Monitor::~Monitor()
     delete _lock;
 }
 
-void Monitor::Enter()
+void Monitor::enter()
 {
-    _lock->Lock();
+    _lock->lock();
     _locked = true;
 }
 
-void Monitor::Exit()
+void Monitor::exit()
 {
     _locked = false;
-    _lock->Unlock();
+    _lock->unlock();
 }
 
-void Monitor::Wait()
+void Monitor::wait()
 {
     if(!_locked)
     {
@@ -34,14 +34,14 @@ void Monitor::Wait()
     }
     while(_pulse == 0)
     {
-        Exit();
+        exit();
         pthread_yield();
-        Enter();
+        enter();
     }
     _pulse -= 1;
 }
 
-void Monitor::Pulse()
+void Monitor::pulse()
 {
     if(!_locked)
     {
@@ -49,4 +49,3 @@ void Monitor::Pulse()
     }
     _pulse += 1;
 }
-

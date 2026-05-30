@@ -10,7 +10,7 @@ Mutex::~Mutex()
 {
 }
 
-void Mutex::Lock()
+void Mutex::lock()
 {
     while(test_and_set(&this->_lock) == 1)
     {
@@ -28,8 +28,7 @@ unsigned long Mutex::test_and_set(unsigned long *lock)
     return newval;
 }
 
-void Mutex::Unlock()
+void Mutex::unlock()
 {
     this->_lock = 0;
 }
-

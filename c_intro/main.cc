@@ -5,9 +5,9 @@
 
 int main(int argc, char *argv[])
 {
-    int passCount = runTests();
+    int pass_count = run_tests();
 
-    printf("%d tests passed\n", passCount);
+    printf("%d tests passed\n", pass_count);
 
     return 0;
 }

@@ -1,7 +1,7 @@
 #include "debug.hh"
 #include <stdio.h>
 
-int assertEquals(int expected, int actual, const char *msg)
+int assert_equals(int expected, int actual, const char *msg)
 {
     int result;
     if(expected == actual)
@@ -16,7 +16,7 @@ int assertEquals(int expected, int actual, const char *msg)
     return result;
 }
 
-int assertEquals(int expected, int actual)
+int assert_equals(int expected, int actual)
 {
-    return assertEquals(expected, actual, "");
+    return assert_equals(expected, actual, "");
 }

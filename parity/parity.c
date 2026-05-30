@@ -6,7 +6,7 @@
 #include <sys/types.h>
 #include <fcntl.h>
 
-size_t parityWrite(
+size_t parity_write(
         int fd0, int fd1, int fd2,
         const void *buf0, const void *buf1,
         size_t count) {
@@ -21,14 +21,14 @@ size_t parityWrite(
     return count;
 }
 
-size_t parityRead(int fd0, int fd1, void *buf, size_t count) {
-    char *buff0 = (char *) malloc(count);
-    char *buff1 = (char *) malloc(count);
-    char *buff = (char *) buf;
-    read(fd0, buff0, count);
-    read(fd1, buff1, count);
+size_t parity_read(int fd0, int fd1, void *output_buffer, size_t count) {
+    char *first_buffer = (char *) malloc(count);
+    char *second_buffer = (char *) malloc(count);
+    char *recovered_buffer = (char *) output_buffer;
+    read(fd0, first_buffer, count);
+    read(fd1, second_buffer, count);
     for (size_t i = 0; i < count; i++) {
-        buff[i] = buff0[i] ^ buff1[i];
+        recovered_buffer[i] = first_buffer[i] ^ second_buffer[i];
     }
     return count;
 }
@@ -41,7 +41,7 @@ int main(int argc, char **argv) {
     const char *msg0 = "hello world\n";
     const char *msg1 = "testing 123\n";
 
-    parityWrite(fd0, fd1, fd2, msg0, msg1, strlen(msg0) + 1);
+    parity_write(fd0, fd1, fd2, msg0, msg1, strlen(msg0) + 1);
 
     close(fd0);
     close(fd1);
@@ -52,17 +52,17 @@ int main(int argc, char **argv) {
     fd0 = open("f0", O_RDWR, 0666);
     fd2 = open("f2", O_RDWR, 0666);
 
-    size_t msgSize = sizeof(char) * strlen(msg0) + 1;
-    char *buff = (char *) malloc(msgSize);
+    size_t msg_size = sizeof(char) * strlen(msg0) + 1;
+    char *recovered_buffer = (char *) malloc(msg_size);
 
-    parityRead(fd0, fd2, buff, msgSize);
+    parity_read(fd0, fd2, recovered_buffer, msg_size);
 
-    printf("f1 contents are = %s\n", buff);
+    printf("f1 contents are = %s\n", recovered_buffer);
 
     close(fd0);
     close(fd2);
 
-    free(buff);
+    free(recovered_buffer);
 
     unlink("f0");
     unlink("f2");

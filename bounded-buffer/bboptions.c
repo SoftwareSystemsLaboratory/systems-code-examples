@@ -6,16 +6,31 @@
 #include <getopt.h>
 
 
-int bb_options_get(bb_options_t *options, int argc, char **argv) {
-    int c;
-    int digit_optind = 0;
-
+static void bb_options_set_defaults(bb_options_t *options) {
     options->no_suppliers = NUM_SUPPLIERS;
     options->no_consumers = NUM_CONSUMERS;
     options->supplier_max_delay_ms = SUPPLIER_DELAY;
     options->consumer_max_delay_ms = CONSUMER_DELAY;
     options->gen_count = GEN_COUNT;
     options->bsize = BB_SIZE;
+}
+
+static void bb_options_print_usage(const char *program_name) {
+    fprintf(stderr,
+            "usage: %s [--suppliers SUPPLIERS] [--consumers CONSUMERS] [--sdelay SDELAY] [--cdelay CDELAY]  [--gen GEN]  [--bsize BSIZE]\n",
+            program_name);
+    fprintf(stderr, "\tSUPPLIERS is number of suppliers (default:  %d)\n", NUM_SUPPLIERS);
+    fprintf(stderr, "\tCONSUMERS is number of suppliers (default:  %d)\n", NUM_CONSUMERS);
+    fprintf(stderr, "\tSDELAY is max random delay in millisconds (default: %d)\n", SUPPLIER_DELAY);
+    fprintf(stderr, "\tCDELAY is max random delay in millisconds (default: %d)\n", CONSUMER_DELAY);
+    fprintf(stderr, "\tBSIZE is bounded buffer size (default: %d)\n", BB_SIZE);
+    fprintf(stderr, "\tGEN number of messages to generate per supplier (default: %d)\n", GEN_COUNT);
+}
+
+int bb_options_get(bb_options_t *options, int argc, char **argv) {
+    int c;
+
+    bb_options_set_defaults(options);
 
     while (1) {
         int this_option_optind = optind ? optind : 1;
@@ -63,17 +78,8 @@ int bb_options_get(bb_options_t *options, int argc, char **argv) {
                 break;
 
             case 'h':
-                fprintf(stderr,
-                        "usage: %s [--suppliers SUPPLIERS] [--consumers CONSUMERS] [--sdelay SDELAY] [--cdelay CDELAY]  [--gen GEN]  [--bsize BSIZE]\n",
-                        argv[0]);
-                fprintf(stderr, "\tSUPPLIERS is number of suppliers (default:  %d)\n", NUM_SUPPLIERS);
-                fprintf(stderr, "\tCONSUMERS is number of suppliers (default:  %d)\n", NUM_CONSUMERS);
-                fprintf(stderr, "\tSDELAY is max random delay in millisconds (default: %d)\n", SUPPLIER_DELAY);
-                fprintf(stderr, "\tCDELAY is max random delay in millisconds (default: %d)\n", CONSUMER_DELAY);
-                fprintf(stderr, "\tBSIZE is bounded buffer size (default: %d)\n", BB_SIZE);
-                fprintf(stderr, "\tGEN number of messages to generate per supplier (default: %d)\n", GEN_COUNT);
+                bb_options_print_usage(argv[0]);
                 exit(0);
-                break;
 
             case '?':
                 break;
@@ -83,16 +89,7 @@ int bb_options_get(bb_options_t *options, int argc, char **argv) {
         }
     }
 
-    /*
-     * Save these notes from GNU man page.
-    if (optind < argc) {
-      printf("non-option ARGV-elements: ");
-      while (optind < argc)
-        printf("%s ", argv[optind++]);
-      printf("\n");
-    }
-    */
-
+    return 0;
 }
 
 void bb_options_print(bb_options_t *options) {

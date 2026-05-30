@@ -7,10 +7,10 @@ class Monitor {
 public:
     Monitor();
     ~Monitor();
-    void Enter();
-    void Exit();
-    void Wait();
-    void Pulse();
+    void enter();
+    void exit();
+    void wait();
+    void pulse();
 private:
     Mutex *_lock;
     volatile bool _locked;
@@ -18,4 +18,3 @@ private:
 };
 
 #endif
-

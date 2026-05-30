@@ -1,5 +1,4 @@
 #ifndef TEST_HH
 #define TEST_HH
-int runTests();
+int run_tests();
 #endif
-

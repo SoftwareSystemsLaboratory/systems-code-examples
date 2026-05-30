@@ -5,12 +5,11 @@ class Mutex {
 public:
     Mutex();
     ~Mutex();
-    void Lock();
-    void Unlock();
+    void lock();
+    void unlock();
 private:
     unsigned long test_and_set(unsigned long *lock);
     unsigned long _lock;
 };
 #endif
-
 

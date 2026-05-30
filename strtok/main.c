@@ -2,55 +2,55 @@
 #include <string.h>
 #include <stdlib.h>
 
-int SplitString(char *str, char *tokens[], const int maxTokens);
+int split_string(char *str, char *tokens[], const int max_tokens);
 
-void testSplitString();
+void test_split_string();
 
-void assertEqualsStr(const char *expected, const char *actual);
+void assert_equals_str(const char *expected, const char *actual);
 
-void assertEqualsInt(const int expected, const int actual);
+void assert_equals_int(const int expected, const int actual);
 
 int main(int argc, char *argv[]) {
     if (argc == 2 && strcmp(argv[1], "--test") == 0) {
-        testSplitString();
+        test_split_string();
         printf("tests pass!\n");
     }
     return 0;
 }
 
-void testSplitString() {
-    const int maxTokens = 20;
-    char testStr[] = "hello\tworld testing 123\nhello again";
-    char *tokens[maxTokens];
+void test_split_string() {
+    const int max_tokens = 20;
+    char test_str[] = "hello\tworld testing 123\nhello again";
+    char *tokens[max_tokens];
 
-    int tokenCount = SplitString(testStr, tokens, maxTokens);
+    int token_count = split_string(test_str, tokens, max_tokens);
 
-    assertEqualsInt(6, tokenCount);
-    assertEqualsStr("hello", tokens[0]);
-    assertEqualsStr("world", tokens[1]);
-    assertEqualsStr("testing", tokens[2]);
-    assertEqualsStr("123", tokens[3]);
-    assertEqualsStr("hello", tokens[4]);
-    assertEqualsStr("again", tokens[5]);
+    assert_equals_int(6, token_count);
+    assert_equals_str("hello", tokens[0]);
+    assert_equals_str("world", tokens[1]);
+    assert_equals_str("testing", tokens[2]);
+    assert_equals_str("123", tokens[3]);
+    assert_equals_str("hello", tokens[4]);
+    assert_equals_str("again", tokens[5]);
 }
 
-void assertEqualsStr(const char *expected, const char *actual) {
+void assert_equals_str(const char *expected, const char *actual) {
     if (strcmp(expected, actual) != 0) {
         printf("expected <%s> but was <%s>\n", expected, actual);
         exit(1);
     }
 }
 
-void assertEqualsInt(const int expected, const int actual) {
+void assert_equals_int(const int expected, const int actual) {
     if (expected != actual) {
         printf("expected <%d> but was <%d>\n", expected, actual);
         exit(1);
     }
 }
 
-int SplitString(char *str, char *tokens[], const int maxTokens) {
+int split_string(char *str, char *tokens[], const int max_tokens) {
     int i = 0;
-    for (i = 0; i < maxTokens; i++) {
+    for (i = 0; i < max_tokens; i++) {
         char *token = strtok(str, " \t\n");
         str = NULL;
         tokens[i] = token;

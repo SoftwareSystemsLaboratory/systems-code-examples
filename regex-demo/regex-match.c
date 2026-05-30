@@ -63,6 +63,14 @@ int regex_compile(regex_t *r, const char *regex_text) {
     return 0;
 }
 
+static void record_match(const char *to_match, const char *match_start,
+                         regmatch_t *match, basic_matchlist_t *match_list) {
+    int start = match->rm_so + (match_start - to_match);
+    int finish = match->rm_eo + (match_start - to_match);
+    char *matched_text = strndup(to_match + start, finish - start);
+    basic_matchlist_add(match_list, start, finish, matched_text);
+}
+
 /*
   Match the string in "to_match" against the compiled regular
   expression in "r".
@@ -82,17 +90,12 @@ int regex_match(regex_t *r, const char *to_match, basic_matchlist_t *match_list)
         }
         //printf("nomatch = %d\n", nomatch);
         for (i = 0; i < n_matches; i++) {
-            int start;
-            int finish;
             if (m[i].rm_so == -1) {
                 break;
             }
 
-            start = m[i].rm_so + (p - to_match);
-            finish = m[i].rm_eo + (p - to_match);
-            char *matched_text = strndup(to_match + start, finish - start);
             //printf("Match %d at %d, %d\n", i, m[i].rm_so, m[i].rm_eo);
-            basic_matchlist_add(match_list, start, finish, matched_text);
+            record_match(to_match, p, &m[i], match_list);
             break;
         }
 
@@ -126,4 +129,3 @@ int main (int argc, char ** argv)
     return 0;
 }
 */
-

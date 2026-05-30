@@ -8,33 +8,33 @@
 
 #define MAX_PID (1000)
 
-int childProcesses[MAX_PID];
+int child_processes[MAX_PID];
 
-void addProcess(int childPid) {
-    printf("add(%d)\n", childPid);
+void add_process(int child_pid) {
+    printf("add(%d)\n", child_pid);
     for (int i = 0; i < MAX_PID; i++) {
-        if (childProcesses[i] == (-1)) {
-            childProcesses[i] = childPid;
-            printf("added child pid = %d\n", childPid);
+        if (child_processes[i] == (-1)) {
+            child_processes[i] = child_pid;
+            printf("added child pid = %d\n", child_pid);
             return;
         }
     }
 }
 
-void removeProcess(int childPid) {
-    printf("remove(%d)\n", childPid);
+void remove_process(int child_pid) {
+    printf("remove(%d)\n", child_pid);
     for (int i = 0; i < MAX_PID; i++) {
-        if (childProcesses[i] == childPid) {
-            childProcesses[i] = (-1);
-            printf("removed child pid = %d\n", childPid);
+        if (child_processes[i] == child_pid) {
+            child_processes[i] = (-1);
+            printf("removed child pid = %d\n", child_pid);
         }
     }
 }
 
-int countProcesses() {
+int count_processes() {
     int count = 0;
     for (int i = 0; i < MAX_PID; i++) {
-        if (childProcesses[i] >= 0) {
+        if (child_processes[i] >= 0) {
             count += 1;
         }
     }
@@ -48,7 +48,7 @@ void clean_up_child_process(int signal_number) {
     while ((pid = waitpid(-1, &status, WNOHANG)) > 0) {
         if (pid > 0) {
             printf("pid %d exited\n", pid);
-            removeProcess((int) pid);
+            remove_process((int) pid);
         }
     }
     return;
@@ -67,20 +67,20 @@ int read_from_stdin() {
     return buffer;
 }
 
-void better_gets(char *buff, int len) {
+void better_gets(char *buffer, int len) {
     int i;
     for (i = 0; i < len - 1; i++) {
         int val = read_from_stdin();
         if (val == EOF) {
             break;
         }
-        buff[i] = val;
-        if (buff[i] == '\n') {
+        buffer[i] = val;
+        if (buffer[i] == '\n') {
             break;
         }
     }
-    buff[i] = (char) 0;
-    //printf("read: [%s]\n", buff);
+    buffer[i] = (char) 0;
+    //printf("read: [%s]\n", buffer);
 }
 
 void parent() {
@@ -90,7 +90,7 @@ void parent() {
         better_gets(&input[0], 12);
         printf("you typed: %s\n", &input[0]);
     }
-    while (countProcesses() > 0) {}
+    while (count_processes() > 0) {}
     printf("parent exiting\n");
 }
 
@@ -103,7 +103,7 @@ void child() {
 
 int main(int argc, char **argv) {
     for (int i = 0; i < MAX_PID; i++) {
-        childProcesses[i] = (-1);
+        child_processes[i] = (-1);
     }
 
     struct sigaction sigchld_action;
@@ -112,12 +112,12 @@ int main(int argc, char **argv) {
     sigaction(SIGCHLD, &sigchld_action, NULL);
 
     for (int i = 0; i < 5; i++) {
-        int childProcess = fork();
-        if (childProcess == 0) {
+        int child_process = fork();
+        if (child_process == 0) {
             child();
             return 0;
-        } else if (childProcess > 0) {
-            addProcess(childProcess);
+        } else if (child_process > 0) {
+            add_process(child_process);
         } else {
             printf("fork failed\n");
         }
@@ -126,5 +126,3 @@ int main(int argc, char **argv) {
 
     return 0;
 }
-
-

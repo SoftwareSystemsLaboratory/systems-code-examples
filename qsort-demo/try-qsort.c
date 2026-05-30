@@ -17,23 +17,23 @@ enum sort_order_enum {
     sort_order_ascending, sort_order_descending
 };
 
-int comparewordcount_info_t(enum sort_order_enum order, wordcount_info_t *wcA, wordcount_info_t *wcB) {
-    //printf("A=%s/%d B=%s/%d\n", wcA->word, wcA->count, wcB->word, wcB->count);
+int comparewordcount_info_t(enum sort_order_enum order, wordcount_info_t *left_entry, wordcount_info_t *right_entry) {
+    //printf("A=%s/%d B=%s/%d\n", left_entry->word, left_entry->count, right_entry->word, right_entry->count);
     switch (order) {
         case sort_order_descending:
-            return -(wcA->count - wcB->count);
+            return -(left_entry->count - right_entry->count);
         case sort_order_ascending:
-            return wcA->count - wcB->count;
+            return left_entry->count - right_entry->count;
         default: /* also sort_order_ascending */
-            return wcA->count - wcB->count;
+            return left_entry->count - right_entry->count;
     }
 }
 
-static int qsort_cmp_wordcount(const void *p1, const void *p2) {
-    //printf("Comparing %p amd %p\n", p1, p2);
-    wordcount_info_t *w1 = *((wordcount_info_t **) p1);
-    wordcount_info_t *w2 = *((wordcount_info_t **) p2);
-    return comparewordcount_info_t(sort_order_descending, w1, w2);
+static int qsort_cmp_wordcount(const void *left, const void *right) {
+    //printf("Comparing %p amd %p\n", left, right);
+    wordcount_info_t *left_entry = *((wordcount_info_t **) left);
+    wordcount_info_t *right_entry = *((wordcount_info_t **) right);
+    return comparewordcount_info_t(sort_order_descending, left_entry, right_entry);
 }
 
 #define min(x, y) ( (x) < (y) ? (x) : (y) )
@@ -89,4 +89,3 @@ int main(int argc, char *argv[]) {
         free(search_key);
     }
 }
-

@@ -72,6 +72,47 @@ void *consumer(void *tsd) {
     pthread_exit(NULL);
 }
 
+void create_supplier_threads(pthread_t *threads, pthread_attr_t *attr, bb_tsd_t *bb_tsd,
+                             bounded_buffer_t *bb, bb_options_t *options) {
+    for (int i = 0; i < options->no_suppliers; i++) {
+        int thread_number = i;
+        bb_tsd[thread_number] = (bb_tsd_t)
+                {
+                        .options = options, .bb = bb, .id = i
+                };
+        lwlog_info("pthread_create ( thread: %d, type: \"supplier\", id: %d }\n", thread_number, i);
+        pthread_create(&threads[thread_number], attr, supplier, (void *) &bb_tsd[thread_number]);
+    }
+}
+
+void create_consumer_threads(pthread_t *threads, pthread_attr_t *attr, bb_tsd_t *bb_tsd,
+                             bounded_buffer_t *bb, bb_options_t *options) {
+    for (int i = 0; i < options->no_consumers; i++) {
+        int thread_number = i + options->no_suppliers;
+        bb_tsd[thread_number] = (bb_tsd_t)
+                {
+                        .options = options, .bb = bb, .id = i
+                };
+        lwlog_info("pthread_create ( thread: %d, type: \"consumer\", id: %d }\n", thread_number, i);
+        pthread_create(&threads[thread_number], attr, consumer, (void *) &bb_tsd[thread_number]);
+    }
+}
+
+void join_threads(pthread_t *threads, int no_threads) {
+    for (int i = 0; i < no_threads; i++) {
+        pthread_join(threads[i], NULL);
+    }
+}
+
+void drain_buffer(bounded_buffer_t *bb) {
+    int bb_size = bounded_buffer_count(bb);
+    for (int i = 0; i < bb_size; i++) {
+        entry_t *entry = bounded_buffer_get(bb);
+        lwlog_info("main { removed: %d }\n", entry->value);
+        free(entry);
+    }
+}
+
 int main(int argc, char *argv[]) {
     pthread_attr_t attr;
     bounded_buffer_t bb;
@@ -89,44 +130,18 @@ int main(int argc, char *argv[]) {
     pthread_attr_init(&attr);
     pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE);
 
-    /* create supplier threads */
-    for (int i = 0; i < options.no_suppliers; i++) {
-        int thread_number = i;
-        bb_tsd[thread_number] = (bb_tsd_t)
-                {
-                        .options = &options, .bb = &bb, .id = i
-                };
-        lwlog_info("pthread_create ( thread: %d, type: \"supplier\", id: %d }\n", thread_number, i);
-        pthread_create(&threads[thread_number], &attr, supplier, (void *) &bb_tsd[thread_number]);
-    }
-
-    /* create supplier threads */
-    for (int i = 0; i < options.no_consumers; i++) {
-        int thread_number = i + options.no_suppliers;
-        bb_tsd[thread_number] = (bb_tsd_t)
-                {
-                        .options = &options, .bb = &bb, .id = i
-                };
-        lwlog_info("pthread_create ( thread: %d, type: \"consumer\", id: %d }\n", thread_number, i);
-        pthread_create(&threads[thread_number], &attr, consumer, (void *) &bb_tsd[thread_number]);
-    }
+    create_supplier_threads(threads, &attr, bb_tsd, &bb, &options);
+    create_consumer_threads(threads, &attr, bb_tsd, &bb, &options);
 
     lwlog_info("main { threads:  %d, state: \"started\" }\n", no_threads);
 
-    for (int i = 0; i < no_threads; i++) {
-        pthread_join(threads[i], NULL);
-    }
+    join_threads(threads, no_threads);
 
     lwlog_info("main { threads:  %d,  state: \"joined\" }\n", no_threads);
 
     lwlog_info("main { extra_entires:  %d }\n", bounded_buffer_count(&bb));
 
-    int bb_size = bounded_buffer_count(&bb);
-    for (int i = 0; i < bb_size; i++) {
-        entry_t *e = bounded_buffer_get(&bb);
-        lwlog_info("main { removed: %d }\n", e->value);
-        free(e);
-    }
+    drain_buffer(&bb);
     pthread_attr_destroy(&attr);
     bounded_buffer_cleanup(&bb);
     free(threads);
@@ -134,4 +149,3 @@ int main(int argc, char *argv[]) {
 
     pthread_exit(NULL);
 }
-
